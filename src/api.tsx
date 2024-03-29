@@ -29,8 +29,20 @@ export const getArtist = async (token: string) => {
     return json;
 };
 
-export const searchTrack = async (token: string) => {
-    const response = await fetch('https://api.spotify.com/v1/search?q=travis&type=track', {
+export const searchTrack = async (token: string, search: string) => {
+    const searchValue = search ? search : 'drake';
+    const response = await fetch(`https://api.spotify.com/v1/search?q=${searchValue}&type=track`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const json = await response.json();
+    return json;
+};
+
+export const searchAlbum = async (token: string, search?: string) => {
+    const response = await fetch(`https://api.spotify.com/v1/albums/1ATL5GLyefJaxhQzSPVrLX`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${token}`,

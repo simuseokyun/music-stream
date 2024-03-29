@@ -32,6 +32,8 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+    background-color: rgba(0,0,0,0.95);
+    color:white
 }
 ol, ul {
 	list-style: none;
@@ -47,6 +49,14 @@ q:before, q:after {
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
+    th, td {
+  text-align: center; /* 텍스트를 가운데 정렬 */
+  vertical-align: middle; /* 셀 내의 요소를 수직으로 가운데 정렬 */
+}
+ 
+}
+img{
+    display:block;
 }
 
 `;
@@ -55,8 +65,10 @@ function Root() {
     return (
         <>
             <GlobalStyle />
-            <Header />
-            <Outlet />
+            <div style={{ maxWidth: 860, margin: 'auto' }}>
+                <Header />
+                <Outlet />
+            </div>
         </>
     );
 }

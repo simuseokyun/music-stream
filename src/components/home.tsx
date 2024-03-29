@@ -1,15 +1,22 @@
 import { useQuery } from 'react-query';
-import { getArtist, getToken, searchTrack } from '../api';
+import { getArtist, getToken, searchAlbum, searchTrack } from '../api';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
+
+import { searchState } from '../atoms';
 
 interface TrackImgProps {
     url: string;
 }
+const Container = styled.div`
+    width: 100%;
+`;
 const TrackImg = styled.div<{ url: string }>`
     background-image: url(${(props) => props.url});
-    width: 200px;
-    height: 200px;
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
     background-position: center;
     background-size: cover;
 `;
@@ -51,6 +58,7 @@ interface IArtist {
 interface ITracks {
     tracks: {
         items: IAlbum[];
+        next: string;
     };
 }
 
@@ -59,35 +67,69 @@ interface IAlbum {
         images: {
             url: string;
         }[];
+        id: string;
+        name: string;
     };
+    name: string;
 }
-const TrackList = styled.li``;
+const TrackList = styled.tr`
+    width: 100%;
+
+    margin-top: 20px;
+    &:first-child {
+        margin: 0;
+    }
+`;
+const TrackTitle = styled.td`
+    margin-left: 20px;
+`;
+const AlbumTitle = styled.td`
+    margin-left: 20px;
+`;
 
 export const Home = () => {
+    const search = useRecoilValue(searchState);
     const { isLoading: tokenLoading, data: tokenData } = useQuery<TokenResponse>('getToken', getToken);
     const { isLoading: artistLoading, data: artistData } = useQuery<IArtist>('getArtist', async () => {
         const artistData = await getArtist(tokenData?.access_token!);
         return artistData;
     });
-    const { isLoading: TrackLoading, data: trackData } = useQuery<ITracks>('searchTrack', async () => {
-        const trackData = await searchTrack(tokenData?.access_token!);
+    const { isLoading: TrackLoading, data: trackData } = useQuery<ITracks>(['searchTrack', search], async () => {
+        const trackData = await searchTrack(tokenData?.access_token!, search);
+        console.log(1);
         return trackData;
     });
-
-    console.log(trackData?.tracks.items[0].album.images[0].url);
+    const { isLoading: AlbumLoading, data: albumData } = useQuery('searchAlbum', async () => {
+        const albumData = await searchAlbum(tokenData?.access_token!);
+        console.log(1);
+        return albumData;
+    });
+    console.log(albumData);
     return (
-        <>
-            <h1>홈 입니다.</h1>
-            <ul>
-                {trackData?.tracks.items?.map((item, i) => {
-                    return (
-                        <TrackList>
-                            <TrackImg url={item.album.images[0].url} />
-                            <p>{}</p>
-                        </TrackList>
-                    );
-                })}
-            </ul>
-        </>
+        <Container>
+            <div style={{ padding: '20px' }}>
+                <table style={{ width: '100%', verticalAlign: 'middle' }}>
+                    <tr>
+                        <th>앨범 커버</th>
+                        <th>노래 제목</th>
+                        <th>앨범 제목</th>
+                    </tr>
+
+                    {TrackLoading
+                        ? 'Loading...'
+                        : trackData?.tracks?.items?.map((item, i) => {
+                              return (
+                                  <TrackList key={i}>
+                                      <td>
+                                          <TrackImg url={item.album.images[0].url} />
+                                      </td>
+                                      <TrackTitle>{item.name}</TrackTitle>
+                                      <AlbumTitle>{item.album.name}</AlbumTitle>
+                                  </TrackList>
+                              );
+                          })}
+                </table>
+            </div>
+        </Container>
     );
 };
