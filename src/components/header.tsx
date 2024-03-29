@@ -13,8 +13,6 @@ export const Header = () => {
         formState: { errors },
     } = useForm<ITrack>();
     const onValid = ({ track }: ITrack) => {
-        console.log(track);
-        console.log(errors);
         setValue('track', '');
     };
     return (
