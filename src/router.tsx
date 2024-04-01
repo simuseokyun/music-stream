@@ -5,6 +5,7 @@ import Root from './root';
 import { Home } from './components/home';
 import { About } from './components/about';
 import { AlbumForm } from './components/albumForm';
+import { ArtistForm } from './components/artistForm';
 
 export const router = createBrowserRouter([
     {
@@ -18,6 +19,10 @@ export const router = createBrowserRouter([
                     {
                         path: 'album/:albumId',
                         element: <AlbumForm />,
+                    },
+                    {
+                        path: 'artist/:artistId',
+                        element: <ArtistForm />,
                     },
                 ],
             },
