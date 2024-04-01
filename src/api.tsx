@@ -18,8 +18,8 @@ export const getToken = async () => {
     return json;
 };
 
-export const getArtist = async (token: string) => {
-    const response = await fetch('https://api.spotify.com/v1/artists/3hvinNZRzTLoREmqFiKr1b', {
+export const getArtist = async (token: string, artistId: string) => {
+    const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${token}`,
@@ -62,3 +62,14 @@ export const getAlbum = async (token: string, albumId: string) => {
     const json = await response.json();
     return json;
 };
+
+// export const getArtit = async (token: string, artistId: string) => {
+//     const response = await fetch('', {
+//         method: 'GET',
+//         headers: {
+//             Authorization: `Bearer ${token}`,
+//         },
+//     });
+//     const json = await response.json();
+//     return json;
+// };
