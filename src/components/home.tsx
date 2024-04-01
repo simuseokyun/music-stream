@@ -92,11 +92,11 @@ const AlbumTitle = styled.td`
 export const Home = () => {
     const search = useRecoilValue(searchState);
     const { isLoading: tokenLoading, data: tokenData } = useQuery<TokenResponse>('getToken', getToken);
-    const { isLoading: artistLoading, data: artistData } = useQuery<IArtist>('getArtist', async () => {
-        const artistData = await getArtist(tokenData?.access_token!);
-        setToken(tokenData?.access_token!);
-        return artistData;
-    });
+    // const { isLoading: artistLoading, data: artistData } = useQuery<IArtist>('getArtist', async () => {
+    //     const artistData = await getArtist(tokenData?.access_token!);
+    //     setToken(tokenData?.access_token!);
+    //     return artistData;
+    // });
     const { isLoading: TrackLoading, data: trackData } = useQuery<ITracks>(['searchTrack', search], async () => {
         const trackData = await searchTrack(tokenData?.access_token!, search);
         return trackData;
@@ -106,6 +106,7 @@ export const Home = () => {
     //     return albumData;
     // });
     const setToken = useSetRecoilState(tokenValue);
+    console.log(tokenData);
 
     return (
         <Container>

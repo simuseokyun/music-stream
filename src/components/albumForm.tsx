@@ -4,6 +4,9 @@ import { tokenValue } from '../atoms';
 import { useQuery } from 'react-query';
 import { getAlbum } from '../api';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface IAlbum {
     images: { height: number; url: string; width: number }[];
@@ -11,7 +14,10 @@ interface IAlbum {
     name: string;
     release_date: string;
     total_tracks: number;
-    tracks: { items: { name: string; track_number: number; duration_ms: number; artists: { name: string }[] }[] };
+    tracks: {
+        items: { name: string; track_number: number; duration_ms: number; artists: { name: string; id: string }[] }[];
+    };
+    copyrights: { text: string }[];
 }
 
 const Container = styled.div`
@@ -31,7 +37,7 @@ const Container = styled.div`
 const AlbumWrap = styled.div`
     width: 1000px;
     height: 700px;
-
+    position: relative;
     border-radius: 8px;
     overflow-y: scroll;
     &::-webkit-scrollbar {
@@ -75,21 +81,49 @@ const TrackListsWrap = styled.div`
 const TrackLists = styled.table`
     width: 100%;
     height: 100%;
+    border-collapse: collapse;
 `;
 const TrackList = styled.tr`
     &:hover {
         background-color: rgba(0, 0, 0, 0.5);
     }
+    a {
+        color: #a0a0a0;
+        &:hover {
+            color: white;
+        }
+    }
     border-radius: 10px;
 `;
 const TrackArtist = styled.span`
-    &:first-child {
-        margin: 0;
+    /* margin-left: 5px; */
+`;
+const CloseBtn = styled.span`
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    font-size: 25px;
+    border-radius: 25px;
+    padding: 5px;
+    cursor: pointer;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.8);
     }
-    /* margin-left: 10px; */
+`;
+const CopyrightWrap = styled.div`
+    padding: 20px 0;
+`;
+const Copyright = styled.p`
+    font-size: 12px;
+    color: #e2e2e2;
 `;
 
 export const AlbumForm = () => {
+    const navigate = useNavigate();
+    const onClose = () => {
+        navigate(-1);
+    };
     const msTransform = (ms: number) => {
         const totalSeconds = ms / 1000;
         const minutes = Math.floor(totalSeconds / 60);
@@ -99,6 +133,7 @@ export const AlbumForm = () => {
 
     const { albumId } = useParams();
     const token = useRecoilValue(tokenValue);
+    console.log(token);
 
     const { isLoading, data } = useQuery<IAlbum>(['albumId', albumId], () => getAlbum(token, albumId!));
     console.log(data);
@@ -108,6 +143,9 @@ export const AlbumForm = () => {
                 'Loading...'
             ) : (
                 <AlbumWrap>
+                    <CloseBtn className="material-symbols-outlined" onClick={onClose}>
+                        close
+                    </CloseBtn>
                     <AlbumTop>
                         <AlbumImg src={data?.images[0].url} />
                         <AlbumInfo>
@@ -116,35 +154,49 @@ export const AlbumForm = () => {
                             <ArtistName>{data?.artists[0].name}</ArtistName>
                             <ReleaseYear>{data?.release_date.slice(0, 4)}</ReleaseYear>
                             <TotalTracks>{data?.total_tracks}곡</TotalTracks>
-                            <RunningTime></RunningTime>
                         </AlbumInfo>
                     </AlbumTop>
-
                     <TrackListsWrap>
                         <TrackLists>
-                            <tr>
-                                <th>#</th>
-                                <th style={{ textAlign: 'left' }}>제목</th>
-
-                                <th>러닝타임</th>
-                            </tr>
-                            {data?.tracks.items.map((track, i) => (
-                                <TrackList key={track.name}>
-                                    <td style={{ padding: '20px' }}>{track.track_number}</td>
-                                    <td style={{ textAlign: 'left' }}>
-                                        <p style={{ marginBottom: '10px' }}>{track.name}</p>
-                                        {track.artists.map((artist) => (
-                                            <TrackArtist>{artist.name}</TrackArtist>
-                                        ))}
-                                    </td>
-                                    <td>{`${msTransform(track.duration_ms).minutes}:${
-                                        String(msTransform(track.duration_ms).seconds).length === 1
-                                            ? `0${msTransform(track.duration_ms).seconds}`
-                                            : msTransform(track.duration_ms).seconds
-                                    }`}</td>
-                                </TrackList>
-                            ))}
+                            <thead>
+                                <tr style={{ padding: '5px 0', borderBottom: '1px solid #808080' }}>
+                                    <th style={{ width: '10%', padding: '10px 0' }}>#</th>
+                                    <th style={{ textAlign: 'left', padding: '10px 0' }}>제목</th>
+                                    <th style={{ padding: '10px 0 ' }}>러닝타임</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data?.tracks.items.map((track, i) => (
+                                    <TrackList key={track.name} style={{ borderRadius: '5px' }}>
+                                        <td style={{ width: '10%' }}>{track.track_number}</td>
+                                        <td style={{ textAlign: 'left', padding: '10px 0' }}>
+                                            <p style={{ marginBottom: '5px' }}>{track.name}</p>
+                                            {track.artists.map((artist, i) => (
+                                                <TrackArtist key={artist.name}>
+                                                    <Link to={`/artist/${artist.id}`}>
+                                                        {track.artists.length == 1
+                                                            ? artist.name
+                                                            : track.artists.length == i + 1
+                                                            ? artist.name
+                                                            : artist.name + ' , '}
+                                                    </Link>
+                                                </TrackArtist>
+                                            ))}
+                                        </td>
+                                        <td>{`${msTransform(track.duration_ms).minutes}:${
+                                            String(msTransform(track.duration_ms).seconds).length === 1
+                                                ? `0${msTransform(track.duration_ms).seconds}`
+                                                : msTransform(track.duration_ms).seconds
+                                        }`}</td>
+                                    </TrackList>
+                                ))}
+                            </tbody>
                         </TrackLists>
+                        <CopyrightWrap>
+                            {data?.copyrights.map((copyright) => (
+                                <Copyright>{copyright.text}</Copyright>
+                            ))}
+                        </CopyrightWrap>
                     </TrackListsWrap>
                 </AlbumWrap>
             )}
