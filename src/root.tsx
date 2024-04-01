@@ -59,6 +59,9 @@ img{
     display:block;
 }
 a { text-decoration:none;color:White}
+*{
+    box-sizing: border-box;
+}
 
 `;
 

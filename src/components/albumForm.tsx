@@ -11,21 +11,32 @@ interface IAlbum {
     name: string;
     release_date: string;
     total_tracks: number;
-    tracks: { items: { name: string; track_number: number; duration_ms: number }[] };
+    tracks: { items: { name: string; track_number: number; duration_ms: number; artists: { name: string }[] }[] };
 }
 
 const Container = styled.div`
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0;
+    box-sizing: border-box;
 `;
 const AlbumWrap = styled.div`
     width: 1000px;
     height: 700px;
-    margin: auto;
+
+    border-radius: 8px;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `;
 const AlbumTop = styled.div`
     display: flex;
@@ -57,14 +68,25 @@ const ReleaseYear = styled.span`
 const RunningTime = styled(ReleaseYear)``;
 const TotalTracks = styled(ReleaseYear)``;
 
-const TrackLists = styled.table`
-    background-color: black;
+const TrackListsWrap = styled.div`
     padding: 20px;
+    background: linear-gradient(90deg, black 0%, #392f31);
+`;
+const TrackLists = styled.table`
     width: 100%;
-    overflow-y: scroll;
+    height: 100%;
 `;
 const TrackList = styled.tr`
-    padding: 20px;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    border-radius: 10px;
+`;
+const TrackArtist = styled.span`
+    &:first-child {
+        margin: 0;
+    }
+    /* margin-left: 10px; */
 `;
 
 export const AlbumForm = () => {
@@ -97,23 +119,33 @@ export const AlbumForm = () => {
                             <RunningTime></RunningTime>
                         </AlbumInfo>
                     </AlbumTop>
-                    <TrackLists>
-                        <tr>
-                            <th>#</th>
-                            <th>제목</th>
-                            <th>재생</th>
-                            <th>러닝타임</th>
-                        </tr>
-                        {data?.tracks.items.map((track, i) => (
-                            <TrackList key={track.name}>
-                                <td>{track.track_number}</td>
-                                <td>{track.name}</td>
-                                <td>{`${msTransform(track.duration_ms).minutes}:${
-                                    msTransform(track.duration_ms).seconds
-                                }`}</td>
-                            </TrackList>
-                        ))}
-                    </TrackLists>
+
+                    <TrackListsWrap>
+                        <TrackLists>
+                            <tr>
+                                <th>#</th>
+                                <th style={{ textAlign: 'left' }}>제목</th>
+
+                                <th>러닝타임</th>
+                            </tr>
+                            {data?.tracks.items.map((track, i) => (
+                                <TrackList key={track.name}>
+                                    <td style={{ padding: '20px' }}>{track.track_number}</td>
+                                    <td style={{ textAlign: 'left' }}>
+                                        <p style={{ marginBottom: '10px' }}>{track.name}</p>
+                                        {track.artists.map((artist) => (
+                                            <TrackArtist>{artist.name}</TrackArtist>
+                                        ))}
+                                    </td>
+                                    <td>{`${msTransform(track.duration_ms).minutes}:${
+                                        String(msTransform(track.duration_ms).seconds).length === 1
+                                            ? `0${msTransform(track.duration_ms).seconds}`
+                                            : msTransform(track.duration_ms).seconds
+                                    }`}</td>
+                                </TrackList>
+                            ))}
+                        </TrackLists>
+                    </TrackListsWrap>
                 </AlbumWrap>
             )}
         </Container>
