@@ -2,9 +2,10 @@ import { useQuery } from 'react-query';
 import { getArtist, getToken, searchAlbum, searchTrack } from '../api';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
-
-import { searchState } from '../atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { Link } from 'react-router-dom';
+import { searchState, tokenValue } from '../atoms';
+import { Outlet } from 'react-router-dom';
 
 interface TrackImgProps {
     url: string;
@@ -82,6 +83,7 @@ const TrackList = styled.tr`
 `;
 const TrackTitle = styled.td`
     margin-left: 20px;
+    text-overflow: ellipsis;
 `;
 const AlbumTitle = styled.td`
     margin-left: 20px;
@@ -92,21 +94,22 @@ export const Home = () => {
     const { isLoading: tokenLoading, data: tokenData } = useQuery<TokenResponse>('getToken', getToken);
     const { isLoading: artistLoading, data: artistData } = useQuery<IArtist>('getArtist', async () => {
         const artistData = await getArtist(tokenData?.access_token!);
+        setToken(tokenData?.access_token!);
         return artistData;
     });
     const { isLoading: TrackLoading, data: trackData } = useQuery<ITracks>(['searchTrack', search], async () => {
         const trackData = await searchTrack(tokenData?.access_token!, search);
-        console.log(1);
         return trackData;
     });
-    const { isLoading: AlbumLoading, data: albumData } = useQuery('searchAlbum', async () => {
-        const albumData = await searchAlbum(tokenData?.access_token!);
-        console.log(1);
-        return albumData;
-    });
-    console.log(albumData);
+    // const { isLoading: AlbumLoading, data: albumData } = useQuery('searchAlbum', async () => {
+    //     const albumData = await searchAlbum(tokenData?.access_token!);
+    //     return albumData;
+    // });
+    const setToken = useSetRecoilState(tokenValue);
+
     return (
         <Container>
+            <Outlet />
             <div style={{ padding: '20px' }}>
                 <table style={{ width: '100%', verticalAlign: 'middle' }}>
                     <tr>
@@ -124,7 +127,9 @@ export const Home = () => {
                                           <TrackImg url={item.album.images[0].url} />
                                       </td>
                                       <TrackTitle>{item.name}</TrackTitle>
-                                      <AlbumTitle>{item.album.name}</AlbumTitle>
+                                      <AlbumTitle>
+                                          <Link to={`album/${item.album.id}`}>{item.album.name}</Link>
+                                      </AlbumTitle>
                                   </TrackList>
                               );
                           })}

@@ -19,6 +19,7 @@ const Input = styled.input`
     outline: none;
     padding: 10px;
     border-radius: 20px;
+    color: white;
     border: 1px solid transparent;
     background-color: rgb(40, 40, 40);
     &:hover {

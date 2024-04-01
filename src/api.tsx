@@ -51,3 +51,14 @@ export const searchAlbum = async (token: string, search?: string) => {
     const json = await response.json();
     return json;
 };
+
+export const getAlbum = async (token: string, albumId: string) => {
+    const response = await fetch(`https://api.spotify.com/v1/albums/${albumId}`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const json = await response.json();
+    return json;
+};
