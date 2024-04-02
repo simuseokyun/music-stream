@@ -1,11 +1,13 @@
 import { useQuery } from 'react-query';
-import { getArtist, getToken, searchAlbum, searchTrack } from '../api';
+import { getArtist, getNewAlbum, getToken, searchAlbum, searchTrack } from '../api';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'react-router-dom';
 import { searchState, tokenValue } from '../atoms';
 import { Outlet } from 'react-router-dom';
+
+import { NewAlbum } from './newAlbum';
 
 interface TrackImgProps {
     url: string;
@@ -73,6 +75,21 @@ interface IAlbum {
     };
     name: string;
 }
+interface INewAlbum {
+    albums: IAlbums;
+}
+interface IAlbums {
+    items: IItems[];
+    href: string;
+}
+interface IItems {
+    album_type: string;
+    artists: { name: string; id: string }[];
+    id: string;
+    images: { url: string; height: number; width: number }[];
+    name: string;
+}
+
 const TrackList = styled.tr`
     width: 100%;
 
@@ -91,26 +108,30 @@ const AlbumTitle = styled.td`
 
 export const Home = () => {
     const search = useRecoilValue(searchState);
-    const { isLoading: tokenLoading, data: tokenData } = useQuery<TokenResponse>('getToken', getToken);
-    // const { isLoading: artistLoading, data: artistData } = useQuery<IArtist>('getArtist', async () => {
-    //     const artistData = await getArtist(tokenData?.access_token!);
-    //     setToken(tokenData?.access_token!);
-    //     return artistData;
-    // });
-    const { isLoading: TrackLoading, data: trackData } = useQuery<ITracks>(['searchTrack', search], async () => {
-        const trackData = await searchTrack(tokenData?.access_token!, search);
-        return trackData;
-    });
-    // const { isLoading: AlbumLoading, data: albumData } = useQuery('searchAlbum', async () => {
-    //     const albumData = await searchAlbum(tokenData?.access_token!);
-    //     return albumData;
-    // });
     const setToken = useSetRecoilState(tokenValue);
-    console.log(tokenData);
+    const { isLoading: tokenLoading, data: tokenData } = useQuery<TokenResponse>('getToken', getToken);
+
+    const { isLoading: TrackLoading, data: trackData } = useQuery<ITracks>(['searchTrack', search], async () => {
+        if (!tokenLoading) {
+            const trackData = await searchTrack(tokenData?.access_token!, search);
+
+            return trackData;
+        }
+    });
+    const { isLoading: newAlbumLoading, data: newAlbumData } = useQuery<INewAlbum>('newAlbum', async () => {
+        if (!tokenLoading) {
+            return getNewAlbum(tokenData?.access_token!);
+        }
+    });
+    console.log(newAlbumLoading, newAlbumData, tokenData);
+
+    const token = useRecoilValue(tokenValue);
+    console.log(token);
 
     return (
         <Container>
             <Outlet />
+            {newAlbumData?.albums && <NewAlbum newAlbums={newAlbumData?.albums!} />}
             <div style={{ padding: '20px' }}>
                 <table style={{ width: '100%', verticalAlign: 'middle' }}>
                     <tr>
