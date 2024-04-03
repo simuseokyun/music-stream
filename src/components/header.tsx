@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { searchState } from '../atoms';
+import { useNavigate } from 'react-router-dom';
 
 interface ITrack {
     track: string;
@@ -32,6 +33,7 @@ const Input = styled.input`
 
 export const Header = () => {
     const [search, setSearch] = useRecoilState(searchState);
+    const navigate = useNavigate();
     const {
         register,
         setValue,
@@ -41,6 +43,7 @@ export const Header = () => {
     const onValid = ({ track }: ITrack) => {
         setSearch(track);
         setValue('track', '');
+        navigate('search');
     };
     console.log(search);
     return (
