@@ -16,12 +16,6 @@ export const router = createBrowserRouter([
             {
                 path: '',
                 element: <Home />,
-                // children: [
-                //     {
-                //         path: 'artist/:artistId',
-                //         element: <ArtistForm />,
-                //     },
-                // ],
             },
             {
                 path: 'search',
@@ -30,6 +24,10 @@ export const router = createBrowserRouter([
             {
                 path: 'album/:albumId',
                 element: <AlbumForm />,
+            },
+            {
+                path: 'artist/:artistId',
+                element: <ArtistForm />,
             },
         ],
     },
