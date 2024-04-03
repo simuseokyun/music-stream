@@ -6,6 +6,7 @@ import { Home } from './components/home';
 import { About } from './components/about';
 import { AlbumForm } from './components/albumForm';
 import { ArtistForm } from './components/artistForm';
+import { SearchResult } from './components/searchResult';
 
 export const router = createBrowserRouter([
     {
@@ -15,20 +16,20 @@ export const router = createBrowserRouter([
             {
                 path: '',
                 element: <Home />,
-                children: [
-                    {
-                        path: 'album/:albumId',
-                        element: <AlbumForm />,
-                    },
-                    {
-                        path: 'artist/:artistId',
-                        element: <ArtistForm />,
-                    },
-                ],
+                // children: [
+                //     {
+                //         path: 'artist/:artistId',
+                //         element: <ArtistForm />,
+                //     },
+                // ],
             },
             {
-                path: 'about',
-                element: <About />,
+                path: 'search',
+                element: <SearchResult />,
+            },
+            {
+                path: 'album/:albumId',
+                element: <AlbumForm />,
             },
         ],
     },

@@ -76,7 +76,7 @@ function Root() {
     return (
         <>
             <GlobalStyle />
-            <div style={{ maxWidth: 860, margin: 'auto' }}>
+            <div style={{ maxWidth: 1180, margin: 'auto' }}>
                 <Header />
                 <Outlet />
             </div>
