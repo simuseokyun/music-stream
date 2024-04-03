@@ -2,7 +2,9 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { Header } from './components/header';
 import { Outlet } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
+import { SideBar } from './components/sideBar';
+import { useRecoilState } from 'recoil';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -70,15 +72,26 @@ a {
     box-sizing: border-box;
 }
 
+
+`;
+const Container = styled.div`
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 20px;
 `;
 
 function Root() {
+    // const [openPli, setOpenPli] = useRecoilState(addPlaylistState);
     return (
         <>
             <GlobalStyle />
             <div style={{ maxWidth: 1180, margin: 'auto' }}>
                 <Header />
-                <Outlet />
+                <Container>
+                    <SideBar></SideBar>
+                    <Outlet />
+                </Container>
             </div>
         </>
     );
