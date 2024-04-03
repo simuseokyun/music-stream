@@ -6,6 +6,7 @@ import { NewAlbumList } from './newAlbumList';
 const Container = styled.div`
     padding: 20px;
     background: linear-gradient(#293a32, rgba(0, 0, 0, 1));
+    border-radius: 8px;
 `;
 
 const FirstAlbumWrap = styled.div`
