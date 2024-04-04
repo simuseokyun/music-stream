@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { Button } from './button';
 import { Link } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { addPlaylistState } from '../atoms';
+import { PlaylistList } from './playlistList';
+
 const SideBarWrap = styled.div`
     width: 100%;
     height: 500px;
@@ -31,6 +33,7 @@ const SideBarBot = styled.div`
     background-color: #131212;
     border-radius: 8px;
     padding: 20px;
+    overflow: scroll;
 `;
 
 const AddPlaylistMessage = styled.p`
@@ -49,7 +52,11 @@ const TitleWrap = styled.div`
     justify-content: space-between;
     align-items: center;
     span {
+        border-radius: 20px;
+        padding: 2px;
+        transition: all 0.2s;
         &:hover {
+            background-color: rgb(117, 117, 117);
             p {
                 opacity: 1;
             }
@@ -58,6 +65,10 @@ const TitleWrap = styled.div`
 `;
 
 export const SideBar = () => {
+    const setPlaylist = useSetRecoilState(addPlaylistState);
+    const addPlaylist = () => {
+        setPlaylist(true);
+    };
     return (
         <SideBarWrap>
             <SideBarTop>
@@ -69,13 +80,18 @@ export const SideBar = () => {
             <SideBarBot>
                 <TitleWrap>
                     <h1>나의 라이브러리</h1>
-                    <span style={{ position: 'relative' }} className="material-symbols-outlined">
+                    <span
+                        onClick={addPlaylist}
+                        style={{ position: 'relative', background: '' }}
+                        className="material-symbols-outlined"
+                    >
                         add_circle
                         <AddPlaylistMessage>플레이리스트 생성</AddPlaylistMessage>
                     </span>
                 </TitleWrap>
                 <Button text="플레이리스트" />
                 <Button text="내가 찜한 앨범" />
+                <PlaylistList />
             </SideBarBot>
         </SideBarWrap>
     );
