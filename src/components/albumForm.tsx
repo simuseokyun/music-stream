@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { tokenValue } from '../atoms';
+import { tokenValue, typeTransform } from '../atoms';
 import { useQuery } from 'react-query';
 import { getAlbum } from '../api';
 import styled from 'styled-components';
@@ -9,6 +9,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface IAlbum {
+    album_type: string;
     images: { height: number; url: string; width: number }[];
     artists: { id: string; name: string }[];
     name: string;
@@ -149,7 +150,13 @@ export const AlbumForm = () => {
                     <AlbumTop>
                         <AlbumImg src={data?.images[0].url} />
                         <AlbumInfo>
-                            <p>앨범</p>
+                            <p>
+                                {data?.album_type === 'single'
+                                    ? typeTransform.single
+                                    : data?.album_type === 'ep'
+                                    ? typeTransform.ep
+                                    : typeTransform.album}
+                            </p>
                             <AlbumTitle>{data?.name}</AlbumTitle>
                             <ArtistName>{data?.artists[0].name}</ArtistName>
                             <ReleaseYear>{data?.release_date.slice(0, 4)}</ReleaseYear>

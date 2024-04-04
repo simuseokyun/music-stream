@@ -6,6 +6,12 @@ export enum typeTransform {
     ep = 'EP',
 }
 
+export interface IPlaylist {
+    id: string;
+    title: string;
+    img?: string;
+}
+
 export const searchState = atom({
     key: 'searchState',
     default: '',
@@ -19,4 +25,9 @@ export const tokenValue = atom({
 export const addPlaylistState = atom({
     key: 'addPlaylistState',
     default: false,
+});
+
+export const playlistList = atom<IPlaylist[]>({
+    key: 'playlistList',
+    default: [{ id: '아이디', title: '플레이리스트 제목', img: '' }],
 });
