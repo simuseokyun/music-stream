@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useQuery } from 'react-query';
 import { getNewAlbum } from '../api';
 import { NewAlbumList } from './newAlbumList';
+import { typeTransform } from '../atoms';
 
 const Container = styled.div`
     padding: 20px;
@@ -65,16 +66,19 @@ export const NewAlbum = ({ newAlbums }: INewAlbum) => {
                 <FirstAlbumWrap>
                     <FirstAlbumImg src={newAlbums.items[0].images[0].url} />
                     <FirstAlbumInfo>
-                        <FirstAlbumType>{newAlbums.items[0].album_type}</FirstAlbumType>
+                        <FirstAlbumType>
+                            {newAlbums.items[0].album_type === 'single' ? typeTransform.single : typeTransform.album}
+                        </FirstAlbumType>
                         <FirstAlbumTitle>{newAlbums.items[0].name}</FirstAlbumTitle>
                         <FirstAlbumArtist>{newAlbums.items[0].artists[0].name}</FirstAlbumArtist>
                     </FirstAlbumInfo>
                 </FirstAlbumWrap>
-                <h1>최신 앨범</h1>
+                <h1>최신 음악</h1>
                 <NewAlbumWrap>
                     {newAlbums.items.slice(1).map((item) => (
                         <NewAlbumList
                             key={item.id}
+                            id={item.id}
                             title={item.name}
                             artist={item.artists[0].name}
                             img={item.images[0].url}

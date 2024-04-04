@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { typeTransform } from '../atoms';
 
 const Container = styled.li`
     width: 100%;
@@ -17,13 +19,19 @@ const NewAlbumTitle = styled.h1``;
 const NewAlbumArtist = styled.p``;
 
 interface INewAlbum {
+    id: string;
     title: string;
     artist: string;
     img: string;
 }
-export const NewAlbumList = ({ title, artist, img }: INewAlbum) => {
+
+export const NewAlbumList = ({ id, title, artist, img }: INewAlbum) => {
+    const navigate = useNavigate();
+    const onClickAlbum = () => {
+        navigate(`/album/${id}`);
+    };
     return (
-        <Container>
+        <Container onClick={onClickAlbum}>
             <NewAlbumImg src={img} />
             <NewAlbumTitle>{title}</NewAlbumTitle>
             <NewAlbumArtist>{artist}</NewAlbumArtist>
