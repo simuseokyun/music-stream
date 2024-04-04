@@ -8,45 +8,40 @@ import { searchState, tokenValue } from '../atoms';
 import { Outlet } from 'react-router-dom';
 import { Button } from './button';
 import { NewAlbum } from './newAlbum';
-
+import { typeTransform } from '../atoms';
 interface TrackImgProps {
     url: string;
 }
-const Container = styled.div`
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    gap: 20px;
-`;
-const LeftMenuWrap = styled.div`
-    width: 100%;
-    height: 500px;
-    position: sticky;
-    top: 70px;
-`;
-const LeftMenuTop = styled.ul`
-    height: 100px;
-    background-color: #131212;
-    border-radius: 8px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 20px;
-`;
-const MenuTopList = styled.li`
-    font-size: 18px;
-    &:first-child {
-        margin-bottom: 20px;
-    }
-`;
-const LeftMenuBot = styled.div`
-    height: 400px;
-    margin-top: 20px;
-    background-color: #131212;
-    border-radius: 8px;
-    padding: 20px;
-`;
+
+// const LeftMenuWrap = styled.div`
+//     width: 100%;
+//     height: 500px;
+//     position: sticky;
+//     top: 70px;
+// `;
+// const LeftMenuTop = styled.ul`
+//     height: 100px;
+//     background-color: #131212;
+//     border-radius: 8px;
+//     width: 100%;
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     padding: 20px;
+// `;
+// const MenuTopList = styled.li`
+//     font-size: 18px;
+//     &:first-child {
+//         margin-bottom: 20px;
+//     }
+// `;
+// const LeftMenuBot = styled.div`
+//     height: 400px;
+//     margin-top: 20px;
+//     background-color: #131212;
+//     border-radius: 8px;
+//     padding: 20px;
+// `;
 
 const TrackImg = styled.div<{ url: string }>`
     background-image: url(${(props) => props.url});
@@ -169,48 +164,5 @@ export const Home = () => {
         }
     );
 
-    return (
-        <Container>
-            <LeftMenuWrap>
-                <LeftMenuTop>
-                    <MenuTopList>
-                        <Link to="/">홈</Link>
-                    </MenuTopList>
-                    <MenuTopList>검색하기</MenuTopList>
-                </LeftMenuTop>
-                <LeftMenuBot>
-                    <h1>나의 라이브러리</h1>
-                    <Button text="플레이리스트" />
-                    <Button text="내가 찜한 앨범" />
-                </LeftMenuBot>
-            </LeftMenuWrap>
-            {/* <Outlet /> */}
-            {newAlbumData?.albums && <NewAlbum newAlbums={newAlbumData?.albums!} />}
-            {/* <div style={{ padding: '20px' }}>
-                <table style={{ width: '100%', verticalAlign: 'middle' }}>
-                    <tr>
-                        <th>앨범 커버</th>
-                        <th>노래 제목</th>
-                        <th>앨범 제목</th>
-                    </tr>
-
-                    {TrackLoading
-                        ? 'Loading...'
-                        : trackData?.tracks?.items?.map((item, i) => {
-                              return (
-                                  <TrackList key={i}>
-                                      <td>
-                                          <TrackImg url={item.album.images[0].url} />
-                                      </td>
-                                      <TrackTitle>{item.name}</TrackTitle>
-                                      <AlbumTitle>
-                                          <Link to={`album/${item.album.id}`}>{item.album.name}</Link>
-                                      </AlbumTitle>
-                                  </TrackList>
-                              );
-                          })}
-                </table>
-            </div> */}
-        </Container>
-    );
+    return <>{newAlbumData?.albums && <NewAlbum newAlbums={newAlbumData?.albums!} />}</>;
 };
