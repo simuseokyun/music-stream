@@ -4,7 +4,9 @@ import { Header } from './components/header';
 import { Outlet } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import { SideBar } from './components/sideBar';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { AddPlaylistForm } from './components/addplaylistForm';
+import { addPlaylistState, playlistList } from './atoms';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -82,11 +84,12 @@ const Container = styled.div`
 `;
 
 function Root() {
-    // const [openPli, setOpenPli] = useRecoilState(addPlaylistState);
+    const openPlaylist = useRecoilValue(addPlaylistState);
     return (
         <>
             <GlobalStyle />
             <div style={{ maxWidth: 1180, margin: 'auto' }}>
+                {openPlaylist && <AddPlaylistForm />}
                 <Header />
                 <Container>
                     <SideBar></SideBar>
