@@ -33,7 +33,8 @@ const SideBarBot = styled.div`
     background-color: #131212;
     border-radius: 8px;
     padding: 20px;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
 `;
 
 const AddPlaylistMessage = styled.p`
@@ -86,7 +87,7 @@ export const SideBar = () => {
                         className="material-symbols-outlined"
                     >
                         add_circle
-                        <AddPlaylistMessage>플레이리스트 생성</AddPlaylistMessage>
+                        {/* <AddPlaylistMessage>플레이리스트 생성</AddPlaylistMessage> */}
                     </span>
                 </TitleWrap>
                 <Button text="플레이리스트" />
