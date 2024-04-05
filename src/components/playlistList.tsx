@@ -1,17 +1,22 @@
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
-import { playlistList } from '../atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { clickPlaylistState, playlistList } from '../atoms';
 import { IPlaylist } from '../atoms';
+import { Link, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 const Container = styled.ul``;
 const List = styled.li`
     display: flex;
     align-items: center;
-    margin-top: 10px;
+    /* margin-top: 5px; */
     border-radius: 8px;
     transition: all 0.2s;
     padding: 5px;
     &:hover {
-        background-color: #123212;
+        background-color: gray;
+    }
+    &:first-child {
+        margin-top: 10px;
     }
 `;
 const ListImg = styled.img`
@@ -30,12 +35,20 @@ const ListType = styled.p`
 
 export const PlaylistList = () => {
     const playlists = useRecoilValue(playlistList);
+    const setPlaylist = useSetRecoilState(clickPlaylistState);
+    const navigate = useNavigate();
     return (
         <Container>
             {playlists.map((playlist) => {
                 return (
-                    <List>
-                        <ListImg src={undefined || '/logo512.png'} />
+                    <List
+                        key={playlist.id}
+                        onClick={() => {
+                            navigate(`/playlist/${playlist.id}`);
+                            setPlaylist(playlist.id);
+                        }}
+                    >
+                        <ListImg src={undefined || '/basicPlaylist.webp'} />
                         <ListInfo>
                             <ListTitle>{playlist.title}</ListTitle>
                             <ListType>플레이리스트</ListType>

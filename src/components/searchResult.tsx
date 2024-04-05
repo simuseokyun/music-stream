@@ -20,6 +20,7 @@ interface IAlbum {
         }[];
         id: string;
         name: string;
+        artists: { name: string }[];
     };
     name: string;
 }
@@ -54,6 +55,7 @@ export const SearchResult = () => {
         const trackData = await searchTrack(token, search);
         return trackData;
     });
+    console.log(trackData);
     return (
         <div style={{ padding: '20px' }}>
             <table style={{ width: '100%', verticalAlign: 'middle' }}>
@@ -71,7 +73,16 @@ export const SearchResult = () => {
                                   <td>
                                       <TrackImg url={item.album.images[0].url} />
                                   </td>
-                                  <TrackTitle>{item.name}</TrackTitle>
+                                  <TrackTitle>
+                                      {item.name}
+                                      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4px' }}>
+                                          {item.album.artists.map((artist) => {
+                                              return (
+                                                  <p style={{ fontSize: '14px', color: '#a0a0a0' }}>{artist.name}</p>
+                                              );
+                                          })}
+                                      </div>
+                                  </TrackTitle>
                                   <AlbumTitle>
                                       <Link to={`/album/${item.album.id}`}>{item.album.name}</Link>
                                   </AlbumTitle>
