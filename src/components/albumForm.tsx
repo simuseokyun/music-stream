@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { TrackList } from './trackList';
 interface IAlbum {
     album_type: string;
     images: { height: number; url: string; width: number }[];
@@ -84,21 +85,7 @@ const TrackLists = styled.table`
     height: 100%;
     border-collapse: collapse;
 `;
-const TrackList = styled.tr`
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.5);
-    }
-    a {
-        color: #a0a0a0;
-        &:hover {
-            color: white;
-        }
-    }
-    border-radius: 10px;
-`;
-const TrackArtist = styled.span`
-    /* margin-left: 5px; */
-`;
+
 const CloseBtn = styled.span`
     position: absolute;
     top: 20px;
@@ -125,19 +112,12 @@ export const AlbumForm = () => {
     const onClose = () => {
         navigate(-1);
     };
-    const msTransform = (ms: number) => {
-        const totalSeconds = ms / 1000;
-        const minutes = Math.floor(totalSeconds / 60);
-        let seconds = Math.floor(totalSeconds % 60);
-        return { minutes, seconds };
-    };
 
     const { albumId } = useParams();
     const token = useRecoilValue(tokenValue);
-    console.log(token);
 
     const { isLoading, data } = useQuery<IAlbum>(['albumId', albumId], () => getAlbum(token, albumId!));
-    console.log(data);
+
     return (
         <Container>
             {isLoading ? (
@@ -174,28 +154,15 @@ export const AlbumForm = () => {
                             </thead>
                             <tbody>
                                 {data?.tracks.items.map((track, i) => (
-                                    <TrackList key={track.name} style={{ borderRadius: '5px' }}>
-                                        <td style={{ width: '10%' }}>{track.track_number}</td>
-                                        <td style={{ textAlign: 'left', padding: '10px 0' }}>
-                                            <p style={{ marginBottom: '5px' }}>{track.name}</p>
-                                            {track.artists.map((artist, i) => (
-                                                <TrackArtist key={artist.name}>
-                                                    <Link to={`/artist/${artist.id}`}>
-                                                        {track.artists.length == 1
-                                                            ? artist.name
-                                                            : track.artists.length == i + 1
-                                                            ? artist.name
-                                                            : artist.name + ' , '}
-                                                    </Link>
-                                                </TrackArtist>
-                                            ))}
-                                        </td>
-                                        <td>{`${msTransform(track.duration_ms).minutes}:${
-                                            String(msTransform(track.duration_ms).seconds).length === 1
-                                                ? `0${msTransform(track.duration_ms).seconds}`
-                                                : msTransform(track.duration_ms).seconds
-                                        }`}</td>
-                                    </TrackList>
+                                    <TrackList
+                                        key={track.name}
+                                        album_title={data.name}
+                                        cover={data.images[0].url}
+                                        name={track.name}
+                                        artists={track.artists}
+                                        track_number={track.track_number}
+                                        duration_ms={track.duration_ms}
+                                    />
                                 ))}
                             </tbody>
                         </TrackLists>
