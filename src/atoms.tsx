@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 
 export enum typeTransform {
     single = '싱글',
@@ -10,7 +10,14 @@ export interface IPlaylist {
     id: string;
     title: string;
     img?: string;
-    tracks: { id: string; title: string; duration_ms: number }[];
+    tracks: {
+        id: string;
+        title: string;
+        duration_ms: number;
+        cover: string;
+        album_title: string;
+        artists: { name: string }[];
+    }[];
 }
 
 export const searchState = atom({
@@ -31,4 +38,20 @@ export const addPlaylistState = atom({
 export const playlistList = atom<IPlaylist[]>({
     key: 'playlistList',
     default: [],
+});
+export const clickPlaylistState = atom({
+    key: 'clickPlaylistState',
+    default: '',
+});
+
+export const playlistFilter = selector({
+    key: 'playlistFilter',
+    get: ({ get }) => {
+        const playLists = get(playlistList);
+        const clickPlaylist = get(clickPlaylistState);
+        const select = playLists.find((playlist) => {
+            return playlist.id === clickPlaylist;
+        });
+        return select;
+    },
 });
