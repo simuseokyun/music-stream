@@ -57,7 +57,7 @@ export const AddPlaylistForm = () => {
     } = useForm<IData>();
 
     const onValid = ({ title }: IData) => {
-        addPlaylist((prev) => [{ id: String(Date.now()), title, img: '1' }, ...prev]);
+        addPlaylist((prev) => [{ id: String(Date.now()), title, img: '1', tracks: [] }, ...prev]);
         close(false);
         setValue('title', '');
     };
