@@ -7,6 +7,7 @@ import { About } from './components/about';
 import { AlbumForm } from './components/albumForm';
 import { ArtistForm } from './components/artistForm';
 import { SearchResult } from './components/searchResult';
+import { PlaylistForm } from './components/playlistForm';
 
 export const router = createBrowserRouter([
     {
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
             {
                 path: 'artist/:artistId',
                 element: <ArtistForm />,
+            },
+            {
+                path: 'playlist/:playlistId',
+                element: <PlaylistForm />,
             },
         ],
     },
