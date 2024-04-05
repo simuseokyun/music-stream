@@ -10,6 +10,7 @@ export interface IPlaylist {
     id: string;
     title: string;
     img?: string;
+    tracks: { id: string; title: string; duration_ms: number }[];
 }
 
 export const searchState = atom({
@@ -29,5 +30,5 @@ export const addPlaylistState = atom({
 
 export const playlistList = atom<IPlaylist[]>({
     key: 'playlistList',
-    default: [{ id: '아이디', title: '플레이리스트 제목', img: '' }],
+    default: [],
 });
