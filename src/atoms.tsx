@@ -18,6 +18,20 @@ export interface IPlaylist {
         album_title: string;
         artists: { name: string }[];
     }[];
+    top?: boolean;
+}
+export interface IAlbum {
+    title: string;
+    img?: string;
+    name: string;
+    // tracks: {
+    //     id: string;
+    //     title: string;
+    //     duration_ms: number;
+
+    //     album_title: string;
+    //     artists: { name: string }[];
+    // }[];
 }
 
 export const searchState = atom({
@@ -37,6 +51,10 @@ export const addPlaylistState = atom({
 
 export const playlistList = atom<IPlaylist[]>({
     key: 'playlistList',
+    default: [],
+});
+export const saveAlbumList = atom<IAlbum[]>({
+    key: 'saveAlbumList',
     default: [],
 });
 export const clickPlaylistState = atom({
