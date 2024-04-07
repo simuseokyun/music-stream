@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { clickPlaylistState, playlistFilter, playlistList } from '../atoms';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { spawn } from 'child_process';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Container = styled.div`
     padding: 20px;
@@ -36,9 +36,11 @@ const TrackImg = styled.img`
 `;
 
 export const PlaylistForm = () => {
-    // const [playlist, setPlaylist] = useRecoilState(playlistList);
+    const [playlists, setPlaylists] = useRecoilState(playlistList);
+
     const playlist = useRecoilValue(playlistFilter);
     const test = useRecoilValue(clickPlaylistState);
+    const navigate = useNavigate();
     console.log(test);
     console.log(playlist);
     const msTransform = (ms: number) => {
@@ -47,9 +49,31 @@ export const PlaylistForm = () => {
         let seconds = Math.floor(totalSeconds % 60);
         return { minutes, seconds };
     };
-    // const onDelete = () ={
-
-    // }
+    const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const {
+            currentTarget: { name },
+        } = event;
+        setPlaylists((prev) => {
+            const fil = prev.filter((playlist) => {
+                return playlist.title !== name;
+            });
+            return fil;
+        });
+        navigate('/');
+    };
+    const topFixed = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const {
+            currentTarget: { name },
+        } = event;
+        setPlaylists((prev) => {
+            const index = prev.findIndex((playlist) => {
+                return playlist.title === name;
+            });
+            // return [{ ...prev.slice(index, 1) }];
+            console.log(prev);
+            return [{ ...prev[index], top: true }, ...prev.slice(0, index), ...prev.slice(index + 1)];
+        });
+    };
     return (
         <Container>
             <PlaylistWrap>
@@ -59,7 +83,12 @@ export const PlaylistForm = () => {
                         <p>플레이리스트</p>
                         <p>{playlist?.title}</p>
                         <p>{playlist?.tracks.length + '곡'}</p>
-                        <button>플레이리스트 삭제하기</button>
+                        <button name={playlist?.title} onClick={onDelete}>
+                            플레이리스트 삭제하기
+                        </button>
+                        <button name={playlist?.title} onClick={topFixed}>
+                            플레이리스트 고정
+                        </button>
                     </PlaylistInfo>
                 </PlaylistTop>
                 <table style={{ width: '100%' }}>
