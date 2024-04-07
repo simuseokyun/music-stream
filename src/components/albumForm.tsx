@@ -1,13 +1,13 @@
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { tokenValue, typeTransform } from '../atoms';
+import { saveAlbumList, tokenValue, typeTransform } from '../atoms';
 import { useQuery } from 'react-query';
 import { getAlbum } from '../api';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import { useSetRecoilState } from 'recoil';
 import { TrackList } from './trackList';
 interface IAlbum {
     album_type: string;
@@ -115,8 +115,13 @@ export const AlbumForm = () => {
 
     const { albumId } = useParams();
     const token = useRecoilValue(tokenValue);
+    const setAlbum = useSetRecoilState(saveAlbumList);
 
     const { isLoading, data } = useQuery<IAlbum>(['albumId', albumId], () => getAlbum(token, albumId!));
+    console.log(isLoading);
+    const saveAlbum = () => {
+        setAlbum((prev) => [...prev, { img: data?.images[0].url, title: data?.name!, name: data?.artists[0].name! }]);
+    };
 
     return (
         <Container>
@@ -141,6 +146,7 @@ export const AlbumForm = () => {
                             <ArtistName>{data?.artists[0].name}</ArtistName>
                             <ReleaseYear>{data?.release_date.slice(0, 4)}</ReleaseYear>
                             <TotalTracks>{data?.total_tracks}곡</TotalTracks>
+                            <button onClick={saveAlbum}>앨범 찜하기</button>
                         </AlbumInfo>
                     </AlbumTop>
                     <TrackListsWrap>
