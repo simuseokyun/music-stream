@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { addPlaylistState } from '../atoms';
 import { PlaylistList } from './playlistList';
+import { AlbumList } from './albumList';
 
 const SideBarWrap = styled.div`
     width: 100%;
@@ -70,6 +71,7 @@ export const SideBar = () => {
     const addPlaylist = () => {
         setPlaylist(true);
     };
+    const onClick = () => {};
     return (
         <SideBarWrap>
             <SideBarTop>
@@ -93,6 +95,7 @@ export const SideBar = () => {
                 <Button text="플레이리스트" />
                 <Button text="내가 찜한 앨범" />
                 <PlaylistList />
+                <AlbumList />
             </SideBarBot>
         </SideBarWrap>
     );

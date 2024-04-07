@@ -32,18 +32,27 @@ export const TrackList = ({ name, track_number, duration_ms, cover, album_title,
     const [playlists, setPlaylist] = useRecoilState(playlistList);
     const [open, setOpen] = useState(false);
 
-    const addTrack = () => {
+    const openBtn = () => {
         setOpen((prev) => !prev);
-        // setPlaylist((prev) => {
-        //     if (!prev.length) {
-        //         alert('플레이리스트를 먼저 생성해주세요');
-        //         return [];
-        //     }
-        //     const newTrack = { id: name, title: name, duration_ms, cover, album_title, artists };
-        //     const newTracks = [...prev[0]?.tracks, newTrack];
-        //     const newPlaylist = [{ ...prev[0], tracks: newTracks }];
-        //     return newPlaylist;
-        // });
+    };
+    const addTrack = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const {
+            currentTarget: { name },
+        } = event;
+
+        setPlaylist((prev) => {
+            const newTrack = { id: name, title: name, duration_ms, cover, album_title, artists };
+            const prevArray = prev.map((prev, index) => {
+                if (prev.title === name) {
+                    return {
+                        ...prev,
+                        tracks: [...prev.tracks, newTrack],
+                    };
+                }
+                return prev;
+            });
+            return prevArray;
+        });
     };
     const msTransform = (ms: number) => {
         const totalSeconds = ms / 1000;
@@ -73,10 +82,14 @@ export const TrackList = ({ name, track_number, duration_ms, cover, album_title,
                     ? `0${msTransform(duration_ms).seconds}`
                     : msTransform(duration_ms).seconds
             }`}</td>
-            <button onClick={addTrack}>추가</button>
+            <button onClick={openBtn}>추가</button>
             {open
                 ? playlists.map((playlist) => {
-                      return <button>{playlist.title}</button>;
+                      return (
+                          <button name={playlist.title} onClick={addTrack}>
+                              {playlist.title}
+                          </button>
+                      );
                   })
                 : null}
         </Container>
