@@ -32,6 +32,14 @@ const ListTitle = styled.h1`
 const ListType = styled.p`
     font-size: 12px;
 `;
+const ListFixed = styled.span`
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    background-color: green;
+    margin-right: 5px;
+`;
 
 export const PlaylistList = () => {
     const playlists = useRecoilValue(playlistList);
@@ -50,7 +58,10 @@ export const PlaylistList = () => {
                     >
                         <ListImg src={undefined || '/basicPlaylist.webp'} />
                         <ListInfo>
-                            <ListTitle>{playlist.title}</ListTitle>
+                            <ListTitle>
+                                {playlist.top && <ListFixed />}
+                                {playlist.title}
+                            </ListTitle>
                             <ListType>플레이리스트</ListType>
                         </ListInfo>
                     </List>
