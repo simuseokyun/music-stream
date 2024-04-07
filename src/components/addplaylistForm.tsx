@@ -48,7 +48,6 @@ export const AddPlaylistForm = () => {
     const addPlaylist = useSetRecoilState(playlistList);
     const playList = useRecoilValue(playlistList);
     const close = useSetRecoilState(addPlaylistState);
-
     const {
         register,
         handleSubmit,
@@ -57,11 +56,20 @@ export const AddPlaylistForm = () => {
     } = useForm<IData>();
 
     const onValid = ({ title }: IData) => {
-        addPlaylist((prev) => [{ id: String(Date.now()), title, img: '1', tracks: [] }, ...prev]);
+        addPlaylist((prev) => {
+            const fil = prev.find((playlist) => {
+                return playlist.title === title;
+            });
+            if (fil) {
+                alert('중복된 플레이리스트가 존재합니다');
+                return prev;
+            }
+            return [{ id: String(Date.now()), title, img: '1', tracks: [] }, ...prev];
+        });
         close(false);
         setValue('title', '');
     };
-    console.log(playList);
+
     const onClose = () => {
         close(false);
     };
