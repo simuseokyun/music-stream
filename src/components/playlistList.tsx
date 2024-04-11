@@ -40,6 +40,7 @@ const ListFixed = styled.span`
     background-color: green;
     margin-right: 5px;
 `;
+const Message = styled.p``;
 
 export const PlaylistList = () => {
     const playlists = useRecoilValue(playlistList);
@@ -47,26 +48,30 @@ export const PlaylistList = () => {
     const navigate = useNavigate();
     return (
         <Container>
-            {playlists.map((playlist) => {
-                return (
-                    <List
-                        key={playlist.id}
-                        onClick={() => {
-                            navigate(`/playlist/${playlist.id}`);
-                            setPlaylist(playlist.id);
-                        }}
-                    >
-                        <ListImg src={undefined || '/basicPlaylist.webp'} />
-                        <ListInfo>
-                            <ListTitle>
-                                {playlist.top && <ListFixed />}
-                                {playlist.title}
-                            </ListTitle>
-                            <ListType>플레이리스트</ListType>
-                        </ListInfo>
-                    </List>
-                );
-            })}
+            {playlists.length ? (
+                playlists.map((playlist) => {
+                    return (
+                        <List
+                            key={playlist.id}
+                            onClick={() => {
+                                navigate(`/playlist/${playlist.id}`);
+                                setPlaylist(playlist.id);
+                            }}
+                        >
+                            <ListImg src={undefined || '/basicPlaylist.webp'} />
+                            <ListInfo>
+                                <ListTitle>
+                                    {playlist.top && <ListFixed />}
+                                    {playlist.title}
+                                </ListTitle>
+                                <ListType>플레이리스트</ListType>
+                            </ListInfo>
+                        </List>
+                    );
+                })
+            ) : (
+                <Message>목록이 없습니다.</Message>
+            )}
         </Container>
     );
 };

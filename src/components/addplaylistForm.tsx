@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { addPlaylistState, playlistList } from '../atoms';
+import { addPlaylistState, clickMenuAlbum, clickMenuPlaylist, clickPlaylistState, playlistList } from '../atoms';
+import { useNavigate } from 'react-router-dom';
 
 interface IData {
     title: string;
@@ -48,6 +49,9 @@ export const AddPlaylistForm = () => {
     const addPlaylist = useSetRecoilState(playlistList);
     const playList = useRecoilValue(playlistList);
     const close = useSetRecoilState(addPlaylistState);
+    const setPlaylistState = useSetRecoilState(clickMenuPlaylist);
+    const setAlbumtState = useSetRecoilState(clickMenuAlbum);
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -55,7 +59,7 @@ export const AddPlaylistForm = () => {
         formState: { errors },
     } = useForm<IData>();
 
-    const onValid = ({ title }: IData) => {
+    const onValid = async ({ title }: IData) => {
         addPlaylist((prev) => {
             const fil = prev.find((playlist) => {
                 return playlist.title === title;
@@ -64,8 +68,55 @@ export const AddPlaylistForm = () => {
                 alert('중복된 플레이리스트가 존재합니다');
                 return prev;
             }
-            return [{ id: String(Date.now()), title, img: '1', tracks: [] }, ...prev];
+            if (!title) {
+                const value = [
+                    ...prev,
+                    {
+                        id: String(Date.now()),
+                        title: `플레이리스트 #${prev.length + 1}`,
+                        img: '',
+                        tracks: [],
+                        top: null,
+                    },
+                ];
+                // const newArr = value.sort((a, b) => {
+                //     if (Number(a.id) > Number(b.id)) {
+                //         return 1;
+                //     } else {
+                //         return -1;
+                //     }
+                // });
+                const topTrueTracks = value.filter((track) => {
+                    return track.top !== null;
+                });
+                const topFalseTracks = value.filter((track) => {
+                    return track.top === null;
+                });
+                const newTracks = [...topTrueTracks, ...topFalseTracks];
+                return newTracks;
+            }
+
+            const value = [...prev, { id: String(Date.now()), title, img: '', tracks: [], top: null }];
+            // const newArr = value.sort((a, b) => {
+            //     if (Number(a.id) > Number(b.id)) {
+            //         return 1;
+            //     } else {
+            //         return -1;
+            //     }
+            // });
+            const topTrueTracks = value.filter((track) => {
+                return track.top !== null;
+            });
+            const topFalseTracks = value.filter((track) => {
+                return track.top === null;
+            });
+
+            const newTracks = [...topTrueTracks, ...topFalseTracks];
+            return newTracks;
         });
+
+        setPlaylistState(true);
+        setAlbumtState(false);
         close(false);
         setValue('title', '');
     };
@@ -86,8 +137,7 @@ export const AddPlaylistForm = () => {
                 <AddForm onSubmit={handleSubmit(onValid)}>
                     <Input
                         {...register('title', {
-                            required: { value: true, message: '필수 값 입니다' },
-                            minLength: { value: 2, message: '두 글자 이상 입력해주세요' },
+                            required: false,
                         })}
                         type="text"
                         placeholder="플레이리스트 이름을 작성해주세요"
