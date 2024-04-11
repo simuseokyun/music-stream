@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Button } from './button';
 import { Link } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { addPlaylistState } from '../atoms';
+import { addPlaylistState, clickMenuAlbum, clickMenuPlaylist, openSearch } from '../atoms';
 import { PlaylistList } from './playlistList';
 import { AlbumList } from './albumList';
 
@@ -68,17 +68,32 @@ const TitleWrap = styled.div`
 
 export const SideBar = () => {
     const setPlaylist = useSetRecoilState(addPlaylistState);
+    const [playlistState, setPlaylistState] = useRecoilState(clickMenuPlaylist);
+    const [albumState, setAlbumState] = useRecoilState(clickMenuAlbum);
+    const searchState = useSetRecoilState(openSearch);
     const addPlaylist = () => {
         setPlaylist(true);
     };
-    const onClick = () => {};
+    const onClickMenu1 = () => {
+        setPlaylistState(true);
+        setAlbumState(false);
+    };
+    const onClickMenu2 = () => {
+        setAlbumState(true);
+        setPlaylistState(false);
+    };
+    const setSearch = () => {
+        searchState((prev) => {
+            return !prev;
+        });
+    };
     return (
         <SideBarWrap>
             <SideBarTop>
                 <TopList>
                     <Link to="/">홈</Link>
                 </TopList>
-                <TopList>검색하기</TopList>
+                <TopList onClick={setSearch}>검색하기</TopList>
             </SideBarTop>
             <SideBarBot>
                 <TitleWrap>
@@ -92,10 +107,9 @@ export const SideBar = () => {
                         {/* <AddPlaylistMessage>플레이리스트 생성</AddPlaylistMessage> */}
                     </span>
                 </TitleWrap>
-                <Button text="플레이리스트" />
-                <Button text="내가 찜한 앨범" />
-                <PlaylistList />
-                <AlbumList />
+                <Button text="플레이리스트" state={playlistState} onClick={onClickMenu1} />
+                <Button text="내가 찜한 앨범" state={albumState} onClick={onClickMenu2} />
+                {playlistState ? <PlaylistList /> : <AlbumList />}
             </SideBarBot>
         </SideBarWrap>
     );
