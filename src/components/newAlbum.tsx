@@ -59,7 +59,6 @@ const NewAlbumWrap = styled.ul`
 `;
 
 export const NewAlbum = ({ newAlbums }: INewAlbum) => {
-    console.log(newAlbums);
     return (
         <>
             <Container>
