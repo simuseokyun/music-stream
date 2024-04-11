@@ -16,14 +16,16 @@ export interface IPlaylist {
         duration_ms: number;
         cover: string;
         album_title: string;
-        artists: { name: string }[];
+        album_id: string;
+        artists: { name: string; id: string }[];
     }[];
-    top?: boolean;
+    top?: number | null;
 }
 export interface IAlbum {
     title: string;
     img?: string;
     name: string;
+    id: string;
     // tracks: {
     //     id: string;
     //     title: string;
@@ -72,4 +74,18 @@ export const playlistFilter = selector({
         });
         return select;
     },
+});
+
+export const clickMenuPlaylist = atom({
+    key: 'playlistState',
+    default: true,
+});
+export const clickMenuAlbum = atom({
+    key: 'albumState',
+    default: false,
+});
+
+export const openSearch = atom({
+    key: 'openSearch',
+    default: false,
 });
