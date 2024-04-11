@@ -7,6 +7,9 @@ import { SideBar } from './components/sideBar';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { AddPlaylistForm } from './components/addplaylistForm';
 import { addPlaylistState, playlistList } from './atoms';
+import { useSetRecoilState } from 'recoil';
+import { getToken } from './api';
+import { tokenValue } from './atoms';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -82,9 +85,21 @@ const Container = styled.div`
     grid-template-columns: 1fr 3fr;
     gap: 20px;
 `;
+interface TokenResponse {
+    access_token: string;
+    expires_in: number;
+    token_type: string;
+}
 
 function Root() {
     const openPlaylist = useRecoilValue(addPlaylistState);
+    const setToken = useSetRecoilState(tokenValue);
+
+    const { isLoading: tokenLoading, data: tokenData } = useQuery<TokenResponse>('getToken', getToken, {
+        onSuccess: (data) => {
+            setToken(data?.access_token!);
+        },
+    });
     return (
         <>
             <GlobalStyle />
