@@ -20,7 +20,7 @@ interface IAlbum {
         }[];
         id: string;
         name: string;
-        artists: { name: string }[];
+        artists: { name: string; id: string }[];
     };
     name: string;
 }
@@ -76,9 +76,31 @@ export const SearchResult = () => {
                                   <TrackTitle>
                                       {item.name}
                                       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4px' }}>
-                                          {item.album.artists.map((artist) => {
+                                          {item.album.artists.map((artist, i) => {
                                               return (
-                                                  <p style={{ fontSize: '14px', color: '#a0a0a0' }}>{artist.name}</p>
+                                                  <p>
+                                                      <Link
+                                                          style={{ fontSize: '14px', color: '#a0a0a0' }}
+                                                          to={`/artist/${artist.id}`}
+                                                      >
+                                                          {artist.name}
+                                                      </Link>
+                                                      {item.album.artists.length == 1
+                                                          ? undefined
+                                                          : item.album.artists[i + 1]
+                                                          ? ','
+                                                          : undefined}
+                                                      {/* {artists.map((artist, i) => (
+                                                          <TrackArtist key={artist.name}>
+                                                              <Link to={`/artist/${artist.id}`}>{artist.name}</Link>
+                                                              {artists.length == 1
+                                                                  ? undefined
+                                                                  : artists[i + 1]
+                                                                  ? ','
+                                                                  : undefined}
+                                                          </TrackArtist>
+                                                      ))} */}
+                                                  </p>
                                               );
                                           })}
                                       </div>
