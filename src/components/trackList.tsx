@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useState } from 'react';
-import { playlistList } from '../atoms';
+import { addPlaylistState, playlistList } from '../atoms';
 
 interface ITrack {
     name: string;
@@ -11,6 +11,7 @@ interface ITrack {
     duration_ms: number;
     cover: string;
     album_title: string;
+    album_id: string;
 }
 const Container = styled.tr`
     &:hover {
@@ -28,22 +29,67 @@ const Container = styled.tr`
 const TrackArtist = styled.span`
     /* margin-left: 5px; */
 `;
-export const TrackList = ({ name, track_number, duration_ms, cover, album_title, artists }: ITrack) => {
-    const [playlists, setPlaylist] = useRecoilState(playlistList);
-    const [open, setOpen] = useState(false);
+const rotateIn = keyframes`
+    from {
+        transform: rotate(0deg) 
+    }
+    to {
+        transform: rotate(180deg) 
+    }
+`;
 
+const rotateOut = keyframes`
+    from {
+        transform: rotate(180deg) 
+    }
+    to {
+        transform: rotate(0deg)
+    }
+`;
+const PlusBtn = styled.span`
+    &:hover {
+        animation: ${rotateIn} 1s forwards;
+    }
+    /* &:not(:hover) {
+        animation: ${rotateOut} 1s forwards;
+    } */
+`;
+const Category = styled.ul`
+    position: absolute;
+    right: 0;
+    width: 150px;
+    padding: 10px;
+    background-color: black;
+`;
+const CategoryList = styled.li``;
+
+export const TrackList = ({ name, track_number, duration_ms, cover, album_title, artists, album_id }: ITrack) => {
+    const [playlists, setPlaylist] = useRecoilState(playlistList);
+    const addPlaylistFormState = useSetRecoilState(addPlaylistState);
+    const [open, setOpen] = useState(false);
     const openBtn = () => {
+        if (!playlists.length) {
+            alert('먼저 플레이리스트를 생성해주세요');
+            addPlaylistFormState((prev) => !prev);
+            return;
+        }
         setOpen((prev) => !prev);
     };
-    const addTrack = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const addTrack = (event: React.MouseEvent<HTMLLIElement>) => {
         const {
-            currentTarget: { name },
+            currentTarget: { textContent, id },
         } = event;
-
         setPlaylist((prev) => {
-            const newTrack = { id: name, title: name, duration_ms, cover, album_title, artists };
+            const newTrack = { id: name, title: name, duration_ms, cover, album_title, artists, album_id };
             const prevArray = prev.map((prev, index) => {
-                if (prev.title === name) {
+                if (prev.title === textContent) {
+                    const confirm = prev.tracks.find((ele) => {
+                        return ele.title === name;
+                    });
+                    if (confirm) {
+                        alert('이미 플레이리스트에 곡이 존재합니다');
+                        return prev;
+                    }
                     return {
                         ...prev,
                         tracks: [...prev.tracks, newTrack],
@@ -67,13 +113,8 @@ export const TrackList = ({ name, track_number, duration_ms, cover, album_title,
                 <p style={{ marginBottom: '5px' }}>{name}</p>
                 {artists.map((artist, i) => (
                     <TrackArtist key={artist.name}>
-                        <Link to={`/artist/${artist.id}`}>
-                            {artists.length == 1
-                                ? artist.name
-                                : artists.length == i + 1
-                                ? artist.name
-                                : artist.name + ' , '}
-                        </Link>
+                        <Link to={`/artist/${artist.id}`}>{artist.name}</Link>
+                        {artists.length == 1 ? undefined : artists[i + 1] ? ',' : undefined}
                     </TrackArtist>
                 ))}
             </td>
@@ -82,16 +123,22 @@ export const TrackList = ({ name, track_number, duration_ms, cover, album_title,
                     ? `0${msTransform(duration_ms).seconds}`
                     : msTransform(duration_ms).seconds
             }`}</td>
-            <button onClick={openBtn}>추가</button>
-            {open
-                ? playlists.map((playlist) => {
-                      return (
-                          <button name={playlist.title} onClick={addTrack}>
-                              {playlist.title}
-                          </button>
-                      );
-                  })
-                : null}
+            <td>
+                <PlusBtn className="material-symbols-outlined" style={{ display: 'block' }} onClick={openBtn}>
+                    add_circle
+                </PlusBtn>
+            </td>
+            {open ? (
+                <Category>
+                    {playlists.map((playlist) => {
+                        return (
+                            <CategoryList key={playlist.id} id={playlist.title} onClick={addTrack}>
+                                {playlist.title}
+                            </CategoryList>
+                        );
+                    })}
+                </Category>
+            ) : null}
         </Container>
     );
 };
