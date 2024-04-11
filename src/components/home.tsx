@@ -143,15 +143,6 @@ export const Home = () => {
             setToken(data?.access_token!);
         },
     });
-
-    // const { isLoading: TrackLoading, data: trackData } = useQuery<ITracks>(['searchTrack', search], async () => {
-    //     if (!tokenLoading) {
-    //         const trackData = await searchTrack(tokenData?.access_token!, search);
-
-    //         return trackData;
-    //     }
-    // });
-
     const { isLoading: newAlbumLoading, data: newAlbumData } = useQuery<INewAlbum>(
         'newAlbum',
         async () => {
