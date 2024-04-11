@@ -73,3 +73,30 @@ export const getNewAlbum = async (token: string) => {
     const json = await response.json();
     return json;
 };
+export const getArtistAlbum = async (token: string, artistId: string) => {
+    const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/albums`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const json = await response.json();
+    return json;
+};
+export const getArtistTopTrack = async (token: string, artistId: string) => {
+    const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const json = await response.json();
+    return json;
+};
+
+export const msTransform = (ms: number) => {
+    const totalSeconds = ms / 1000;
+    const minutes = Math.floor(totalSeconds / 60);
+    let seconds = Math.floor(totalSeconds % 60);
+    return { minutes, seconds };
+};
