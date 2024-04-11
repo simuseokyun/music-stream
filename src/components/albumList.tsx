@@ -6,8 +6,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 const Container = styled.ul``;
 const List = styled.li`
-    display: flex;
-    align-items: center;
     /* margin-top: 5px; */
     border-radius: 8px;
     transition: all 0.2s;
@@ -18,6 +16,11 @@ const List = styled.li`
     }
     &:first-child {
         margin-top: 10px;
+    }
+    a {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
     }
 `;
 const ListImg = styled.img`
@@ -39,21 +42,28 @@ const ListTitle = styled.h1`
 const ListArtist = styled.p`
     font-size: 12px;
 `;
+const Message = styled.p``;
 
 export const AlbumList = () => {
     const AlbumList = useRecoilValue(saveAlbumList);
     console.log(AlbumList);
     return (
         <Container>
-            {AlbumList.map((album) => (
-                <List>
-                    <ListImg src={album.img} />
-                    <ListInfo>
-                        <ListTitle>{album.title}</ListTitle>
-                        <ListArtist>{album.name}</ListArtist>
-                    </ListInfo>
-                </List>
-            ))}
+            {AlbumList.length ? (
+                AlbumList.map((album) => (
+                    <List>
+                        <Link to={`/album/${album.id}`}>
+                            <ListImg src={album.img} />
+                            <ListInfo>
+                                <ListTitle>{album.title}</ListTitle>
+                                <ListArtist>{album.name}</ListArtist>
+                            </ListInfo>
+                        </Link>
+                    </List>
+                ))
+            ) : (
+                <Message>찜한 앨범이 없습니다</Message>
+            )}
         </Container>
     );
 };

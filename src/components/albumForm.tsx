@@ -1,13 +1,13 @@
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { saveAlbumList, tokenValue, typeTransform } from '../atoms';
+import { clickMenuAlbum, clickMenuPlaylist, saveAlbumList, tokenValue, typeTransform } from '../atoms';
 import { useQuery } from 'react-query';
 import { getAlbum } from '../api';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { TrackList } from './trackList';
 interface IAlbum {
     album_type: string;
@@ -20,6 +20,7 @@ interface IAlbum {
         items: { name: string; track_number: number; duration_ms: number; artists: { name: string; id: string }[] }[];
     };
     copyrights: { text: string }[];
+    id: string;
 }
 
 const Container = styled.div`
@@ -37,7 +38,8 @@ const Container = styled.div`
     box-sizing: border-box;
 `;
 const AlbumWrap = styled.div`
-    width: 1000px;
+    width: 90%;
+    max-width: 860px;
     height: 700px;
     position: relative;
     border-radius: 8px;
@@ -115,13 +117,33 @@ export const AlbumForm = () => {
 
     const { albumId } = useParams();
     const token = useRecoilValue(tokenValue);
-    const setAlbum = useSetRecoilState(saveAlbumList);
+    const [albums, setAlbum] = useRecoilState(saveAlbumList);
+    const clickPlaylistState = useSetRecoilState(clickMenuPlaylist);
+    const clickAlbumState = useSetRecoilState(clickMenuAlbum);
 
     const { isLoading, data } = useQuery<IAlbum>(['albumId', albumId], () => getAlbum(token, albumId!));
-    console.log(isLoading);
+
     const saveAlbum = () => {
-        setAlbum((prev) => [...prev, { img: data?.images[0].url, title: data?.name!, name: data?.artists[0].name! }]);
+        setAlbum((prev) => {
+            return [
+                ...prev,
+                { img: data?.images[0].url, title: data?.name!, name: data?.artists[0].name!, id: albumId! },
+            ];
+        });
+        clickAlbumState(true);
+        clickPlaylistState(false);
     };
+    const deleteAlbum = () => {
+        setAlbum((prev) => {
+            const newArr = prev.filter((saveAlbum) => {
+                return saveAlbum.title !== data?.name;
+            });
+            return newArr;
+        });
+    };
+    const saveAlbumState = [...albums].find((album) => {
+        return album.title === data?.name;
+    });
 
     return (
         <Container>
@@ -143,10 +165,17 @@ export const AlbumForm = () => {
                                     : typeTransform.album}
                             </p>
                             <AlbumTitle>{data?.name}</AlbumTitle>
-                            <ArtistName>{data?.artists[0].name}</ArtistName>
+                            <ArtistName>
+                                <Link to={`/artist/${data?.artists[0].id}`}>{data?.artists[0].name}</Link>
+                                {/* {data?.artists[0].name} */}
+                            </ArtistName>
                             <ReleaseYear>{data?.release_date.slice(0, 4)}</ReleaseYear>
                             <TotalTracks>{data?.total_tracks}곡</TotalTracks>
-                            <button onClick={saveAlbum}>앨범 찜하기</button>
+                            {saveAlbumState ? (
+                                <button onClick={deleteAlbum}>찜 해제</button>
+                            ) : (
+                                <button onClick={saveAlbum}>앨범 찜하기</button>
+                            )}
                         </AlbumInfo>
                     </AlbumTop>
                     <TrackListsWrap>
@@ -155,7 +184,9 @@ export const AlbumForm = () => {
                                 <tr style={{ padding: '5px 0', borderBottom: '1px solid #808080' }}>
                                     <th style={{ width: '10%', padding: '10px 0' }}>#</th>
                                     <th style={{ textAlign: 'left', padding: '10px 0' }}>제목</th>
-                                    <th style={{ padding: '10px 0 ' }}>러닝타임</th>
+                                    <th style={{ padding: '10px 0 ' }}>
+                                        <span className="material-symbols-outlined">schedule</span>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -168,6 +199,7 @@ export const AlbumForm = () => {
                                         artists={track.artists}
                                         track_number={track.track_number}
                                         duration_ms={track.duration_ms}
+                                        album_id={data.id}
                                     />
                                 ))}
                             </tbody>
