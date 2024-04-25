@@ -9,6 +9,7 @@ import { AlbumList } from './albumList';
 const SideBarWrap = styled.div`
     width: 100%;
     height: 500px;
+    overflow: hidden;
     position: sticky;
     top: 70px;
 `;
@@ -49,10 +50,12 @@ const AddPlaylistMessage = styled.p`
     opacity: 0;
     transition: all 0.2s;
 `;
+const LibraryTitle = styled.h1``;
 const TitleWrap = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 5px;
     span {
         border-radius: 20px;
         padding: 2px;
@@ -74,11 +77,11 @@ export const SideBar = () => {
     const addPlaylist = () => {
         setPlaylist(true);
     };
-    const onClickMenu1 = () => {
+    const onClickPlaylist = () => {
         setPlaylistState(true);
         setAlbumState(false);
     };
-    const onClickMenu2 = () => {
+    const onClickSetAlbum = () => {
         setAlbumState(true);
         setPlaylistState(false);
     };
@@ -91,24 +94,23 @@ export const SideBar = () => {
         <SideBarWrap>
             <SideBarTop>
                 <TopList>
-                    <Link to="/">홈</Link>
+                    <Link to="/home">홈</Link>
                 </TopList>
                 <TopList onClick={setSearch}>검색하기</TopList>
             </SideBarTop>
             <SideBarBot>
                 <TitleWrap>
-                    <h1>나의 라이브러리</h1>
+                    <LibraryTitle>나의 라이브러리</LibraryTitle>
                     <span
                         onClick={addPlaylist}
                         style={{ position: 'relative', background: '' }}
                         className="material-symbols-outlined"
                     >
                         add_circle
-                        {/* <AddPlaylistMessage>플레이리스트 생성</AddPlaylistMessage> */}
                     </span>
                 </TitleWrap>
-                <Button text="플레이리스트" state={playlistState} onClick={onClickMenu1} />
-                <Button text="내가 찜한 앨범" state={albumState} onClick={onClickMenu2} />
+                <Button text="플레이리스트" state={playlistState} onClick={onClickPlaylist} />
+                <Button ml="5px" text="내가 찜한 앨범" state={albumState} onClick={onClickSetAlbum} />
                 {playlistState ? <PlaylistList /> : <AlbumList />}
             </SideBarBot>
         </SideBarWrap>

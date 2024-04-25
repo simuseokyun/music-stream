@@ -10,6 +10,15 @@ interface ITrack {
 }
 const Container = styled.div`
     padding: 20px;
+
+    position: relative;
+`;
+const BackBtn = styled.span`
+    position: absolute;
+    background-color: rgb(40, 40, 40);
+    padding: 5px;
+    font-size: 20px;
+    border-radius: 20px;
 `;
 const Form = styled.form`
     text-align: center;
@@ -48,9 +57,15 @@ export const Header = () => {
         setValue('track', '');
         navigate('search');
     };
+    const onBackBtn = () => {
+        navigate(-1);
+    };
 
     return (
         <Container>
+            <BackBtn className="material-symbols-outlined" onClick={onBackBtn}>
+                arrow_back_ios_new
+            </BackBtn>
             <Form onSubmit={handleSubmit(onValid)}>
                 <Input
                     open={openSearch_}

@@ -19,7 +19,7 @@ export interface IPlaylist {
         album_id: string;
         artists: { name: string; id: string }[];
     }[];
-    top?: number | null;
+    top?: number;
 }
 export interface IAlbum {
     title: string;
@@ -43,6 +43,10 @@ export const searchState = atom({
 
 export const tokenValue = atom({
     key: 'tokenValue',
+    default: '',
+});
+export const tokenValue2 = atom({
+    key: 'tokenValue2',
     default: '',
 });
 
@@ -87,5 +91,15 @@ export const clickMenuAlbum = atom({
 
 export const openSearch = atom({
     key: 'openSearch',
+    default: false,
+});
+
+export const titleChangeState = atom({
+    key: 'titleChangeState',
+    default: false,
+});
+
+export const playlistFixState = atom({
+    key: 'playlistFixState',
     default: false,
 });

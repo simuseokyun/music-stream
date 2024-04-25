@@ -6,13 +6,14 @@ import styled, { createGlobalStyle } from 'styled-components';
 import { SideBar } from './components/sideBar';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { AddPlaylistForm } from './components/addplaylistForm';
-import { addPlaylistState, playlistList } from './atoms';
+import { addPlaylistState, playlistFilter, playlistFixState, playlistList } from './atoms';
 import { useSetRecoilState } from 'recoil';
 import { getToken } from './api';
 import { tokenValue } from './atoms';
+import { PlaylistFixForm } from './components/playlistFixForm';
+import { LoginForm } from './components/login';
 
 const GlobalStyle = createGlobalStyle`
-
     html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -76,41 +77,17 @@ a {
 *{
     box-sizing: border-box;
 }
-
-
-`;
-const Container = styled.div`
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    gap: 20px;
-`;
-interface TokenResponse {
-    access_token: string;
-    expires_in: number;
-    token_type: string;
+input[type="file" i] span{
+ display:none
 }
 
-function Root() {
-    const openPlaylist = useRecoilValue(addPlaylistState);
-    const setToken = useSetRecoilState(tokenValue);
+`;
 
-    const { isLoading: tokenLoading, data: tokenData } = useQuery<TokenResponse>('getToken', getToken, {
-        onSuccess: (data) => {
-            setToken(data?.access_token!);
-        },
-    });
+function Root() {
     return (
         <>
             <GlobalStyle />
-            <div style={{ maxWidth: 1180, margin: 'auto' }}>
-                {openPlaylist && <AddPlaylistForm />}
-                <Header />
-                <Container>
-                    <SideBar></SideBar>
-                    <Outlet />
-                </Container>
-            </div>
+            <Outlet />
         </>
     );
 }

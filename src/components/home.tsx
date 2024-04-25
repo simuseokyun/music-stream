@@ -9,6 +9,16 @@ import { Outlet } from 'react-router-dom';
 import { Button } from './button';
 import { NewAlbum } from './newAlbum';
 import { typeTransform } from '../atoms';
+import { addPlaylistState } from '../atoms';
+import { SideBar } from './sideBar';
+import { playlistFixState } from '../atoms';
+import { Header } from './header';
+import { AddPlaylistForm } from './addplaylistForm';
+import { useRecoilState } from 'recoil';
+import { tokenValue2 } from '../atoms';
+import { getToken2 } from '../api';
+import { player } from '../api';
+import { PlaylistFixForm } from './playlistFixForm';
 interface TrackImgProps {
     url: string;
 }
@@ -117,7 +127,13 @@ interface IItems {
     images: { url: string; height: number; width: number }[];
     name: string;
 }
-
+interface SpotifyToken {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    refresh_token: string;
+    scope: string;
+}
 const TrackList = styled.tr`
     width: 100%;
 
@@ -133,8 +149,29 @@ const TrackTitle = styled.td`
 const AlbumTitle = styled.td`
     margin-left: 20px;
 `;
-
+const Container = styled.div`
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 20px;
+    padding: 0 20px 20px 20px;
+`;
+interface TokenResponse {
+    access_token: string;
+    expires_in: number;
+    token_type: string;
+}
 export const Home = () => {
+    const openPlaylist = useRecoilValue(addPlaylistState);
+    // const setToken = useSetRecoilState(tokenValue);
+    const fixState = useRecoilValue(playlistFixState);
+
+    // const { isLoading: tokenLoading, data: tokenData } = useQuery<TokenResponse>('getToken', getToken, {
+    //     onSuccess: (data) => {
+    //         setToken(data?.access_token!);
+    //     },
+    // });
+
     const search = useRecoilValue(searchState);
     const setToken = useSetRecoilState(tokenValue);
     const token = useRecoilValue(tokenValue);
@@ -143,17 +180,64 @@ export const Home = () => {
             setToken(data?.access_token!);
         },
     });
-    const { isLoading: newAlbumLoading, data: newAlbumData } = useQuery<INewAlbum>(
-        'newAlbum',
+    // const { isLoading: newAlbumLoading, data: newAlbumData } = useQuery<INewAlbum>(
+    //     'newAlbum',
+    //     async () => {
+    //         if (!tokenLoading && tokenData?.access_token) {
+    //             return getNewAlbum(tokenData.access_token);
+    //         }
+    //     },
+    //     {
+    //         enabled: !tokenLoading && !!tokenData?.access_token,
+    //     }
+    // );
+    const [token2, setToken2] = useRecoilState(tokenValue2);
+    const home = window.location.href;
+
+    const extractAuthCodeFromUrl = (url: string) => {
+        const params = new URLSearchParams(url.split('?')[1]);
+        return params.get('code');
+    };
+
+    const authCode = extractAuthCodeFromUrl(home);
+    console.log(authCode);
+    // const { isLoading: tokenLoading, data: tokenData } = useQuery<TokenResponse>('getToken', getToken, {
+    //     onSuccess: (data) => {
+    //         setToken(data?.access_token!);
+    //     },
+    // });
+    const { isLoading: sLoading, data: sData } = useQuery<SpotifyToken>('hi', async () => getToken2(authCode!), {
+        enabled: !!authCode, // authCode가 존재할 때만 쿼리를 실행
+        onSuccess: (data) => {
+            setToken2(data?.access_token);
+        },
+    });
+    console.log(sData);
+    const { isLoading: tLoading, data: tData } = useQuery(
+        'bye',
         async () => {
-            if (!tokenLoading && tokenData?.access_token) {
-                return getNewAlbum(tokenData.access_token);
+            if (!sLoading && sData?.access_token) {
+                const playerData = await player(token2!);
+                return playerData;
             }
         },
         {
-            enabled: !tokenLoading && !!tokenData?.access_token, //
+            enabled: !sLoading && !!sData?.access_token,
         }
     );
 
-    return <>{newAlbumData?.albums && <NewAlbum newAlbums={newAlbumData?.albums!} />}</>;
+    return (
+        <div style={{ maxWidth: 1180, margin: 'auto', width: '100%' }}>
+            {openPlaylist && <AddPlaylistForm />}
+            {fixState && <PlaylistFixForm />}
+            <Header />
+            <Container>
+                <SideBar></SideBar>
+                {tokenData && <Outlet />}
+            </Container>
+        </div>
+    );
 };
+{
+    /* {newAlbumData?.albums && <NewAlbum newAlbums={newAlbumData?.albums!} />} */
+}

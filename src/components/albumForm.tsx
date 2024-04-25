@@ -108,7 +108,15 @@ const Copyright = styled.p`
     font-size: 12px;
     color: #e2e2e2;
 `;
-
+const Btn = styled.button`
+    text-align: center;
+    background-color: #65d46e;
+    border: none;
+    border-radius: 20px;
+    padding: 4px 8px;
+    margin-left: 10px;
+    vertical-align: middle;
+`;
 export const AlbumForm = () => {
     const navigate = useNavigate();
     const onClose = () => {
@@ -166,15 +174,17 @@ export const AlbumForm = () => {
                             </p>
                             <AlbumTitle>{data?.name}</AlbumTitle>
                             <ArtistName>
-                                <Link to={`/artist/${data?.artists[0].id}`}>{data?.artists[0].name}</Link>
+                                <Link to={`/home/artist/${data?.artists[0].id}`}>{data?.artists[0].name}</Link>
                                 {/* {data?.artists[0].name} */}
                             </ArtistName>
                             <ReleaseYear>{data?.release_date.slice(0, 4)}</ReleaseYear>
                             <TotalTracks>{data?.total_tracks}곡</TotalTracks>
                             {saveAlbumState ? (
-                                <button onClick={deleteAlbum}>찜 해제</button>
+                                <Btn style={{ background: '#e2e2e2' }} onClick={deleteAlbum}>
+                                    찜 해제
+                                </Btn>
                             ) : (
-                                <button onClick={saveAlbum}>앨범 찜하기</button>
+                                <Btn onClick={saveAlbum}>앨범 찜하기</Btn>
                             )}
                         </AlbumInfo>
                     </AlbumTop>
@@ -182,8 +192,8 @@ export const AlbumForm = () => {
                         <TrackLists>
                             <thead>
                                 <tr style={{ padding: '5px 0', borderBottom: '1px solid #808080' }}>
-                                    <th style={{ width: '10%', padding: '10px 0' }}>#</th>
-                                    <th style={{ textAlign: 'left', padding: '10px 0' }}>제목</th>
+                                    <th style={{ width: '100px' }}>#</th>
+                                    <th style={{ textAlign: 'left', width: '70%' }}>제목</th>
                                     <th style={{ padding: '10px 0 ' }}>
                                         <span className="material-symbols-outlined">schedule</span>
                                     </th>

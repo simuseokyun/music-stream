@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import { clickPlaylistState, playlistFilter, playlistList } from '../atoms';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { clickPlaylistState, playlistFilter, playlistFixState, playlistList, titleChangeState } from '../atoms';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'react-router-dom';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { PlaylistTracks } from './playlistTracks';
 
 const Container = styled.div`
     padding: 20px;
@@ -21,36 +22,82 @@ const PlaylistWrap = styled.div`
 const PlaylistTop = styled.div`
     display: flex;
     align-items: end;
+    margin-bottom: 20px;
 `;
 const PlaylistImg = styled.img`
+    background-color: #232323;
     width: 150px;
     height: 150px;
     border-radius: 8px;
+    &:hover {
+    }
 `;
+
 const PlaylistInfo = styled.div`
     margin-left: 20px;
 `;
 
+const PlaylistType = styled.p`
+    margin-bottom: 2px;
+`;
+const PlaylistTitle = styled.p`
+    margin-bottom: 2px;
+`;
+const SetIcon = styled.span`
+    font-size: 18px;
+    vertical-align: middle;
+`;
+const PlaylistTracksLength = styled.p`
+    margin-bottom: 5px;
+`;
 const TrackImg = styled.img`
     width: 50px;
     height: 50px;
 `;
+// const CoverWrap = styled.div`
+//     position: relative;
+//     width: 150px;
+//     height: 150px;
+//     border-radius: 8px;
+//     overflow: hidden;
+//     CoverWrap:hover ${Overlay} {
+//         display: block; /* CoverWrap을 호버할 때 Overlay가 나타남 */
+//     }
+// `;
+const Btn = styled.button`
+    display: inline-block;
+    text-align: center;
+    background-color: #65d46e;
+    border: none;
+    border-radius: 20px;
+    padding: 4px 8px;
+`;
 
 export const PlaylistForm = () => {
+    const setFixForm = useSetRecoilState(playlistFixState);
     const [playlists, setPlaylists] = useRecoilState(playlistList);
-    const [changeForm, setChangeForm] = useState(false);
-    const [value, setValue] = useState('');
     const playlist = useRecoilValue(playlistFilter);
-    const navigate = useNavigate();
-    console.log(playlist);
 
-    console.log(playlist);
-    const msTransform = (ms: number) => {
-        const totalSeconds = ms / 1000;
-        const minutes = Math.floor(totalSeconds / 60);
-        let seconds = Math.floor(totalSeconds % 60);
-        return { minutes, seconds };
+    const [value, setValue] = useState('');
+    const [changeForm, setChangeForm] = useRecoilState(titleChangeState);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const navigate = useNavigate();
+    useEffect(() => {
+        setValue(() => '');
+    }, []);
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                if (typeof e.target?.result === 'string') {
+                    setImagePreview(e.target.result);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
     };
+
     const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
         const {
             currentTarget: { name },
@@ -61,14 +108,14 @@ export const PlaylistForm = () => {
             });
             return fil;
         });
-        navigate('/');
+        navigate('/home');
     };
     const topFixed = (event: React.MouseEvent<HTMLButtonElement>) => {
         const {
             currentTarget: { name },
         } = event;
         setPlaylists((prev) => {
-            const fil = prev.filter((playlist) => playlist.top !== null);
+            const fil = prev.filter((playlist) => playlist.hasOwnProperty('top'));
             if (fil.length > 2) {
                 alert('플레이리스트는 최대 3개까지 고정할 수 있습니다');
                 return prev;
@@ -76,7 +123,9 @@ export const PlaylistForm = () => {
             const index = prev.findIndex((playlist) => {
                 return playlist.title === name;
             });
-            const newTracks = [{ ...prev[index], top: Date.now() }, ...prev.slice(0, index), ...prev.slice(index + 1)];
+            const value = { ...prev[index], top: Date.now() };
+
+            const newTracks = [value, ...prev.slice(0, index), ...prev.slice(index + 1)];
             return newTracks;
         });
     };
@@ -86,34 +135,30 @@ export const PlaylistForm = () => {
         } = event;
         setPlaylists((prev) => {
             const index = prev.findIndex((playlist) => {
-                return playlist.title === name;
+                return playlist.title == name;
             });
-            const newTrack = { ...prev[index], top: false };
+            const value = [{ ...prev[index] }].map((playlist) => {
+                const { top, ...rest } = playlist;
+                return rest;
+            });
+            const value2 = [...prev.slice(0, index), ...value, ...prev.slice(index + 1)];
+            const value3 = value2.filter((playlist) => {
+                return playlist.hasOwnProperty('top');
+            });
+            const value4 = value2.filter((playlist) => {
+                return !playlist.hasOwnProperty('top');
+            });
 
-            // const index = prev.findIndex((playlist) => {
-            //     return playlist.title === name;
-            // });
-            console.log(prev);
-            return prev;
-        });
-    };
-    const titleChange = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setPlaylists((prev) => {
-            // const fil = playlists.find((ele) => ele.id === playlist?.id);
-            const index = playlists.findIndex((ele) => ele.id === playlist?.id);
-            const find = prev.find((e) => {
-                return e.title === value;
+            console.log(value3, value4);
+            const value5 = [...value4].sort((a, b) => {
+                if (a.id > b.id) {
+                    return 1;
+                } else {
+                    return -1;
+                }
             });
-            if (value.length < 1) {
-                alert('한 글자 이상 입력하세요');
-                return prev;
-            }
-            if (find) {
-                alert('중복된 플레이리스트가 존재합니다');
-                return prev;
-            }
-            setChangeForm(false);
-            return [...prev.slice(0, index), { ...prev[index], title: value }, ...prev.slice(index + 1)];
+            console.log(value5);
+            return [...value3, ...value5];
         });
     };
     return (
@@ -123,103 +168,65 @@ export const PlaylistForm = () => {
                     <PlaylistTop>
                         <PlaylistImg src={playlist?.img || '/basicPlaylist.webp'}></PlaylistImg>
                         <PlaylistInfo>
-                            <p>플레이리스트</p>
-                            {changeForm ? (
-                                <>
-                                    <input
-                                        type="text"
-                                        value={value}
-                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                            const {
-                                                currentTarget: { value },
-                                            } = event;
-                                            setValue(value);
-                                        }}
-                                    />
-                                    <button onClick={titleChange}>수정</button>
-                                </>
-                            ) : (
-                                <p>
-                                    {playlist?.title}
-                                    <span
-                                        onClick={() => setChangeForm(true)}
-                                        className="material-symbols-outlined"
-                                        style={{ fontSize: '15px' }}
-                                    >
-                                        border_color
-                                    </span>
-                                </p>
+                            <PlaylistType>내 플레이리스트</PlaylistType>
+                            <PlaylistTitle>
+                                {playlist.title}
+                                <SetIcon className="material-symbols-outlined" onClick={() => setFixForm(() => true)}>
+                                    border_color
+                                </SetIcon>
+                            </PlaylistTitle>
+                            <PlaylistTracksLength>{playlist?.tracks.length + '곡'}</PlaylistTracksLength>
+                            {!playlist.top && (
+                                <Btn name={playlist?.title} onClick={topFixed}>
+                                    플레이리스트 고정
+                                </Btn>
                             )}
-                            <p>{playlist?.tracks.length + '곡'}</p>
-                            <button name={playlist?.title} onClick={onDelete}>
+                            {playlist.top && (
+                                <Btn name={playlist?.title} onClick={clearFixed}>
+                                    고정 해제
+                                </Btn>
+                            )}
+                            <Btn
+                                name={playlist?.title}
+                                onClick={onDelete}
+                                style={{ marginLeft: '5px', background: '#e2e2e2' }}
+                            >
                                 플레이리스트 삭제하기
-                            </button>
-                            <button name={playlist?.title} onClick={topFixed}>
-                                플레이리스트 고정
-                            </button>
-                            <button name={playlist?.title} onClick={clearFixed}>
-                                고정 해제
-                            </button>
+                            </Btn>
                         </PlaylistInfo>
                     </PlaylistTop>
-                    <table style={{ width: '100%' }}>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th style={{ textAlign: 'left' }}>제목</th>
-                                <th>앨범</th>
-                                <th>
-                                    <span className="material-symbols-outlined">schedule</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {playlist?.tracks.map((track, i) => (
+                    {playlist.tracks.length ? (
+                        <table style={{ width: '100%' }}>
+                            <thead>
                                 <tr>
-                                    <td>{i + 1}</td>
-                                    <td>
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <TrackImg src={track.cover} alt="album_cover" />
-                                            <div>
-                                                <p>{track.title}</p>
-                                                {track.artists.map((artist) => (
-                                                    <span>
-                                                        <Link to={`/artist/${artist.id}`}>{artist.name}</Link>
-                                                        {track.artists.length == 1
-                                                            ? undefined
-                                                            : track.artists[i + 1]
-                                                            ? ','
-                                                            : undefined}
-                                                    </span>
-                                                ))}
-                                                {/* <td style={{ textAlign: 'left', padding: '10px 0' }}>
-                                                    <p style={{ marginBottom: '5px' }}>{name}</p>
-                                                    {artists.map((artist, i) => (
-                                                        <TrackArtist key={artist.name}>
-                                                            <Link to={`/artist/${artist.id}`}>{artist.name}</Link>
-                                                            {artists.length == 1
-                                                                ? undefined
-                                                                : artists[i + 1]
-                                                                ? ','
-                                                                : undefined}
-                                                        </TrackArtist>
-                                                    ))}
-                                                </td> */}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <Link to={`/album/${track.album_id}`}>{track.album_title}</Link>
-                                    </td>
-                                    <td>{`${msTransform(track.duration_ms).minutes}:${
-                                        String(msTransform(track.duration_ms).seconds).length === 1
-                                            ? `0${msTransform(track.duration_ms).seconds}`
-                                            : msTransform(track.duration_ms).seconds
-                                    }`}</td>
+                                    <th style={{ width: '30px' }}>#</th>
+                                    <th style={{ textAlign: 'left', width: '65%', padding: '5px' }}>제목</th>
+                                    <th style={{ textAlign: 'left' }}>앨범</th>
+                                    <th>
+                                        <span className="material-symbols-outlined">schedule</span>
+                                    </th>
+                                    <th style={{ width: '50px' }}></th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {playlist?.tracks.map((track, i) => (
+                                    <PlaylistTracks
+                                        playlist_id={playlist.id}
+                                        key={track.id}
+                                        i={i}
+                                        cover={track.cover}
+                                        title={track.title}
+                                        artists={track.artists}
+                                        album_id={track.album_id}
+                                        album_title={track.album_title}
+                                        duration={track.duration_ms}
+                                    />
+                                ))}
+                            </tbody>
+                        </table>
+                    ) : (
+                        <p style={{ textAlign: 'center', marginTop: '50px' }}>플레이리스트에 곡을 추가해주세요</p>
+                    )}
                 </PlaylistWrap>
             )}
         </Container>

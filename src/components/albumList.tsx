@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { clickPlaylistState, playlistList, saveAlbumList } from '../atoms';
-import { IPlaylist } from '../atoms';
-import { Link, useNavigate } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { saveAlbumList } from '../atoms';
+import { Link } from 'react-router-dom';
+
 const Container = styled.ul``;
 const List = styled.li`
     /* margin-top: 5px; */
@@ -28,13 +27,12 @@ const ListImg = styled.img`
     height: 50px;
 `;
 const ListInfo = styled.div`
+    width: calc(100% - 50px);
     margin-left: 8px;
-    width: 100%;
 `;
 const ListTitle = styled.h1`
     margin-bottom: 5px;
 
-    width: 200px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -42,17 +40,19 @@ const ListTitle = styled.h1`
 const ListArtist = styled.p`
     font-size: 12px;
 `;
-const Message = styled.p``;
-
+const Message = styled.p`
+    text-align: center;
+    font-size: 14px;
+    margin-top: 20px;
+`;
 export const AlbumList = () => {
     const AlbumList = useRecoilValue(saveAlbumList);
-    console.log(AlbumList);
     return (
         <Container>
             {AlbumList.length ? (
                 AlbumList.map((album) => (
                     <List>
-                        <Link to={`/album/${album.id}`}>
+                        <Link to={`/home/album/${album.id}`}>
                             <ListImg src={album.img} />
                             <ListInfo>
                                 <ListTitle>{album.title}</ListTitle>

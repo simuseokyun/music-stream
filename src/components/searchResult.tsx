@@ -1,10 +1,16 @@
 import { useQuery } from 'react-query';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import { searchState, tokenValue } from '../atoms';
 import { searchTrack } from '../api';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { playlistList } from '../atoms';
+import { addPlaylistState } from '../atoms';
+
+import { SearchTrackList } from './searchTrackList';
 
 interface ITracks {
     tracks: {
@@ -22,16 +28,31 @@ interface IAlbum {
         name: string;
         artists: { name: string; id: string }[];
     };
+    duration_ms: number;
+
     name: string;
 }
+const ResultMessage = styled.h1`
+    font-size: 20px;
+    margin-bottom: 10px;
+`;
 const TrackList = styled.tr`
     width: 100%;
 
-    margin-top: 20px;
     &:first-child {
         margin: 0;
     }
+    &:hover {
+        background-color: #2a2929;
+        span {
+            opacity: 1;
+        }
+    }
 `;
+const Table = styled.table``;
+const Tr = styled.tr``;
+const Th = styled.th``;
+
 const TrackImg = styled.div<{ url: string }>`
     background-image: url(${(props) => props.url});
     width: 50px;
@@ -43,75 +64,66 @@ const TrackImg = styled.div<{ url: string }>`
 const TrackTitle = styled.td`
     margin-left: 20px;
     text-overflow: ellipsis;
+    text-align: left;
 `;
 const AlbumTitle = styled.td`
     margin-left: 20px;
 `;
+const rotateIn = keyframes`
+    from {
+        transform: rotate(0deg) 
+    }
+    to {
+        transform: rotate(180deg) 
+    }
+`;
+const AddBtn = styled.span`
+    opacity: 0;
+    &:hover {
+        animation: ${rotateIn} 1s forwards;
+    }
+`;
+
 export const SearchResult = () => {
+    const [open, setOpen] = useState(false);
     const search = useRecoilValue(searchState);
+    const [playlists, setPlaylist] = useRecoilState(playlistList);
+    const addPlaylistFormState = useSetRecoilState(addPlaylistState);
     const token = useRecoilValue(tokenValue);
-    // const { trackId } = useParams();
+
     const { isLoading: TrackLoading, data: trackData } = useQuery<ITracks>(['searchTrack', search], async () => {
         const trackData = await searchTrack(token, search);
         return trackData;
     });
     console.log(trackData);
     return (
-        <div style={{ padding: '20px' }}>
-            <table style={{ width: '100%', verticalAlign: 'middle' }}>
-                <tr>
-                    <th>앨범 커버</th>
-                    <th>노래 제목</th>
-                    <th>앨범 제목</th>
-                </tr>
+        <div>
+            <ResultMessage>"{search}"에 대한 결과</ResultMessage>
+            <Table style={{ width: '100%', verticalAlign: 'middle' }}>
+                <Tr>
+                    <Th></Th>
+                    <Th></Th>
+                    <Th></Th>
+                    <Th></Th>
+                </Tr>
 
                 {TrackLoading
                     ? 'Loading...'
                     : trackData?.tracks?.items?.map((item, i) => {
                           return (
-                              <TrackList key={i}>
-                                  <td>
-                                      <TrackImg url={item.album.images[0].url} />
-                                  </td>
-                                  <TrackTitle>
-                                      {item.name}
-                                      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4px' }}>
-                                          {item.album.artists.map((artist, i) => {
-                                              return (
-                                                  <p>
-                                                      <Link
-                                                          style={{ fontSize: '14px', color: '#a0a0a0' }}
-                                                          to={`/artist/${artist.id}`}
-                                                      >
-                                                          {artist.name}
-                                                      </Link>
-                                                      {item.album.artists.length == 1
-                                                          ? undefined
-                                                          : item.album.artists[i + 1]
-                                                          ? ','
-                                                          : undefined}
-                                                      {/* {artists.map((artist, i) => (
-                                                          <TrackArtist key={artist.name}>
-                                                              <Link to={`/artist/${artist.id}`}>{artist.name}</Link>
-                                                              {artists.length == 1
-                                                                  ? undefined
-                                                                  : artists[i + 1]
-                                                                  ? ','
-                                                                  : undefined}
-                                                          </TrackArtist>
-                                                      ))} */}
-                                                  </p>
-                                              );
-                                          })}
-                                      </div>
-                                  </TrackTitle>
-                                  <AlbumTitle>
-                                      <Link to={`/album/${item.album.id}`}>{item.album.name}</Link>
-                                  </AlbumTitle>
-                              </TrackList>
+                              <SearchTrackList
+                                  key={i}
+                                  i={i}
+                                  cover={item.album.images[0].url}
+                                  title={item.name}
+                                  artists={item.album.artists}
+                                  album_id={item.album.id}
+                                  album_title={item.album.name}
+                                  duration_ms={item.duration_ms}
+                              />
                           );
                       })}
-            </table>
+            </Table>
         </div>
     );
 };
