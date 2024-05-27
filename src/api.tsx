@@ -28,6 +28,7 @@ export const getToken = async () => {
 };
 
 export const getSdkToken = async (code: string) => {
+    const redirect_uri = process.env.REACT_APP_REDIRECT_URI || '';
     const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
@@ -35,7 +36,7 @@ export const getSdkToken = async (code: string) => {
         },
         body: new URLSearchParams({
             code: code,
-            redirect_uri: 'http://localhost:3000/home',
+            redirect_uri: redirect_uri,
             grant_type: 'authorization_code',
             client_id: process.env.REACT_APP_CLIENT_ID || '',
             client_secret: process.env.REACT_APP_SECRET_ID || '',
