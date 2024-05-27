@@ -15,10 +15,10 @@ export const getToken = async () => {
         },
         body: new URLSearchParams({
             grant_type: 'client_credentials',
-            // client_id: process.env.REACT_APP_CLIENT_ID || '',
-            // client_secret: process.env.REACT_APP_SECRET_ID || '',
-            client_id: '9b1aa9c5e93a407f8a2253ef5cd7b2c4',
-            client_secret: '8eef047b0dbb405b9a0236ba1d01a10e',
+            client_id: process.env.REACT_APP_CLIENT_ID || '',
+            client_secret: process.env.REACT_APP_SECRET_ID || '',
+            //     client_id: '9b1aa9c5e93a407f8a2253ef5cd7b2c4',
+            //     client_secret: '8eef047b0dbb405b9a0236ba1d01a10e',
         }),
     });
     const json = await response.json();
