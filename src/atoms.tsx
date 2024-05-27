@@ -18,6 +18,7 @@ export interface IPlaylist {
         album_title: string;
         album_id: string;
         artists: { name: string; id: string }[];
+        uri?: string;
     }[];
     top?: number;
 }
@@ -26,25 +27,17 @@ export interface IAlbum {
     img?: string;
     name: string;
     id: string;
-    // tracks: {
-    //     id: string;
-    //     title: string;
-    //     duration_ms: number;
-
-    //     album_title: string;
-    //     artists: { name: string }[];
-    // }[];
 }
 
 export const searchState = atom({
     key: 'searchState',
     default: '',
 });
-
-export const tokenValue = atom({
-    key: 'tokenValue',
-    default: '',
+export const setMobile = atom({
+    key: 'isMobile',
+    default: false,
 });
+
 export const tokenValue2 = atom({
     key: 'tokenValue2',
     default: '',
@@ -101,5 +94,30 @@ export const titleChangeState = atom({
 
 export const playlistFixState = atom({
     key: 'playlistFixState',
+    default: false,
+});
+
+export const deviceInfo = atom<string | null>({
+    key: 'device_id',
+    default: null,
+});
+export interface Itest {
+    title: string;
+    cover: string;
+    artist: string;
+    is_playing: boolean;
+}
+export const nowSongInfo = atom<Itest>({
+    key: 'nowSongInfo',
+    default: { title: '', cover: '', artist: '', is_playing: false },
+});
+
+export const isLoggedInState = atom({
+    key: 'isLoggedInState',
+    default: false, // 초기 상태를 false로 설정
+});
+
+export const isPlayingState = atom({
+    key: 'isPlayingState',
     default: false,
 });

@@ -1,17 +1,5 @@
-import React from 'react';
-import { useQuery } from 'react-query';
-import { Header } from './components/header';
 import { Outlet } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-import { SideBar } from './components/sideBar';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { AddPlaylistForm } from './components/addplaylistForm';
-import { addPlaylistState, playlistFilter, playlistFixState, playlistList } from './atoms';
-import { useSetRecoilState } from 'recoil';
-import { getToken } from './api';
-import { tokenValue } from './atoms';
-import { PlaylistFixForm } from './components/playlistFixForm';
-import { LoginForm } from './components/login';
 
 const GlobalStyle = createGlobalStyle`
     html, body, div, span, applet, object, iframe,

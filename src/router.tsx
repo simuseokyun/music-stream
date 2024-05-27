@@ -1,18 +1,15 @@
-import path from 'path';
-import { element } from 'prop-types';
 import { createBrowserRouter } from 'react-router-dom';
 import Root from './root';
-import { Home } from './components/home';
-import { About } from './components/about';
-import { AlbumForm } from './components/albumForm';
-import { ArtistForm } from './components/artistForm';
-import { SearchResult } from './components/searchResult';
-import { PlaylistForm } from './components/playlistForm';
-import { LoginForm } from './components/login';
-import { NewAlbum } from './components/newAlbum';
-import { Main } from './components/main';
+import { Home } from './Routes/home';
+import { AlbumForm } from './components/albumForm/albumForm';
+import { ArtistForm } from './components/artistForm/artistForm';
+import { SearchResult } from './components/SearchForm/searchResult';
+import { PlaylistForm } from './components/playlistForm/playlistForm';
+import { Main } from './Routes/main';
 import { AllAlbum } from './components/artistForm/allAlbum';
-import { PopularPlaylistForm } from './components/popularPlaylist/popularPlaylistForm';
+import { PopularPlaylistForm } from './components/popularPlaylistForm/popularPlaylistForm';
+import { Library } from './components/libraryForm/library';
+import { InitForm } from './Routes/init';
 
 export const router = createBrowserRouter([
     {
@@ -21,8 +18,9 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: '',
-                element: <LoginForm />,
+                element: <InitForm />,
             },
+
             {
                 path: 'home',
                 element: <Home />,
@@ -38,12 +36,6 @@ export const router = createBrowserRouter([
                     {
                         path: 'artist/:artistId',
                         element: <ArtistForm />,
-                        children: [
-                            {
-                                path: 'allAlbum',
-                                element: <AllAlbum />,
-                            },
-                        ],
                     },
                     {
                         path: 'playlist/:playlistId',
@@ -56,6 +48,14 @@ export const router = createBrowserRouter([
                     {
                         path: 'popularPlaylist/:id',
                         element: <PopularPlaylistForm />,
+                    },
+                    {
+                        path: 'allAlbum/:artistId',
+                        element: <AllAlbum />,
+                    },
+                    {
+                        path: 'library',
+                        element: <Library />,
                     },
                 ],
             },

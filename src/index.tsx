@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './router';
+import { CookiesProvider } from 'react-cookie';
 // dotenv.config();
 const client = new QueryClient();
 
@@ -14,7 +15,9 @@ root.render(
     <React.StrictMode>
         <RecoilRoot>
             <QueryClientProvider client={client}>
-                <RouterProvider router={router}></RouterProvider>
+                <CookiesProvider>
+                    <RouterProvider router={router}></RouterProvider>
+                </CookiesProvider>
             </QueryClientProvider>
         </RecoilRoot>
     </React.StrictMode>

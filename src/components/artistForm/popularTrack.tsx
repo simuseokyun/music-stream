@@ -1,17 +1,33 @@
-import styled, { keyframes } from 'styled-components';
-import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
-import { playlistList } from '../../atoms';
-import { addPlaylistState } from '../../atoms';
-import { msTransform } from '../../api';
+import styled from 'styled-components';
+import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
 import { useState } from 'react';
+import { deviceInfo, nowSongInfo, setMobile, addPlaylistState, playlistList } from '../../atoms';
+import { playSong, msTransform } from '../../util';
+import Cookies from 'js-cookie';
+
+interface ITrack {
+    cover: string;
+    title: string;
+    artists: { id: string; name: string }[];
+    album_id: string;
+    album_title: string;
+    duration_ms: number;
+    i: number;
+    uri: string;
+}
+
 const TopTrackList = styled.tr`
+    width: 100%;
     &:hover {
         span {
             opacity: 1;
         }
     }
 `;
-const TopTrackTitle = styled.p``;
+const TdWrap = styled.div`
+    display: flex;
+    align-items: center;
+`;
 const TrackImg = styled.img`
     width: 50px;
     height: 50px;
@@ -20,31 +36,32 @@ const TrackImg = styled.img`
 const TrackTitle = styled.p`
     margin-left: 10px;
 `;
+
 const Td = styled.td`
+    padding: 5px;
     &:first-child {
-        width: 50px;
+        width: 5%;
     }
     &:nth-child(2) {
-        padding: 5px 0;
         width: 80%;
         text-align: left;
+        max-width: 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
     &:nth-child(3) {
+        @media (max-width: 768px) {
+            display: none;
+        }
+    }
+    &:nth-child(4) {
+        text-align: right;
     }
 `;
-const rotateIn = keyframes`
-    from {
-        transform: rotate(0deg) 
-    }
-    to {
-        transform: rotate(180deg) 
-    }
-`;
-const AddBtn = styled.span`
-    opacity: 0;
-    &:hover {
-        animation: ${rotateIn} 1s forwards;
-    }
+
+const AddBtn = styled.span<{ state: string }>`
+    opacity: ${({ state }) => (state === 'true' ? 1 : 0)};
 `;
 const Category = styled.ul`
     position: absolute;
@@ -63,23 +80,41 @@ const CategoryList = styled.li`
         background-color: #3e3d3d;
     }
 `;
-const TdWrap = styled.div`
-    display: flex;
-    align-items: center;
-`;
-interface ITrack {
-    cover: string;
-    title: string;
-    artists: { id: string; name: string }[];
-    album_id: string;
-    album_title: string;
-    duration_ms: number;
-    i: number;
-}
-export const PopularTracks = ({ i, cover, title, artists, album_id, album_title, duration_ms }: ITrack) => {
+const PlayBtn = styled.span``;
+
+export const PopularTracks = ({ i, cover, title, artists, album_id, album_title, duration_ms, uri }: ITrack) => {
     const [playlists, setPlaylist] = useRecoilState(playlistList);
+    const isMobile = useRecoilValue(setMobile);
+    const [song, setNowSong] = useRecoilState(nowSongInfo);
+    const deviceId = useRecoilValue(deviceInfo);
+    const accessToken = Cookies.get('accessToken');
     const [open, setOpen] = useState(false);
     const addPlaylistFormState = useSetRecoilState(addPlaylistState);
+    const handleSongClick = async (trackUri: string, title: string, cover: string, artist: string) => {
+        try {
+            if (!accessToken) {
+                alert('로그인이 필요한 서비스입니다');
+                return;
+            }
+            if (deviceId) {
+                await playSong(trackUri, deviceId);
+                setNowSong((prev) => {
+                    return { title, cover, artist, is_playing: true };
+                });
+            } else {
+                alert('웹 플레이어를 생성하기 위해 로그아웃 하겠습니다.');
+                Cookies.remove('accessToken');
+                Cookies.remove('refreshToken');
+                window.location.href = '/';
+                return;
+            }
+        } catch (error) {
+            console.error('노래를 재생하는 중 에러 발생:', error);
+            setNowSong((prev) => {
+                return { title: '실행 오류', cover: '', artist: '', is_playing: false };
+            });
+        }
+    };
     const addTrack = (event: React.MouseEvent<HTMLLIElement>) => {
         const {
             currentTarget: { textContent, id },
@@ -116,11 +151,19 @@ export const PopularTracks = ({ i, cover, title, artists, album_id, album_title,
         }
         setOpen((prev) => !prev);
     };
+
     return (
         <TopTrackList>
-            <Td>{i + 1}</Td>
             <Td>
-                <TdWrap style={{ display: 'flex' }}>
+                <PlayBtn
+                    className="material-symbols-outlined"
+                    onClick={() => handleSongClick(uri, title, cover, artists[0].name)}
+                >
+                    play_arrow
+                </PlayBtn>
+            </Td>
+            <Td>
+                <TdWrap>
                     <TrackImg src={cover} alt="album_cover" />
                     <TrackTitle>{title}</TrackTitle>
                 </TdWrap>
@@ -130,9 +173,8 @@ export const PopularTracks = ({ i, cover, title, artists, album_id, album_title,
                     ? `0${msTransform(duration_ms).seconds}`
                     : msTransform(duration_ms).seconds
             }`}</Td>
-
-            <td style={{ paddingRight: '5px', position: 'relative' }}>
-                <AddBtn onClick={onAddBtn} style={{ position: 'relative' }} className="material-symbols-outlined">
+            <Td>
+                <AddBtn onClick={onAddBtn} state={isMobile.toString()} className="material-symbols-outlined">
                     add_circle
                 </AddBtn>
                 {open ? (
@@ -146,7 +188,7 @@ export const PopularTracks = ({ i, cover, title, artists, album_id, album_title,
                         })}
                     </Category>
                 ) : null}
-            </td>
+            </Td>
         </TopTrackList>
     );
 };
