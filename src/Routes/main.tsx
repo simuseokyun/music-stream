@@ -5,8 +5,12 @@ import { FeaturePlaylist } from '../components/featurePlaylistForm/featurePlayli
 const Container = styled.div`
     width: 100%;
     padding: 20px;
-    background: linear-gradient(#293a32, rgba(0, 0, 0, 1));
+    background-color: #131212;
     border-radius: 8px;
+    @media (max-width: 768px) {
+        padding: 20px 20px 80px 20px;
+        height: calc(100vh - 50px);
+    }
 `;
 
 export const Main = () => {
