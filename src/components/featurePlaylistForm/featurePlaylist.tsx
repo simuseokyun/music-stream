@@ -13,15 +13,7 @@ interface IFeaturePlaylist {
 const Container = styled.div`
     margin-top: 20px;
 `;
-const Row = styled.div`
-    height: 500px;
-    @media (max-width: 768px) {
-        height: 300px;
-    }
-    @media (max-width: 425px) {
-        height: 200px;
-    }
-`;
+const Row = styled.div``;
 const SectionTitle = styled.h1`
     font-size: 24px;
     font-weight: 700;
@@ -41,13 +33,14 @@ const FeaturePlaylistWrap = styled.ul<{ state: string }>`
 const BtnWrap = styled.div`
     text-align: right;
 `;
-const PrevBtn = styled.span`
-    background-color: rgba(0, 0, 0, 0.5);
+const PrevBtn = styled.img`
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.4);
+    width: 24px;
+    height: 24px;
     padding: 4px;
-    font-size: 20px;
-    border-radius: 20px;
+    border-radius: 24px;
     @media (max-width: 768px) {
-        font-size: 14px;
     }
 `;
 const NextBtn = styled(PrevBtn)`
@@ -104,12 +97,8 @@ export const FeaturePlaylist = () => {
                     <TopWrap>
                         <SectionTitle>인기 플레이리스트</SectionTitle>
                         <BtnWrap>
-                            <PrevBtn className="material-symbols-outlined" onClick={onPrevBtn}>
-                                arrow_back_ios_new
-                            </PrevBtn>
-                            <NextBtn className="material-symbols-outlined" onClick={onNextBtn}>
-                                arrow_forward_ios
-                            </NextBtn>
+                            <PrevBtn src="/images/left_arrow.png" onClick={onPrevBtn}></PrevBtn>
+                            <NextBtn src="/images/right_arrow.png" onClick={onNextBtn}></NextBtn>
                         </BtnWrap>
                     </TopWrap>
                     <Row>
