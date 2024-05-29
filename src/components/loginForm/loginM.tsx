@@ -36,7 +36,7 @@ export const LoginM = () => {
     };
     return (
         <Container>
-            <Logo src="/spotifyLogo.png" alt="Logo" />
+            <Logo src="/images/spotifyLogo.png" alt="Logo" />
             {!accessToken ? <Btn onClick={loginSpotify}>로그인</Btn> : <Btn onClick={logout}>로그아웃</Btn>}
         </Container>
     );

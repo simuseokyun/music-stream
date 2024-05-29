@@ -18,20 +18,19 @@ const SideBarWrap = styled.div`
     }
 `;
 const SideBarTop = styled.ul`
-    /* height: 100px; */
     background-color: #131212;
     border-radius: 8px;
     width: 100%;
-    /* display: flex; */
     flex-direction: column;
     justify-content: center;
     padding: 20px;
 `;
-const BackBtn = styled.span`
-    background-color: rgb(40, 40, 40);
-    padding: 5px;
-    font-size: 20px;
-    border-radius: 20px;
+const BackBtn = styled.img`
+    background-color: white;
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+    border-radius: 24px;
 `;
 const TopList = styled.li`
     margin-top: 20px;
@@ -64,9 +63,7 @@ export const SideBar = () => {
     return (
         <SideBarWrap>
             <SideBarTop>
-                <BackBtn className="material-symbols-outlined" onClick={onBackBtn}>
-                    arrow_back_ios_new
-                </BackBtn>
+                <BackBtn src="/images/left_arrow.png" onClick={onBackBtn}></BackBtn>
                 <TopList>
                     <Link to="/home">홈</Link>
                 </TopList>

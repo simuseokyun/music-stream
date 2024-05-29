@@ -15,6 +15,7 @@ const Container = styled.div`
     position: fixed;
     left: 0;
     bottom: 0;
+    z-index: 10;
     background: rgba(0, 0, 0, 0.9);
     @media (max-width: 768px) {
         bottom: 52px;
@@ -72,7 +73,7 @@ const InfoWrap = styled.div`
     white-space: nowrap;
 `;
 const Title = styled.p`
-    margin-bottom: 3px;
+    margin-bottom: 8px;
     @media (max-width: 768px) {
         font-size: 14px;
     }
@@ -177,7 +178,6 @@ export const Player = () => {
                     console.error('Playback Error:', message);
                 });
                 player.addListener('player_state_changed', (state) => {
-                    // console.log(state);
                     if (!state) return;
                     if (state.paused && state.position === 0 && state.track_window.next_tracks.length > 0) {
                     }
