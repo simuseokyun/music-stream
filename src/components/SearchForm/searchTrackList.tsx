@@ -26,7 +26,6 @@ const rotateIn = keyframes`
         transform: rotate(180deg) 
     }
 `;
-//
 
 const TrackList = styled.tr`
     width: 100%;
@@ -77,11 +76,15 @@ const TdWrap = styled.div`
     display: flex;
 `;
 const Td = styled.td`
-    padding: 5px;
+    cursor: pointer;
+    padding: 5px 0;
+    max-width: 0;
+    overflow: hidden;
     &:first-child {
-        width: 10px;
-        span:hover {
-            color: #65d46e;
+        width: 6%;
+        text-align: left;
+        @media (max-width: 425px) {
+            width: 100px;
         }
     }
 
@@ -115,8 +118,17 @@ const Td = styled.td`
     }
 `;
 const PlayBtn = styled.span``;
-const ArtistsWrap = styled.p``;
-
+const ArtistsWrap = styled.p`
+    margin-top: 6px;
+    a {
+        font-size: 14px;
+        color: #a0a0a0;
+    }
+`;
+const Dot = styled.span`
+    color: rgb(160, 160, 160);
+    margin: 0 2px;
+`;
 export const SearchTrackList = ({ cover, title, album_id, album_title, artists, duration_ms, uri, id }: ITrack) => {
     const [open, setOpen] = useState(false);
     const [playlists, setPlaylist] = useRecoilState(playlistList);
@@ -213,10 +225,10 @@ export const SearchTrackList = ({ cover, title, album_id, album_title, artists, 
                     {artists.map((artist, i) => {
                         return (
                             <ArtistsWrap key={artist.id}>
-                                <Link style={{ fontSize: '14px', color: '#a0a0a0' }} to={`/home/artist/${artist.id}`}>
+                                <Link style={{}} to={`/home/artist/${artist.id}`}>
                                     {artist.name}
                                 </Link>
-                                {artists.length == 1 ? undefined : artists[i + 1] ? ',' : undefined}
+                                {artists.length == 1 ? undefined : artists[i + 1] ? <Dot>,</Dot> : undefined}
                             </ArtistsWrap>
                         );
                     })}

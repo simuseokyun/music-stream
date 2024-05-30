@@ -32,7 +32,7 @@ const Container = styled.div`
     border-radius: 8px;
     overflow: hidden;
     @media (max-width: 768px) {
-        padding: 20px 20px 140px 20px;
+        padding: 10px 10px 140px 10px;
     }
 `;
 const PlaylistWrap = styled.div`
@@ -73,13 +73,14 @@ const PlaylistInfo = styled.div`
 const Description = styled.p`
     color: #e2e2e2;
     font-size: 14px;
+    line-height: 1.4;
 `;
 const PlaylistType = styled.p`
     margin-bottom: 2px;
     font-size: 14px;
 `;
 const PlaylistTitle = styled.p`
-    font-size: 40px;
+    font-size: 30px;
     font-weight: 700;
     margin: 10px 0;
     @media (max-width: 768px) {
@@ -108,11 +109,12 @@ const Tr = styled.tr`
     width: 100%;
 `;
 const Th = styled.th`
-    padding: 3px;
+    padding: 5px 0;
     &:first-child {
-        width: 5%;
+        width: 6%;
+        text-align: left;
         @media (max-width: 768px) {
-            width: 10%;
+            width: 100px;
         }
     }
 
@@ -171,9 +173,9 @@ export const PopularPlaylistForm = () => {
                         <Table>
                             <Thead>
                                 <Tr>
-                                    <Th>#</Th>
-                                    <Th>제목</Th>
-                                    <Th>앨범</Th>
+                                    <Th></Th>
+                                    <Th></Th>
+                                    <Th></Th>
                                     <Th></Th>
                                 </Tr>
                             </Thead>

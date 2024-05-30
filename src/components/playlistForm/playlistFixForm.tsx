@@ -30,31 +30,34 @@ const FormTop = styled.div`
     align-items: center;
     margin-bottom: 20px;
 `;
-const AddForm = styled.form``;
+
 const AddFormWrap = styled.div`
     display: flex;
     align-items: start;
     justify-content: space-between;
+    @media (max-width: 768px) {
+        display: block;
+    }
 `;
-const FormLeft = styled.div`
-    width: 100px;
-`;
+const FormLeft = styled.div``;
 const FormRight = styled.div`
     width: 100%;
     margin-left: 20px;
+    @media (max-width: 768px) {
+        margin-left: 0;
+    }
 `;
 const FormTitle = styled.h1`
     font-size: 18px;
+    @media (max-width: 768px) {
+        font-size: 16px;
+    }
 `;
 const ImgWrap = styled.div`
     position: relative;
     width: 100px;
     height: 100px;
-    &:hover {
-        div {
-            opacity: 1;
-        }
-    }
+    left: calc(50% - 50px);
 `;
 const FormImg = styled.img`
     position: absolute;
@@ -75,8 +78,6 @@ const ImgOverlay = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 0;
-
     p {
         font-size: 12px;
     }
@@ -87,23 +88,21 @@ const Input = styled.input`
     display: inline-block;
     padding: 4px;
     outline: none;
-
+    margin-top: 10px;
     color: white;
     border: 1px solid transparent;
     background-color: rgb(40, 40, 40);
 `;
-const CloseBtn = styled.span`
-    background-color: rgba(0, 0, 0, 0.4);
-    font-size: 15px;
-    border-radius: 25px;
-    padding: 5px;
-    cursor: pointer;
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.8);
+
+const Title = styled.p`
+    margin-bottom: 2px;
+    @media (max-width: 768px) {
+        margin-top: 10px;
     }
 `;
 const BtnWrap = styled.div`
     text-align: right;
+    margin-top: 20px;
 `;
 const Btn = styled.button`
     display: inline-block;
@@ -113,6 +112,8 @@ const Btn = styled.button`
     border-radius: 20px;
     padding: 4px 8px;
 `;
+const SubMessage = styled.p``;
+
 export const PlaylistFixForm = () => {
     const playlist = useRecoilValue(playlistFilter);
     const [playlists, setPlaylists] = useRecoilState(playlistList);
@@ -135,8 +136,8 @@ export const PlaylistFixForm = () => {
                 alert('한 글자 이상 입력하세요');
                 return prev;
             }
-            if (value.length > 20) {
-                alert('20글자 이하로 입력하세요');
+            if (value.length > 12) {
+                alert('12글자 이하로 입력하세요');
                 return prev;
             }
             if (find) {
@@ -175,18 +176,19 @@ export const PlaylistFixForm = () => {
         <Container>
             <FixForm>
                 <FormTop>
-                    <FormTitle>플레이리스트 수정</FormTitle>
+                    <FormTitle>플레이리스트 생성</FormTitle>
                 </FormTop>
-
                 <AddFormWrap>
                     <FormLeft>
                         <ImgWrap>
-                            <FormImg src={imagePreview!} alt="Preview" />
+                            <FormImg
+                                src={imagePreview ? imagePreview : '/images/basic_playlist.png'}
+                                alt="Preview"
+                            ></FormImg>
                             <ImgOverlay onClick={handleClick}>
-                                <p>사진 선택</p>
+                                <SubMessage>사진 선택</SubMessage>
                             </ImgOverlay>
                         </ImgWrap>
-
                         <Input
                             type="file"
                             ref={fileInputRef}
@@ -196,14 +198,14 @@ export const PlaylistFixForm = () => {
                         />
                     </FormLeft>
                     <FormRight>
-                        <p style={{ fontSize: '14px', marginBottom: '2px' }}>제목</p>
+                        <Title>제목</Title>
                         <Input type="text" value={value} onChange={titleChange}></Input>
                     </FormRight>
                 </AddFormWrap>
                 <BtnWrap>
                     <Btn onClick={submitInfo}>수정</Btn>
                     <Btn
-                        style={{ marginLeft: '5px', background: 'White' }}
+                        style={{ marginLeft: '5px', background: 'white' }}
                         onClick={() => {
                             setPlaylist(() => false);
                         }}

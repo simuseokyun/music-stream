@@ -18,25 +18,27 @@ interface IList {
 const TrackList = styled.tr`
     width: 100%;
     border-radius: 8px;
-    &:hover {
+    /* &:hover {
         background-color: #2a2929;
         td > span {
             opacity: 1;
         }
-    }
+    } */
 `;
 const TdWrap = styled.div`
     display: flex;
     align-items: center;
 `;
 const Td = styled.td`
-    padding: 5px;
+    cursor: pointer;
+    padding: 5px 0;
     max-width: 0;
     overflow: hidden;
     &:first-child {
-        width: 5%;
-        @media (max-width: 768px) {
-            width: 10%;
+        width: 6%;
+        text-align: left;
+        @media (max-width: 425px) {
+            width: 100px;
         }
     }
 
@@ -79,7 +81,7 @@ const ArtistsWrap = styled.div`
 `;
 const PlayBtn = styled.p``;
 const ArtistNameWrap = styled.p`
-    margin-top: 4px;
+    margin-top: 6px;
     a {
         color: rgb(160, 160, 160);
     }
@@ -101,9 +103,13 @@ const CategoryList = styled.li`
     color: white;
     font-size: 14px;
     padding: 5px;
-    &:hover {
+    /* &:hover {
         background-color: #3e3d3d;
-    }
+    } */
+`;
+const Dot = styled.span`
+    color: rgb(160, 160, 160);
+    margin: 0 2px;
 `;
 
 export const PopularPlaylistTrack = ({ cover, title, duration, artists, album_id, album_title, uri }: IList) => {
@@ -199,7 +205,7 @@ export const PopularPlaylistTrack = ({ cover, title, duration, artists, album_id
                             {artists.map((artist, i) => (
                                 <ArtistNameWrap>
                                     <Link to={`/home/artist/${artist.id}`}>{artist.name}</Link>
-                                    {artists.length == 1 ? undefined : artists[i + 1] ? ',' : undefined}
+                                    {artists.length == 1 ? undefined : artists[i + 1] ? <Dot>,</Dot> : undefined}
                                 </ArtistNameWrap>
                             ))}
                         </ArtistsWrap>
