@@ -1,12 +1,12 @@
 import Cookies from 'js-cookie';
 
 export const getToken = async () => {
-    const accessToken = localStorage.getItem('webAccessToken');
-    const expiration = localStorage.getItem('webExpiration');
+    const access_token = localStorage.getItem('webAccessToken');
+    const expires_in = localStorage.getItem('webExpiration');
     const now = new Date();
     const nowTimeNumber = now.getTime();
-    if (accessToken && expiration && parseInt(expiration, 10) > nowTimeNumber) {
-        return { accessToken, expiration };
+    if (access_token && expires_in && parseInt(expires_in, 10) > nowTimeNumber) {
+        return { access_token, expires_in };
     }
     const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -17,14 +17,12 @@ export const getToken = async () => {
             grant_type: 'client_credentials',
             client_id: process.env.REACT_APP_CLIENT_ID || '',
             client_secret: process.env.REACT_APP_SECRET_ID || '',
-            //     client_id: '9b1aa9c5e93a407f8a2253ef5cd7b2c4',
-            //     client_secret: '8eef047b0dbb405b9a0236ba1d01a10e',
         }),
     });
     const json = await response.json();
     const newToken = json.access_token;
     const newExpiration = (now.getTime() + 59 * 60 * 1000).toString();
-    return { accessToken: newToken, expiration: newExpiration };
+    return { access_token: newToken, expires_in: newExpiration };
 };
 
 export const getSdkToken = async (code: string) => {
@@ -94,7 +92,7 @@ const fetchWithToken = async (url: string, token: string) => {
         const errorData = await response.json();
         if (errorData.error && errorData.error.message === 'The access token expired') {
             const newTokenData = await getToken();
-            response = await makeRequest(newTokenData.accessToken);
+            response = await makeRequest(newTokenData.access_token);
         }
     }
     if (!response.ok) {
