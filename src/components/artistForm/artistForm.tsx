@@ -33,10 +33,12 @@ interface ITopTracks {
 const Container = styled.div`
     width: 100%;
     padding: 20px 20px 140px 20px;
-    background: black;
+    background: #131212;
     border-radius: 8px;
     overflow-x: hidden;
     @media (max-width: 768px) {
+        background: black;
+
         padding: 10px 10px 140px 10px;
     }
 `;

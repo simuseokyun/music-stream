@@ -10,15 +10,15 @@ const Container = styled.div`
     width: 100%;
 `;
 const SideBarBot = styled.div`
-    height: 600px;
     background-color: #131212;
     border-radius: 8px;
-    padding: 20px;
+    padding: 20px 20px 140px 20px;
     overflow-y: scroll;
     overflow-x: hidden;
     @media (max-width: 768px) {
-        height: 100vh;
-        padding: 50px 20px 20px 20px;
+        /* height: 100vh; */
+        padding: 10px 10px 140px 10px;
+        background-color: black;
     }
 `;
 
