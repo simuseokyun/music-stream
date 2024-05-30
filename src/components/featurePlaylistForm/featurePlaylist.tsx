@@ -41,8 +41,8 @@ const PrevBtn = styled.img`
     padding: 4px;
     border-radius: 24px;
     @media (max-width: 768px) {
-        width: 16px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
     }
 `;
 const NextBtn = styled(PrevBtn)`

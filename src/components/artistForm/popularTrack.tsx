@@ -29,8 +29,8 @@ const TdWrap = styled.div`
     align-items: center;
 `;
 const TrackImg = styled.img`
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border-radius: 8px;
 `;
 const TrackTitle = styled.p`

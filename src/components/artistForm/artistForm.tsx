@@ -32,8 +32,8 @@ interface ITopTracks {
 }
 const Container = styled.div`
     width: 100%;
-    padding: 20px;
-    background: #131212;
+    padding: 20px 20px 140px 20px;
+    background: black;
     border-radius: 8px;
     overflow-x: hidden;
     @media (max-width: 768px) {
@@ -113,21 +113,20 @@ const FirstTitle = styled.h1`
 `;
 const SecondTitle = styled(FirstTitle)``;
 const Name = styled.h1`
-    font-size: 50px;
+    font-size: 36px;
     font-weight: 700;
     @media (max-width: 768px) {
-        font-size: 36px;
+        font-size: 24px;
     }
     @media (max-width: 425px) {
-        font-size: 24px;
+        font-size: 20px;
     }
 `;
 const Follower = styled.span`
-    font-size: 24px;
+    font-size: 18px;
     margin-top: 10px;
     @media (max-width: 425px) {
-        font-size: 18px;
-        margin-top: 5px;
+        font-size: 14px;
     }
 `;
 
@@ -135,7 +134,7 @@ const AlbumWrap = styled.ul<{ state: string }>`
     width: 100%;
     display: grid;
     grid-template-columns: ${({ state }) => `repeat(${state === 'true' ? 3 : 4}, 1fr)`};
-    gap: 10px;
+
     @media (max-width: 768px) {
     }
 `;
@@ -168,7 +167,6 @@ const AllShow = styled.p`
     text-align: right;
 `;
 const AlbumTitle = styled.h1`
-    font-size: 16px;
     margin-top: 10px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -179,7 +177,6 @@ const AlbumReleaseWrap = styled.div`
 `;
 const AlbumRelease = styled.span`
     color: rgb(160, 160, 160);
-    font-size: 14px;
 `;
 const AlbumType = styled.span`
     color: rgb(160, 160, 160);
@@ -225,8 +222,8 @@ export const ArtistForm = () => {
                     <Table>
                         <Thead>
                             <Tr>
-                                <Th>#</Th>
-                                <Th>제목</Th>
+                                <Th></Th>
+                                <Th></Th>
                                 <Th>
                                     <span className="material-symbols-outlined">schedule</span>
                                 </Th>

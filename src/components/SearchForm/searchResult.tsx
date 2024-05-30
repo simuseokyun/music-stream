@@ -51,25 +51,47 @@ const Table = styled.table`
     width: 100%;
     vertical-align: middle;
 `;
-const Thead = styled.thead``;
-const Tbody = styled.tbody``;
-const Tr = styled.tr``;
+const Thead = styled.thead`
+    width: 100%;
+`;
+const Tbody = styled.tbody`
+    width: 100%;
+`;
+const Tr = styled.tr`
+    width: 100%;
+`;
 const Th = styled.th`
-    cursor: pointer;
     padding: 5px 0;
-    max-width: 0;
-    overflow: hidden;
     &:first-child {
         width: 6%;
         text-align: left;
-        @media (max-width: 425px) {
+        @media (max-width: 768px) {
             width: 100px;
         }
     }
-    &:nth-child(4) {
+
+    &:nth-child(2) {
+        width: 50%;
+        text-align: left;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        @media (max-width: 768px) {
+            width: 80%;
+        }
+    }
+    &:nth-child(3) {
+        width: 30%;
+        text-align: left;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
         @media (max-width: 768px) {
             display: none;
         }
+    }
+    &:nth-child(4) {
+        width: 10%;
     }
 `;
 
@@ -92,7 +114,6 @@ export const SearchResult = () => {
                 <Table>
                     <Thead>
                         <Tr>
-                            <Th></Th>
                             <Th></Th>
                             <Th></Th>
                             <Th></Th>

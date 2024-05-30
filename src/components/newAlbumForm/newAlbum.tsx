@@ -97,8 +97,8 @@ const PrevBtn = styled.img`
     padding: 4px;
     border-radius: 24px;
     @media (max-width: 768px) {
-        width: 16px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
     }
 `;
 const NextBtn = styled(PrevBtn)`
@@ -108,7 +108,7 @@ const SectionTitle = styled.h1`
     font-size: 24px;
     font-weight: 700;
     @media (max-width: 768px) {
-        font-size: 18px;
+        font-size: 20px;
     }
     @media (max-width: 425px) {
         font-size: 16px;

@@ -32,25 +32,17 @@ const TrackList = styled.tr`
     &:first-child {
         margin: 0;
     }
-    &:hover {
-        background-color: #2a2929;
-        span {
-            opacity: 1;
-        }
-    }
 `;
 
-const TrackImg = styled.div<{ url: string }>`
-    background-image: url(${(props) => props.url});
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
+const TrackImg = styled.img`
+    width: 45px;
+    height: 45px;
     background-position: center;
     background-size: cover;
 `;
 
 const AddBtn = styled.span<{ state: string }>`
-    opacity: ${({ state }) => (state === 'true' ? 1 : 0)};
+    /* opacity: ${({ state }) => (state === 'true' ? 1 : 0)}; */
     &:hover {
         animation: ${rotateIn} 1s forwards;
     }
@@ -89,12 +81,7 @@ const Td = styled.td`
     }
 
     &:nth-child(2) {
-        width: 50px;
-    }
-    &:nth-child(3) {
         width: 50%;
-        text-align: left;
-        max-width: 0;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
@@ -102,10 +89,9 @@ const Td = styled.td`
             width: 80%;
         }
     }
-    &:nth-child(4) {
+    &:nth-child(3) {
         width: 30%;
         text-align: left;
-        max-width: 0;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
@@ -113,23 +99,34 @@ const Td = styled.td`
             display: none;
         }
     }
-    &:last-child {
-        width: 10%;
+    &:nth-child(4) {
+        width: 5%;
     }
 `;
-const PlayBtn = styled.span``;
-const ArtistsWrap = styled.p`
+const TitleWrap = styled.div`
+    width: 100%;
+    text-align: left;
+    margin-left: 10px;
+`;
+const TrackTitle = styled.p``;
+
+const ArtistsWrap = styled.div`
+    display: flex;
+`;
+const ArtistNameWrap = styled.p`
     margin-top: 6px;
     a {
-        font-size: 14px;
-        color: #a0a0a0;
+        color: rgb(160, 160, 160);
     }
 `;
+
+const PlayBtn = styled.span``;
+
 const Dot = styled.span`
     color: rgb(160, 160, 160);
     margin: 0 2px;
 `;
-export const SearchTrackList = ({ cover, title, album_id, album_title, artists, duration_ms, uri, id }: ITrack) => {
+export const SearchTrackList = ({ cover, title, album_id, album_title, artists, duration_ms, id, uri }: ITrack) => {
     const [open, setOpen] = useState(false);
     const [playlists, setPlaylist] = useRecoilState(playlistList);
     const isMobile = useRecoilValue(setMobile);
@@ -145,7 +142,7 @@ export const SearchTrackList = ({ cover, title, album_id, album_title, artists, 
             currentTarget: { textContent, id },
         } = event;
         setPlaylist((prev) => {
-            const newTrack = { id: title, title, duration_ms, cover, album_title, artists, album_id, uri };
+            const newTrack = { id: title, title, duration_ms, cover, album_title, artists, album_id };
             console.log(newTrack);
             const prevArray = prev.map((prev, index) => {
                 if (prev.title === textContent) {
@@ -178,7 +175,7 @@ export const SearchTrackList = ({ cover, title, album_id, album_title, artists, 
     };
 
     // 노래 클릭 시 재생 함수 호출 예시
-    const handleSongClick = async (trackUri: string, title: string, cover: string, artist: string) => {
+    const handleSongClick = async (trackUri: string, title: string, uri: string, artist: string) => {
         try {
             try {
                 if (!accessToken) {
@@ -213,32 +210,35 @@ export const SearchTrackList = ({ cover, title, album_id, album_title, artists, 
 
     return (
         <TrackList onMouseLeave={mouseLeave} key={id}>
-            <Td onClick={() => handleSongClick(uri, title, cover, artists[0].name)}>
-                <PlayBtn className="material-symbols-outlined">play_arrow</PlayBtn>
+            <Td>
+                <PlayBtn
+                    className="material-symbols-outlined"
+                    onClick={() => handleSongClick(uri, title, cover, artists[0].name)}
+                >
+                    play_arrow
+                </PlayBtn>
             </Td>
             <Td>
-                <TrackImg url={cover} />
-            </Td>
-            <Td>
-                {title}
                 <TdWrap>
-                    {artists.map((artist, i) => {
-                        return (
-                            <ArtistsWrap key={artist.id}>
-                                <Link style={{}} to={`/home/artist/${artist.id}`}>
-                                    {artist.name}
-                                </Link>
-                                {artists.length == 1 ? undefined : artists[i + 1] ? <Dot>,</Dot> : undefined}
-                            </ArtistsWrap>
-                        );
-                    })}
+                    <TrackImg src={cover} alt="album_cover" />
+                    <TitleWrap>
+                        <TrackTitle>{title}</TrackTitle>
+                        <ArtistsWrap>
+                            {artists.map((artist, i) => (
+                                <ArtistNameWrap>
+                                    <Link to={`/home/artist/${artist.id}`}>{artist.name}</Link>
+                                    {artists.length == 1 ? undefined : artists[i + 1] ? <Dot>,</Dot> : undefined}
+                                </ArtistNameWrap>
+                            ))}
+                        </ArtistsWrap>
+                    </TitleWrap>
                 </TdWrap>
             </Td>
             <Td>
                 <Link to={`/home/album/${album_id}`}>{album_title}</Link>
             </Td>
             <Td>
-                <AddBtn onClick={onAddBtn} className="material-symbols-outlined" state={isMobile.toString()}>
+                <AddBtn state={isMobile.toString()} onClick={onAddBtn} className="material-symbols-outlined">
                     add_circle
                 </AddBtn>
                 {open ? (

@@ -38,7 +38,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
-    background-color: rgba(0,0,0,0.95);
+    background-color:black;
     color:white;
   
 }

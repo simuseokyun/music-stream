@@ -88,7 +88,7 @@ const ArtistNameWrap = styled.p`
 `;
 
 const AddBtn = styled.span<{ state: string }>`
-    opacity: ${({ state }) => (state === 'true' ? 1 : 0)};
+    /* opacity: ${({ state }) => (state === 'true' ? 1 : 0)}; */
 `;
 const Category = styled.ul`
     position: absolute;
