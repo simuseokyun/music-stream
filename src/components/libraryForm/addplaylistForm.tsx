@@ -24,9 +24,9 @@ const Container = styled.div`
 `;
 const Form = styled.div`
     background-color: #232322;
+    width: 80%;
     max-width: 500px;
     padding: 20px;
-    width: 80%;
     border-radius: 8px;
 `;
 const FormTop = styled.div`
@@ -44,9 +44,7 @@ const AddFormWrap = styled.div`
         display: block;
     }
 `;
-const FormLeft = styled.div`
-    width: 100px;
-`;
+const FormLeft = styled.div``;
 const FormRight = styled.div`
     width: 100%;
     margin-left: 20px;
@@ -56,16 +54,15 @@ const FormRight = styled.div`
 `;
 const FormTitle = styled.h1`
     font-size: 18px;
+    @media (max-width: 768px) {
+        font-size: 16px;
+    }
 `;
 const ImgWrap = styled.div`
     position: relative;
     width: 100px;
     height: 100px;
-    &:hover {
-        div {
-            opacity: 1;
-        }
-    }
+    left: calc(50% - 50px);
 `;
 const FormImg = styled.img`
     position: absolute;
@@ -74,8 +71,6 @@ const FormImg = styled.img`
     width: 100%;
     height: 100%;
     object-fit: cover;
-    @media (max-width: 768px) {
-    }
 `;
 const ImgOverlay = styled.div`
     position: absolute;
@@ -88,11 +83,8 @@ const ImgOverlay = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 0;
-
     p {
         font-size: 12px;
-        /* text-align: center; */
     }
 `;
 
@@ -100,6 +92,7 @@ const Input = styled.input`
     width: 100%;
     display: inline-block;
     padding: 4px;
+    margin-top: 10px;
     outline: none;
     color: white;
     border: 1px solid transparent;
@@ -116,7 +109,6 @@ const CloseBtn = styled.span`
     }
 `;
 const Title = styled.p`
-    font-size: 14px;
     margin-bottom: 2px;
     @media (max-width: 768px) {
         margin-top: 10px;
@@ -124,6 +116,7 @@ const Title = styled.p`
 `;
 const BtnWrap = styled.div`
     text-align: right;
+    margin-top: 20px;
 `;
 const Btn = styled.button`
     display: inline-block;
@@ -133,14 +126,12 @@ const Btn = styled.button`
     border-radius: 20px;
     padding: 4px 8px;
 `;
-
+const SubMessage = styled.p``;
 export const AddPlaylistForm = () => {
     const addPlaylist = useSetRecoilState(playlistList);
-    const playList = useRecoilValue(playlistList);
     const close = useSetRecoilState(addPlaylistState);
     const setPlaylistState = useSetRecoilState(clickMenuPlaylist);
     const setAlbumtState = useSetRecoilState(clickMenuAlbum);
-    const navigate = useNavigate();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const handleClick = () => {
@@ -148,12 +139,7 @@ export const AddPlaylistForm = () => {
             fileInputRef.current.click();
         }
     };
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        formState: { errors },
-    } = useForm<IData>();
+    const { register, handleSubmit, setValue } = useForm<IData>();
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -181,7 +167,7 @@ export const AddPlaylistForm = () => {
                     {
                         id: String(Date.now()),
                         title: `플레이리스트 #${prev.length + 1}`,
-                        img: imagePreview ? imagePreview : '/images/basicPlayList.webp',
+                        img: imagePreview ? imagePreview : '/images/basic_playlist.png',
                         tracks: [],
                     },
                 ];
@@ -193,7 +179,7 @@ export const AddPlaylistForm = () => {
                 {
                     id: String(Date.now()),
                     title,
-                    img: imagePreview ? imagePreview : '/images/basicPlayList.webp',
+                    img: imagePreview ? imagePreview : '/images/basic_playlist.png',
                     tracks: [],
                 },
             ];
@@ -224,14 +210,13 @@ export const AddPlaylistForm = () => {
                         <FormLeft>
                             <ImgWrap>
                                 <FormImg
-                                    src={imagePreview ? imagePreview : '/images/basicPlaylist.webp'}
+                                    src={imagePreview ? imagePreview : '/images/basic_playlist.png'}
                                     alt="Preview"
                                 ></FormImg>
                                 <ImgOverlay onClick={handleClick}>
-                                    <p>사진 선택</p>
+                                    <SubMessage>사진 선택</SubMessage>
                                 </ImgOverlay>
                             </ImgWrap>
-
                             <Input
                                 type="file"
                                 ref={fileInputRef}
@@ -242,11 +227,10 @@ export const AddPlaylistForm = () => {
                         </FormLeft>
                         <FormRight>
                             <Title>제목</Title>
-
                             <Input
                                 {...register('title', {
                                     required: false,
-                                    maxLength: { value: 20, message: '20글자 이하로 입력해주세요' },
+                                    maxLength: { value: 12, message: '12글자 이하로 입력해주세요' },
                                 })}
                                 type="text"
                                 placeholder="플레이리스트 이름을 작성해주세요"

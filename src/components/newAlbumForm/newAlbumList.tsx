@@ -9,11 +9,8 @@ const Container = styled.li`
     &:hover {
         background-color: #1a191a;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 425px) {
         padding: 5px;
-    }
-    @media (max-width: 375px) {
-        padding: 2px;
     }
 `;
 const NewAlbumImg = styled.img`

@@ -38,6 +38,9 @@ const TopList = styled.li`
     &:first-child {
         margin-bottom: 20px;
     }
+    a {
+        font-size: 18px;
+    }
 `;
 
 export const SideBar = () => {

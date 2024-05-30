@@ -21,13 +21,13 @@ const SectionTitle = styled.h1`
         font-size: 18px;
     }
     @media (max-width: 425px) {
-        font-size: 14px;
+        font-size: 16px;
     }
 `;
 const FeaturePlaylistWrap = styled.ul<{ state: string }>`
     display: grid;
     grid-template-columns: ${({ state }) => `repeat(${state === 'true' ? 3 : 4}, 1fr)`};
-    gap: 5px;
+    /* gap: 5px; */
     width: 100%;
 `;
 const BtnWrap = styled.div`
@@ -41,6 +41,8 @@ const PrevBtn = styled.img`
     padding: 4px;
     border-radius: 24px;
     @media (max-width: 768px) {
+        width: 16px;
+        height: 16px;
     }
 `;
 const NextBtn = styled(PrevBtn)`
@@ -62,6 +64,7 @@ export const FeaturePlaylist = () => {
     const isMobile = useRecoilValue(setMobile);
     const offset = isMobile ? 3 : 4;
     const [index, setIndex] = useState(0);
+
     const token = getTokenLocalStorage('webAccessToken');
     const {
         isLoading: playlistLoading,

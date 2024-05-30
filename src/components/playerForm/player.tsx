@@ -1,17 +1,21 @@
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { deviceInfo, nowSongInfo } from '../../atoms';
 import Cookies from 'js-cookie';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface IPlaying {
     is_playing: boolean;
     item: { name: string; artists: { name: string }[]; album: { images: { url: string }[] } };
 }
+const marquee = keyframes`
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+`;
 
 const Container = styled.div`
     width: 100%;
-    height: 80px;
+    /* height: 80px; */
     position: fixed;
     left: 0;
     bottom: 0;
@@ -19,14 +23,14 @@ const Container = styled.div`
     background: rgba(0, 0, 0, 0.9);
     @media (max-width: 768px) {
         bottom: 52px;
-        height: 50px;
+        /* height: 50px; */
     }
 `;
 
 const Wrap = styled.div`
     max-width: 1180px;
     height: 100%;
-    padding: 20px;
+    padding: 15px;
     margin: auto;
     @media (max-width: 768px) {
         padding: 10px;
@@ -67,20 +71,31 @@ const Cover = styled.img`
     }
 `;
 const InfoWrap = styled.div`
+    width: 100%;
     margin-left: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    box-sizing: border-box;
 `;
-const Title = styled.p`
-    margin-bottom: 8px;
+const Title = styled.p<{ shouldAnimate: boolean }>`
+    font-size: 14px;
+    display: inline-block;
+    /* padding-left: ${({ shouldAnimate }) => (shouldAnimate ? '100%' : '0')}; */
+    ${({ shouldAnimate }) =>
+        shouldAnimate &&
+        css`
+            animation: ${marquee} 10s linear infinite;
+        `}
     @media (max-width: 768px) {
         font-size: 14px;
     }
 `;
+
 const Artists = styled.p`
     font-size: 12px;
     color: rgb(160, 160, 160);
+    margin-top: 5px;
 `;
 const SongBtn = styled.span`
     background-color: white;
@@ -91,8 +106,11 @@ const SongBtn = styled.span`
 export const Player = () => {
     const [device, setDevice] = useRecoilState(deviceInfo);
     const [song, setSong] = useRecoilState(nowSongInfo);
-
+    const textRef = useRef<HTMLParagraphElement>(null);
+    const divRef = useRef<HTMLDivElement>(null);
+    const [shouldAnimate, setShouldAnimate] = useState(false);
     const token = Cookies.get('accessToken');
+    console.log(shouldAnimate);
     const resumeSong = async () => {
         try {
             const response = await fetch('https://api.spotify.com/v1/me/player/play', {
@@ -196,6 +214,13 @@ export const Player = () => {
             pauseSong();
         };
     }, [token]);
+    useEffect(() => {
+        console.log(textRef);
+        console.log(divRef);
+        if (textRef.current && divRef.current) {
+            setShouldAnimate(textRef.current.clientWidth > divRef.current.clientWidth);
+        }
+    }, [song.title]);
 
     return (
         <>
@@ -203,10 +228,12 @@ export const Player = () => {
                 <Container>
                     <Wrap>
                         <PlayerForm>
-                            <PlayerLeft>
+                            <PlayerLeft ref={divRef}>
                                 <Cover src={song.cover} />
                                 <InfoWrap>
-                                    <Title>{song.title}</Title>
+                                    <Title ref={textRef} shouldAnimate={shouldAnimate}>
+                                        {song.title}
+                                    </Title>
                                     <Artists>{song.artist}</Artists>
                                 </InfoWrap>
                             </PlayerLeft>

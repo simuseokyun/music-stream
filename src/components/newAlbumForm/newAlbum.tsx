@@ -27,10 +27,6 @@ const Container = styled.div`
 
 const FirstAlbumWrap = styled.div`
     display: flex;
-
-    @media (max-width: 768px) {
-        padding: 10px;
-    }
 `;
 
 const FirstAlbumImg = styled.img`
@@ -81,14 +77,13 @@ const FirstAlbumArtist = styled.span`
 
 const Row = styled.div`
     position: relative;
-
     width: 100%;
 `;
 const NewAlbumWrap = styled.ul<{ state: string }>`
     width: 100%;
     display: grid;
     grid-template-columns: ${({ state }) => `repeat(${state === 'true' ? 3 : 4}, 1fr)`};
-    gap: 5px;
+    /* gap: 5px; */
     width: 100%;
 `;
 const BtnWrap = styled.div`
@@ -102,6 +97,8 @@ const PrevBtn = styled.img`
     padding: 4px;
     border-radius: 24px;
     @media (max-width: 768px) {
+        width: 16px;
+        height: 16px;
     }
 `;
 const NextBtn = styled(PrevBtn)`
@@ -114,7 +111,7 @@ const SectionTitle = styled.h1`
         font-size: 18px;
     }
     @media (max-width: 425px) {
-        font-size: 14px;
+        font-size: 16px;
     }
 `;
 const TopWrap = styled.div`
@@ -133,7 +130,6 @@ export const NewAlbum = () => {
     const isMobile = useRecoilValue(setMobile);
     const offset = isMobile ? 3 : 4;
     const [index, setIndex] = useState(0);
-
     const onNextBtn = () => {
         if (isMobile) {
             setIndex((prev) => (prev === 6 ? 0 : prev + 1));
@@ -143,9 +139,9 @@ export const NewAlbum = () => {
     };
     const onPrevBtn = () => {
         if (isMobile) {
-            setIndex((prev) => (prev === 6 ? 0 : prev - 1));
+            setIndex((prev) => (prev === 0 ? 6 : prev - 1));
         } else {
-            setIndex((prev) => (prev === 4 ? 0 : prev - 1));
+            setIndex((prev) => (prev === 0 ? 4 : prev - 1));
         }
     };
     const token = getTokenLocalStorage('webAccessToken');
@@ -160,7 +156,6 @@ export const NewAlbum = () => {
                 return getNewAlbum(token);
             }
         },
-
         {
             enabled: !!token,
             onError: (error) => {

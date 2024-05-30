@@ -165,12 +165,13 @@ const Copyright = styled.p`
     color: #e2e2e2;
 `;
 const Btn = styled.button`
+    font-size: 12px;
     text-align: center;
     background-color: #65d46e;
     border: none;
     border-radius: 20px;
     padding: 4px 8px;
-    margin-top: 5px;
+    margin-top: 10px;
     vertical-align: middle;
 `;
 export const AlbumForm = () => {
@@ -226,11 +227,7 @@ export const AlbumForm = () => {
                         <AlbumImg src={data?.images[0].url} />
                         <AlbumInfo>
                             <AlbumType>
-                                {data?.album_type === 'single'
-                                    ? typeTransform.single
-                                    : data?.album_type === 'ep'
-                                    ? typeTransform.ep
-                                    : typeTransform.album}
+                                {data?.album_type === 'single' ? typeTransform.single : typeTransform.album}
                             </AlbumType>
                             <AlbumTitle>{data?.name}</AlbumTitle>
                             <ArtistName>
@@ -279,11 +276,7 @@ export const AlbumForm = () => {
                                 ))}
                             </Tbody>
                         </TrackLists>
-                        <CopyrightWrap>
-                            {data?.copyrights.map((copyright) => (
-                                <Copyright key={copyright.text}>{copyright.text}</Copyright>
-                            ))}
-                        </CopyrightWrap>
+                        <CopyrightWrap>{data?.copyrights[0].text}</CopyrightWrap>
                     </TrackListsWrap>
                 </AlbumWrap>
             )}

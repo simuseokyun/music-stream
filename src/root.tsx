@@ -18,12 +18,18 @@ time, mark, audio, video {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-size: 100%;
+	font-size: 14px;;
     font-family: "Noto Sans KR", sans-serif;
     font-optical-sizing: auto;
      font-style: normal;
      font-weight: 400;
 	vertical-align: baseline;
+    @media (max-width:768px) {
+        font-size:14px;
+    }
+    @media (max-width:425px) {
+        font-size:12px;
+    }
 }
 
 article, aside, details, figcaption, figure, 
