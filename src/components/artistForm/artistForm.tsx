@@ -180,10 +180,8 @@ const AlbumReleaseWrap = styled.div`
 const AlbumRelease = styled.span`
     color: rgb(160, 160, 160);
 `;
-const AlbumType = styled.span`
-    color: rgb(160, 160, 160);
+const AlbumType = styled(AlbumRelease)`
     margin-left: 3px;
-    font-size: 14px;
 `;
 export const ArtistForm = () => {
     const { artistId } = useParams();

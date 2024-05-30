@@ -9,11 +9,12 @@ import { getTokenLocalStorage } from '../../util';
 
 const Container = styled.div`
     width: 100%;
-    padding: 20px 20px 60px 20px;
+    padding: 20px 20px 140px 20px;
     background: #131212;
     border-radius: 8px;
     @media (max-width: 768px) {
-        padding: 50px 10px 110px 10px;
+        padding: 10px 10px 110px 10px;
+        background: black;
     }
 `;
 const SectionTitle = styled.h1`
@@ -24,7 +25,6 @@ const AlbumWrap = styled.ul<{ state: string }>`
     width: 100%;
     display: grid;
     grid-template-columns: ${({ state }) => `repeat(${state === 'true' ? 3 : 4}, 1fr)`};
-    gap: 10px;
 `;
 const AlbumList = styled.li`
     width: 100%;
@@ -39,7 +39,6 @@ const AlbumList = styled.li`
     }
 `;
 const AlbumTitle = styled.h1`
-    font-size: 16px;
     margin-top: 10px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -50,16 +49,14 @@ const AlbumImg = styled.img`
     border-radius: 8px;
 `;
 const AlbumReleaseWrap = styled.div`
-    margin-top: 3px;
+    margin-top: 5px;
 `;
 const AlbumRelease = styled.span`
     color: rgb(160, 160, 160);
-    font-size: 14px;
 `;
 const AlbumType = styled.span`
     color: rgb(160, 160, 160);
     margin-left: 3px;
-    font-size: 14px;
 `;
 export const AllAlbum = () => {
     const token = getTokenLocalStorage('webAccessToken') || '';
