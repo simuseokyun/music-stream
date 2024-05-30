@@ -18,11 +18,6 @@ interface ITrack {
 
 const TopTrackList = styled.tr`
     width: 100%;
-    &:hover {
-        span {
-            opacity: 1;
-        }
-    }
 `;
 const TdWrap = styled.div`
     display: flex;
@@ -61,7 +56,7 @@ const Td = styled.td`
 `;
 
 const AddBtn = styled.span<{ state: string }>`
-    opacity: ${({ state }) => (state === 'true' ? 1 : 0)};
+    /* opacity: ${({ state }) => (state === 'true' ? 1 : 0)}; */
 `;
 const Category = styled.ul`
     position: absolute;

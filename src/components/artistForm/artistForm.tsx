@@ -224,9 +224,7 @@ export const ArtistForm = () => {
                             <Tr>
                                 <Th></Th>
                                 <Th></Th>
-                                <Th>
-                                    <span className="material-symbols-outlined">schedule</span>
-                                </Th>
+                                <Th></Th>
                                 <Th></Th>
                             </Tr>
                         </Thead>

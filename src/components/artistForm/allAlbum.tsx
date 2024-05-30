@@ -9,11 +9,12 @@ import { getTokenLocalStorage } from '../../util';
 
 const Container = styled.div`
     width: 100%;
-    padding: 20px 20px 140px 20px;
+    padding: 20px;
     background: #131212;
     border-radius: 8px;
+    margin-bottom: 140px;
     @media (max-width: 768px) {
-        padding: 10px 10px 110px 10px;
+        padding: 10px;
         background: black;
     }
 `;

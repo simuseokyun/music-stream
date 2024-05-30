@@ -13,7 +13,6 @@ const Container = styled.div`
     margin-bottom: 100px;
     @media (max-width: 768px) {
         background-color: black;
-
         padding: 10px;
     }
 `;
@@ -60,26 +59,21 @@ const PlaylistInfo = styled.div`
     }
 `;
 
-const PlaylistType = styled.p`
-    margin-bottom: 2px;
+const PlaylistTitle = styled.p`
+    font-size: 24px;
+    margin-bottom: 5px;
     @media (max-width: 768px) {
-        margin-top: 10px;
+        font-size: 20px;
     }
 `;
-const PlaylistTitle = styled.p`
-    margin-bottom: 2px;
-`;
 const SetIcon = styled.span`
-    font-size: 18px;
+    font-size: 24px;
     vertical-align: middle;
 `;
 const PlaylistTracksLength = styled.p`
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 `;
-const TrackImg = styled.img`
-    width: 50px;
-    height: 50px;
-`;
+
 const Table = styled.table`
     width: 100%;
 `;
@@ -214,7 +208,6 @@ export const PlaylistForm = () => {
                     <PlaylistTop>
                         <PlaylistImg src={playlist?.img || '/basicPlaylist.webp'}></PlaylistImg>
                         <PlaylistInfo>
-                            <PlaylistType>내 플레이리스트</PlaylistType>
                             <PlaylistTitle>
                                 {playlist.title}
                                 <SetIcon className="material-symbols-outlined" onClick={() => setFixForm(() => true)}>

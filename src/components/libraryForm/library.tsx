@@ -7,17 +7,15 @@ import { PlaylistList } from '../playlistForm/playlistList';
 import { AlbumList } from '../albumForm/albumList';
 import { useNavigate } from 'react-router-dom';
 const Container = styled.div`
-    width: 100%;
-`;
-const SideBarBot = styled.div`
     background-color: #131212;
     border-radius: 8px;
-    padding: 20px 20px 140px 20px;
+    height: 500px;
+    padding: 20px;
+    margin-bottom: 140px;
     overflow-y: scroll;
     overflow-x: hidden;
     @media (max-width: 768px) {
-        /* height: 100vh; */
-        padding: 10px 10px 140px 10px;
+        padding: 10px;
         background-color: black;
     }
 `;
@@ -71,17 +69,15 @@ export const Library = () => {
 
     return (
         <Container>
-            <SideBarBot>
-                <TitleWrap>
-                    <LibraryTitle>나의 라이브러리</LibraryTitle>
-                    <span onClick={addPlaylist} className="material-symbols-outlined">
-                        add_circle
-                    </span>
-                </TitleWrap>
-                <Button text="플레이리스트" state={playlistState.toString()} onClick={onClickPlaylist} />
-                <Button ml="5px" text="내가 찜한 앨범" state={albumState.toString()} onClick={onClickSetAlbum} />
-                {playlistState ? <PlaylistList /> : <AlbumList />}
-            </SideBarBot>
+            <TitleWrap>
+                <LibraryTitle>나의 라이브러리</LibraryTitle>
+                <span onClick={addPlaylist} className="material-symbols-outlined">
+                    add_circle
+                </span>
+            </TitleWrap>
+            <Button text="플레이리스트" state={playlistState.toString()} onClick={onClickPlaylist} />
+            <Button ml="5px" text="내가 찜한 앨범" state={albumState.toString()} onClick={onClickSetAlbum} />
+            {playlistState ? <PlaylistList /> : <AlbumList />}
         </Container>
     );
 };
