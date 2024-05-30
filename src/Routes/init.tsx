@@ -9,18 +9,17 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
 `;
-const LoginBtn = styled.button`
-    width: 80px;
-    height: 30px;
-    background-color: #00ff00;
-    border-radius: 20px;
-    border: none;
-    font-weight: 700;
-`;
 const Logo = styled.img`
-    width: 40%;
+    width: 30%;
     max-width: 150px;
     margin-bottom: 20px;
+`;
+const LoginBtn = styled.button`
+    padding: 5px 10px;
+    background-color: #00ff00;
+    border-radius: 15px;
+    border: none;
+    font-weight: 700;
 `;
 
 export const InitForm = () => {

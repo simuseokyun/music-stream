@@ -28,7 +28,8 @@ interface IAlbum {
 }
 
 const Container = styled.div`
-    padding: 20px;
+    padding: 20px 20px 140px 20px;
+
     height: 500px;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -39,12 +40,12 @@ const Container = styled.div`
     }
     @media (max-width: 768px) {
         height: 100vh;
-        padding: 50px 10px 140px 10px;
+        padding: 10px 10px 140px 10px;
     }
 `;
 const ResultMessage = styled.h1`
     font-size: 20px;
-    margin-bottom: 10px;
+    margin: 20px 0;
 `;
 const Table = styled.table`
     width: 100%;
@@ -54,6 +55,17 @@ const Thead = styled.thead``;
 const Tbody = styled.tbody``;
 const Tr = styled.tr``;
 const Th = styled.th`
+    cursor: pointer;
+    padding: 5px 0;
+    max-width: 0;
+    overflow: hidden;
+    &:first-child {
+        width: 6%;
+        text-align: left;
+        @media (max-width: 425px) {
+            width: 100px;
+        }
+    }
     &:nth-child(4) {
         @media (max-width: 768px) {
             display: none;
@@ -73,7 +85,7 @@ export const SearchResult = () => {
 
     return (
         <Container>
-            {search ? <ResultMessage>"{search}"에 대한 결과</ResultMessage> : <h1>검색 결과가 없습니다</h1>}
+            <ResultMessage>{search ? `"${search}"에 대한 검색결과` : '검색 결과가 없습니다'}</ResultMessage>
             {TrackLoading ? (
                 'Loading'
             ) : (
