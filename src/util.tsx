@@ -40,7 +40,7 @@ export const commaSeparate = (num: number) => {
 
 export async function playSong(trackUri?: string, deviceId?: string) {
     const token = Cookies.get('accessToken');
-    
+
     const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
         method: 'PUT',
         headers: {
