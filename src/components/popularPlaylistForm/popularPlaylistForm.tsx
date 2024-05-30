@@ -31,8 +31,10 @@ const Container = styled.div`
     background-color: #131212;
     border-radius: 8px;
     overflow: hidden;
+    margin-bottom: 100px;
     @media (max-width: 768px) {
-        padding: 10px 10px 140px 10px;
+        padding: 10px;
+        background-color: black;
     }
 `;
 const PlaylistWrap = styled.div`

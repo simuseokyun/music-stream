@@ -28,8 +28,8 @@ interface IAlbum {
 }
 
 const Container = styled.div`
-    padding: 20px 20px 140px 20px;
-
+    padding: 20px;
+    margin-bottom: 140px;
     height: 500px;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -40,7 +40,7 @@ const Container = styled.div`
     }
     @media (max-width: 768px) {
         height: 100vh;
-        padding: 10px 10px 140px 10px;
+        padding: 10px;
     }
 `;
 const ResultMessage = styled.h1`

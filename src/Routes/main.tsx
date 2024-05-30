@@ -4,12 +4,13 @@ import { FeaturePlaylist } from '../components/featurePlaylistForm/featurePlayli
 
 const Container = styled.div`
     width: 100%;
-    padding: 20px 20px 140px 20px;
+    padding: 20px;
     background-color: #131212;
     border-radius: 8px;
+    margin-bottom: 100px;
 
     @media (max-width: 768px) {
-        padding: 10px 10px 140px 10px;
+        padding: 10px;
         background-color: black;
     }
 `;

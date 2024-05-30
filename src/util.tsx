@@ -75,11 +75,11 @@ export async function playSong(trackUri?: string, deviceId?: string) {
             alert('로그인이 필요한 서비스입니다.');
         }
     }
-    if (response.status == 404) {
-        alert('웹 플레이어를 다시 생성하기 위해 로그아웃 하겠습니다.');
-        Cookies.remove('accessToken');
-        Cookies.remove('refreshToken');
-        window.location.href = '/';
-        return;
-    }
+    // if (response.status == 404) {
+    //     alert('웹 플레이어를 다시 생성하기 위해 로그아웃 하겠습니다.');
+    //     Cookies.remove('accessToken');
+    //     Cookies.remove('refreshToken');
+    //     window.location.href = '/';
+    //     return;
+    // }
 }
