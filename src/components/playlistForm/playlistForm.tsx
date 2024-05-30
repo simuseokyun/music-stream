@@ -10,8 +10,11 @@ const Container = styled.div`
     padding: 20px;
     background-color: #131212;
     border-radius: 8px;
+    margin-bottom: 100px;
     @media (max-width: 768px) {
-        padding: 80px 20px 80px 20px;
+        background-color: black;
+
+        padding: 10px;
     }
 `;
 const PlaylistWrap = styled.div`
@@ -44,6 +47,7 @@ const PlaylistImg = styled.img`
     width: 150px;
     height: 150px;
     border-radius: 8px;
+    object-fit: cover;
     @media (max-width: 768px) {
         margin: auto;
     }
