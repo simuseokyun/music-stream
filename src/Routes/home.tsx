@@ -15,91 +15,19 @@ import { PlaylistFixForm } from '../components/playlistForm/playlistFixForm';
 import { BottomBar } from '../components/navForm/bottomBar';
 import { Player } from '../components/playerForm/player';
 
-interface TrackImgProps {
-    url: string;
-}
-
-interface TokenResponse {
-    access_token: string;
-    expires_in: number;
-    token_type: string;
-}
-
-interface ExternalUrls {
-    spotify: string;
-}
-
-interface Followers {
-    href: string | null;
-    total: number;
-}
-
-interface Image {
-    height: number;
-    url: string;
-    width: number;
-}
-interface IArtist {
-    external_urls: ExternalUrls;
-    followers: Followers;
-    genres: string[];
-    href: string;
-    id: string;
-    images: Image[];
-    name: string;
-    popularity: number;
-    type: string;
-    uri: string;
-}
-
-interface ITracks {
-    tracks: {
-        items: IAlbum[];
-        next: string;
-    };
-}
-
-interface IAlbum {
-    album: {
-        images: {
-            url: string;
-        }[];
-        id: string;
-        name: string;
-    };
-    name: string;
-}
-interface INewAlbum {
-    albums: IAlbums;
-}
-interface IAlbums {
-    items: IItems[];
-    href: string;
-}
-interface IItems {
-    album_type: string;
-    artists: { name: string; id: string }[];
-    id: string;
-    images: { url: string; height: number; width: number }[];
-    name: string;
-}
 interface ISpotifyWebToken {
-    accessToken: string;
-    expiration: string;
-}
-interface ISpotifySdkToken {
     access_token: string;
-    refresh_token: string;
-    expires_in: number;
-    token_type: string;
+    expires_in: string;
 }
-const Wrap = styled.div`
+interface ISpotifySdkToken extends ISpotifyWebToken {
+    refresh_token: string;
+}
+const Container = styled.div`
     max-width: 1180px;
     margin: auto;
     width: 100%;
-    height: 100vh;
 `;
-const Container = styled.div`
+const Content = styled.div`
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 3fr;
@@ -121,8 +49,8 @@ export const Home = () => {
 
     const { isLoading: tokenLoading, data: tokenData } = useQuery<ISpotifyWebToken>('getWebToken', getToken, {
         onSuccess: (data) => {
-            saveLocalStorage('webAccessToken', data.accessToken);
-            saveLocalStorage('webExpiration', data.expiration);
+            saveLocalStorage('webAccessToken', data.access_token);
+            saveLocalStorage('webExpiration', data.expires_in);
         },
         staleTime: 59 * 60 * 1000, // 59분으로 설정 (유효기간이 1시간)
     });
@@ -181,25 +109,25 @@ export const Home = () => {
             }
         };
 
-        handleResize(); // 초기 실행
-        window.addEventListener('resize', handleResize); // 리사이즈 이벤트 핸들러 등록
+        handleResize();
+        window.addEventListener('resize', handleResize);
         return () => {
-            window.removeEventListener('resize', handleResize); // 컴포넌트가 언마운트될 때 리스너 제거
+            window.removeEventListener('resize', handleResize);
         };
     }, []);
 
     return (
-        <Wrap>
+        <Container>
             {openPlaylist && <AddPlaylistForm />}
             {fixState && <PlaylistFixForm />}
             <Header />
-            <Container>
+            <Content>
                 {isMobile && <LoginM />}
                 {!isMobile && <SideBar />}
                 {tokenData && <Outlet />}
-            </Container>
+            </Content>
             {accessToken && <Player />}
             {isMobile && <BottomBar />}
-        </Wrap>
+        </Container>
     );
 };
