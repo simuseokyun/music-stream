@@ -39,7 +39,7 @@ const Container = styled.div`
         display: none;
     }
     @media (max-width: 768px) {
-        height: 100vh;
+        background-color: black;
         padding: 10px;
     }
 `;
