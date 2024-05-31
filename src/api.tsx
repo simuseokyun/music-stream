@@ -19,6 +19,9 @@ export const getToken = async () => {
             client_secret: process.env.REACT_APP_SECRET_ID || '',
         }),
     });
+    if (!response.ok) {
+        console.log('네트워크 오류');
+    }
     const json = await response.json();
     const newToken = json.access_token;
     const newExpiration = (now.getTime() + 59 * 60 * 1000).toString();
