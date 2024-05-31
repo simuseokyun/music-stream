@@ -19,12 +19,7 @@ interface ITrack {
 }
 const Container = styled.tr`
     border-radius: 5px;
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.5);
-        span {
-            opacity: 1;
-        }
-    }
+
     a {
         color: #a0a0a0;
         &:hover {
@@ -47,7 +42,6 @@ const rotateIn = keyframes`
     }
 `;
 const AddBtn = styled.span`
-    opacity: 0;
     &:hover {
         animation: ${rotateIn} 1s forwards;
     }
@@ -59,6 +53,7 @@ const Category = styled.ul`
     padding: 10px;
     background-color: #282828;
     border-radius: 8px;
+    z-index: 1;
 `;
 const CategoryList = styled.li`
     text-align: left;

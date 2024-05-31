@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Cookies from 'js-cookie';
 import { loginSpotify } from '../../util';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '../buttonForm/button';
 
 const Container = styled.div`
     width: 100%;
@@ -16,16 +17,6 @@ const Logo = styled.img`
     height: 30px;
 `;
 
-const Btn = styled.button`
-    text-align: center;
-    background-color: #65d46e;
-    border: none;
-    border-radius: 20px;
-    padding: 4px 8px;
-    margin-top: 5px;
-    vertical-align: middle;
-`;
-
 export const LoginM = () => {
     const navigate = useNavigate();
     const accessToken = Cookies.get('accessToken');
@@ -37,7 +28,11 @@ export const LoginM = () => {
     return (
         <Container>
             <Logo src="/images/spotifyLogo.png" alt="Logo" />
-            {!accessToken ? <Btn onClick={loginSpotify}>로그인</Btn> : <Btn onClick={logout}>로그아웃</Btn>}
+            {!accessToken ? (
+                <Button bgColor="#65d46e" onClick={loginSpotify} text="로그인" />
+            ) : (
+                <Button bgColor="#65d46e" onClick={logout} text="로그아웃" />
+            )}
         </Container>
     );
 };

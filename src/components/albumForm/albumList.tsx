@@ -33,13 +33,12 @@ const ListInfo = styled.div`
 `;
 const ListTitle = styled.h1`
     margin-bottom: 5px;
-
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 `;
 const ListArtist = styled.p`
-    font-size: 12px;
+    color: rgb(160, 160, 160);
 `;
 const Message = styled.p`
     text-align: center;

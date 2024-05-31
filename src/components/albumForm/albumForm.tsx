@@ -7,6 +7,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { TrackList } from './albumTrackList';
 import { getTokenLocalStorage } from '../../util';
+import { Button } from '../buttonForm/button';
 interface IAlbum {
     album_type: string;
     images: { height: number; url: string; width: number }[];
@@ -144,6 +145,9 @@ const Th = styled.th`
         text-align: right;
     }
 `;
+const SpanWrap = styled.div`
+    margin-bottom: 10px;
+`;
 const CloseBtn = styled.span`
     position: absolute;
     top: 20px;
@@ -157,23 +161,13 @@ const CloseBtn = styled.span`
         background-color: rgba(0, 0, 0, 0.8);
     }
 `;
-const CopyrightWrap = styled.div`
-    padding: 20px 0;
-`;
+
 const Copyright = styled.p`
     font-size: 12px;
+    padding-top: 20px;
     color: #e2e2e2;
 `;
-const Btn = styled.button`
-    font-size: 12px;
-    text-align: center;
-    background-color: #65d46e;
-    border: none;
-    border-radius: 20px;
-    padding: 4px 8px;
-    margin-top: 10px;
-    vertical-align: middle;
-`;
+
 export const AlbumForm = () => {
     const navigate = useNavigate();
     const onClose = () => {
@@ -230,21 +224,17 @@ export const AlbumForm = () => {
                                 {data?.album_type === 'single' ? typeTransform.single : typeTransform.album}
                             </AlbumType>
                             <AlbumTitle>{data?.name}</AlbumTitle>
-                            <ArtistName>
-                                <Link to={`/home/artist/${data?.artists[0].id}`}>{data?.artists[0].name}</Link>
-                            </ArtistName>
-                            <ReleaseYear>{data?.release_date.slice(0, 4)}</ReleaseYear>
-                            <TotalTracks>{data?.total_tracks}곡</TotalTracks>
+                            <SpanWrap>
+                                <ArtistName>
+                                    <Link to={`/home/artist/${data?.artists[0].id}`}>{data?.artists[0].name}</Link>
+                                </ArtistName>
+                                <ReleaseYear>{data?.release_date.slice(0, 4)}</ReleaseYear>
+                                <TotalTracks>{data?.total_tracks}곡</TotalTracks>
+                            </SpanWrap>
                             {saveAlbumState ? (
-                                <div>
-                                    <Btn style={{ background: '#e2e2e2' }} onClick={deleteAlbum}>
-                                        찜 해제
-                                    </Btn>
-                                </div>
+                                <Button bgColor="#e2e2e2" text="찜 해제" onClick={deleteAlbum} />
                             ) : (
-                                <div>
-                                    <Btn onClick={saveAlbum}>앨범 찜하기</Btn>
-                                </div>
+                                <Button bgColor="#65d46e" text="앨범 찜하기" onClick={saveAlbum} />
                             )}
                         </AlbumInfo>
                     </AlbumTop>
@@ -276,7 +266,7 @@ export const AlbumForm = () => {
                                 ))}
                             </Tbody>
                         </TrackLists>
-                        <CopyrightWrap>{data?.copyrights[0].text}</CopyrightWrap>
+                        <Copyright>{data?.copyrights[0].text}</Copyright>
                     </TrackListsWrap>
                 </AlbumWrap>
             )}

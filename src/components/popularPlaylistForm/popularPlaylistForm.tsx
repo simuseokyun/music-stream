@@ -182,14 +182,14 @@ export const PopularPlaylistForm = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {popularData?.tracks.items.map((item, i) => (
+                                {popularData?.tracks?.items.map((item, i) => (
                                     <PopularPlaylistTrack
                                         key={item.track.id}
                                         cover={item.track.album.images[0].url}
                                         title={item.track.name}
                                         artists={item.track.artists}
-                                        album_id={item.track.album.id}
-                                        album_title={item.track.album.name}
+                                        album_id={item?.track.album.id}
+                                        album_title={item?.track.album.name}
                                         duration={item.track.duration_ms}
                                         uri={item.track.uri}
                                     />

@@ -206,7 +206,7 @@ export const PlaylistForm = () => {
             {playlist ? (
                 <PlaylistWrap>
                     <PlaylistTop>
-                        <PlaylistImg src={playlist?.img || '/basicPlaylist.webp'}></PlaylistImg>
+                        <PlaylistImg src={playlist?.img || '/images/basic_playlist.png'}></PlaylistImg>
                         <PlaylistInfo>
                             <PlaylistTitle>
                                 {playlist.title}

@@ -2,24 +2,25 @@ import styled from 'styled-components';
 
 interface IButton {
     text: string;
-    state: string;
-    onClick: () => void;
-    ml?: string;
+    bgColor: string;
+    onClick?: () => void;
+    margin?: string;
 }
 
-const Container = styled.button<{ state: string; ml: string }>`
-    background-color: ${(props) => (props.state === 'true' ? 'white' : '#232323')};
-    color: ${(props) => (props.state === 'true' ? '#232323' : 'white')};
-    margin-left: ${(props) => (props.ml ? props.ml : 0)};
+const Container = styled.button<{ bgColor: string; margin: string }>`
+    background-color: ${(props) => props.bgColor};
+    margin: ${(props) => props.margin};
     padding: 4px 8px;
     border: none;
-    border-radius: 20px;
+    border-radius: 15px;
     font-size: 12px;
+    font-weight: 600;
+    vertical-align: middle;
 `;
 
-export const Button = ({ text, state, onClick, ml }: IButton) => {
+export const Button = ({ text, bgColor, onClick, margin }: IButton) => {
     return (
-        <Container ml={ml!} onClick={onClick} state={state}>
+        <Container margin={margin ? margin : '0'} bgColor={bgColor} onClick={onClick}>
             {text}
         </Container>
     );

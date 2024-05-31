@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { Button } from '../components/buttonForm/button';
 
 const Container = styled.div`
     width: 100%;
@@ -14,13 +15,6 @@ const Logo = styled.img`
     max-width: 150px;
     margin-bottom: 20px;
 `;
-const LoginBtn = styled.button`
-    padding: 5px 10px;
-    background-color: #00ff00;
-    border-radius: 15px;
-    border: none;
-    font-weight: 700;
-`;
 
 export const InitForm = () => {
     const navigate = useNavigate();
@@ -31,7 +25,7 @@ export const InitForm = () => {
     return (
         <Container>
             <Logo src="/images/spotifyLogo.png" alt="Logo" />
-            <LoginBtn onClick={home}>입장하기</LoginBtn>
+            <Button margin="10px 0 0 0 " text="입장하기" bgColor="#65d46e" onClick={home} />
         </Container>
     );
 };

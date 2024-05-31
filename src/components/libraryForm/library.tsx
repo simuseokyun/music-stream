@@ -9,13 +9,14 @@ import { useNavigate } from 'react-router-dom';
 const Container = styled.div`
     background-color: #131212;
     border-radius: 8px;
-    height: 500px;
+    height: 450px;
     padding: 20px;
     margin-bottom: 140px;
     overflow-y: scroll;
     overflow-x: hidden;
     @media (max-width: 768px) {
         padding: 10px;
+        height: auto;
         background-color: black;
     }
 `;
@@ -75,8 +76,13 @@ export const Library = () => {
                     add_circle
                 </span>
             </TitleWrap>
-            <Button text="플레이리스트" state={playlistState.toString()} onClick={onClickPlaylist} />
-            <Button ml="5px" text="내가 찜한 앨범" state={albumState.toString()} onClick={onClickSetAlbum} />
+            <Button text="플레이리스트" bgColor={playlistState ? 'white' : '#232323'} onClick={onClickPlaylist} />
+            <Button
+                margin="0px 0px 0px 5px"
+                text="내가 찜한 앨범"
+                bgColor={playlistState ? '#232323' : 'white'}
+                onClick={onClickSetAlbum}
+            />
             {playlistState ? <PlaylistList /> : <AlbumList />}
         </Container>
     );

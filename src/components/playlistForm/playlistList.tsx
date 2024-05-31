@@ -25,6 +25,7 @@ const ListImg = styled.img`
     width: 50px;
     height: 50px;
     border-radius: 8px;
+    object-fit: cover;
     background-color: #232323;
 `;
 const ListInfo = styled.div`
@@ -32,13 +33,9 @@ const ListInfo = styled.div`
     margin-left: 8px;
 `;
 const ListTitle = styled.h1`
-    margin-bottom: 5px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-`;
-const ListType = styled.p`
-    font-size: 12px;
 `;
 
 const Message = styled.p`
@@ -77,7 +74,6 @@ export const PlaylistList = () => {
                                     {playlist.top && <Pin className="material-symbols-outlined">check</Pin>}
                                     {playlist.title}
                                 </ListTitle>
-                                <ListType>플레이리스트</ListType>
                             </ListInfo>
                         </List>
                     );
