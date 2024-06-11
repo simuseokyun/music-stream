@@ -49,7 +49,6 @@ export const Library = () => {
     const setPlaylist = useSetRecoilState(addPlaylistState);
     const [playlistState, setPlaylistState] = useRecoilState(clickMenuPlaylist);
     const setAlbumState = useSetRecoilState(clickMenuAlbum);
-
     const addPlaylist = () => {
         setPlaylist(true);
     };
