@@ -4,14 +4,14 @@ import { useQuery } from 'react-query';
 import { getAlbum } from '../api/api';
 import { useNavigate, Link } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { AlbumTracks } from '../components/AlbumForm/albumTrackItem';
+import { AlbumTracks } from '../components/albumForm/albumTrackItem';
 import { getLocalStorage } from '../utils/util';
 import styled from 'styled-components';
 import { Button } from '../components/buttonForm/button';
 import { IAlbumInfo } from '../types/albumInfo';
-import { Table, Thead, Tbody, Message } from '../styles/common.style';
-import { AlbumInfo } from '../components/AlbumForm/albumInfo';
-import { AlbumTrackList } from '../components/AlbumForm/albumTrackList';
+import { Message } from '../styles/common.style';
+import { AlbumInfo } from '../components/albumForm/albumInfo';
+import { AlbumTrackList } from '../components/albumForm/albumTrackList';
 
 const Container = styled.div`
     background-color: rgba(0, 0, 0, 0.7);
@@ -40,7 +40,7 @@ const TrackListsWrap = styled.div`
     padding: 20px;
     background: linear-gradient(90deg, black 0%, #392f31);
 `;
-export const CloseBtn = styled.span`
+const CloseBtn = styled.span`
     position: absolute;
     top: 20px;
     right: 20px;
@@ -54,7 +54,7 @@ export const CloseBtn = styled.span`
     }
 `;
 
-export const Copyright = styled.p`
+const Copyright = styled.p`
     font-size: 12px;
     padding-top: 20px;
     color: #e2e2e2;

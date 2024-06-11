@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { AlbumTracks } from './albumTrackItem';
 import { Tr, Thead, Tbody, Table } from '../../styles/common.style';
 import { AlbumInfo } from './albumInfo';
 import { IAlbumInfo } from '../../types/albumInfo';
+import { AlbumTracks } from './albumTrackItem';
 
-export const Th = styled.th`
+const Th = styled.th`
     border-bottom: 1px solid #808080;
     padding: 10px 5px;
     &:first-child {
@@ -46,7 +46,6 @@ interface IData2 {
     };
 }
 export const AlbumTrackList = ({ data }: IData) => {
-    console.log(data, '하이');
     return (
         <Table>
             <Thead>
