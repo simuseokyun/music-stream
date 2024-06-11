@@ -1,15 +1,15 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Root from './root';
-import { Home } from './Routes/home';
-import { AlbumForm } from './components/albumForm/albumForm';
-import { ArtistForm } from './components/artistForm/artistForm';
-import { SearchResult } from './components/SearchForm/searchResult';
-import { PlaylistForm } from './components/playlistForm/playlistForm';
-import { Main } from './Routes/main';
-import { AllAlbum } from './components/artistForm/allAlbum';
-import { PopularPlaylistForm } from './components/popularPlaylistForm/popularPlaylistForm';
-import { Library } from './components/libraryForm/library';
-import { InitForm } from './Routes/init';
+import { Home } from './pages/homePage';
+import { AlbumForm } from './pages/albumPage';
+import { ArtistForm } from './pages/artistPage';
+import { SearchResult } from './pages/searchPage';
+import { PlaylistForm } from './pages/myPlaylistPage';
+import { Main } from './pages/mainPage';
+import { AllAlbum } from './pages/allAlbumPage';
+import { PopularPlaylistForm } from './pages/popularPlaylistPage';
+import { Library } from './pages/libraryPage';
+import { InitForm } from './pages/initPage';
 
 export const router = createBrowserRouter([
     {
