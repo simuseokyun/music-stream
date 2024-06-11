@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
-import { openSearch } from '../../atoms';
+import { openSearch } from '../../state/atoms';
 import { Link } from 'react-router-dom';
 const Container = styled.div`
     width: 100%;
@@ -16,12 +16,10 @@ const NavWrap = styled.div`
     max-width: 1180px;
     width: 70%;
 `;
-const Nav = styled.ul`
+const NavList = styled.ul`
     display: flex;
-
-    /* justify-content: space-between; */
 `;
-const NavList = styled.li`
+const NavItem = styled.li`
     font-size: 12px;
     padding: 20px 10px;
     text-align: center;
@@ -31,22 +29,20 @@ const NavList = styled.li`
 export const BottomBar = () => {
     const searchState = useSetRecoilState(openSearch);
     const setSearch = () => {
-        searchState((prev) => {
-            return !prev;
-        });
+        searchState((prev) => !prev);
     };
     return (
         <Container>
             <NavWrap>
-                <Nav>
-                    <NavList>
+                <NavList>
+                    <NavItem>
                         <Link to="/home">홈</Link>
-                    </NavList>
-                    <NavList onClick={setSearch}>검색</NavList>
-                    <NavList>
+                    </NavItem>
+                    <NavItem onClick={setSearch}>검색</NavItem>
+                    <NavItem>
                         <Link to="/home/library">라이브러리</Link>
-                    </NavList>
-                </Nav>
+                    </NavItem>
+                </NavList>
             </NavWrap>
         </Container>
     );

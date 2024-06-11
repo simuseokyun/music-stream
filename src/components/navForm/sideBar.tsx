@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { deviceInfo, openSearch } from '../../atoms';
+import { deviceInfo, openSearch } from '../../state/atoms';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { loginSpotify } from '../../util';
+import { loginSpotify, logout } from '../../utils/util';
 
 const SideBarWrap = styled.div`
     width: 100%;
@@ -12,7 +12,6 @@ const SideBarWrap = styled.div`
     overflow: hidden;
     position: sticky;
     top: 0px;
-
     @media (max-width: 768px) {
         display: none;
     }
@@ -35,6 +34,7 @@ const BackBtn = styled.img`
 const TopList = styled.li`
     margin-top: 20px;
     font-size: 18px;
+    cursor: pointer;
     &:first-child {
         margin-bottom: 20px;
     }
@@ -48,11 +48,9 @@ export const SideBar = () => {
     const searchState = useSetRecoilState(openSearch);
     const setDevice = useSetRecoilState(deviceInfo);
     const navigate = useNavigate();
-    const logout = () => {
-        Cookies.remove('accessToken');
-        Cookies.remove('refreshToken');
+    const logoutSpotify = () => {
+        logout();
         setDevice(null);
-        navigate('/');
     };
     const setSearch = () => {
         searchState((prev) => {
@@ -66,7 +64,7 @@ export const SideBar = () => {
     return (
         <SideBarWrap>
             <SideBarTop>
-                <BackBtn src="/images/left_arrow.png" onClick={onBackBtn}></BackBtn>
+                <BackBtn src="/images/leftArrow.png" onClick={onBackBtn}></BackBtn>
                 <TopList>
                     <Link to="/home">홈</Link>
                 </TopList>
@@ -75,7 +73,7 @@ export const SideBar = () => {
                     <Link to="/home/library">내 라이브러리</Link>
                 </TopList>
                 {accessToken ? (
-                    <TopList onClick={logout}>로그아웃</TopList>
+                    <TopList onClick={logoutSpotify}>로그아웃</TopList>
                 ) : (
                     <TopList onClick={loginSpotify}>로그인</TopList>
                 )}

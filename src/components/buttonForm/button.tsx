@@ -1,15 +1,9 @@
+import { IButton } from '../../types/button';
 import styled from 'styled-components';
 
-interface IButton {
-    text: string;
-    bgColor: string;
-    onClick?: () => void;
-    margin?: string;
-}
-
-const Container = styled.button<{ bgColor: string; margin: string }>`
+const Container = styled.button<{ bgColor: string; margin: string | undefined }>`
     background-color: ${(props) => props.bgColor};
-    margin: ${(props) => props.margin};
+    margin: ${(props) => (props.margin ? props.margin : '0')};
     padding: 4px 8px;
     border: none;
     border-radius: 15px;
@@ -20,7 +14,7 @@ const Container = styled.button<{ bgColor: string; margin: string }>`
 
 export const Button = ({ text, bgColor, onClick, margin }: IButton) => {
     return (
-        <Container margin={margin ? margin : '0'} bgColor={bgColor} onClick={onClick}>
+        <Container margin={margin} bgColor={bgColor} onClick={onClick}>
             {text}
         </Container>
     );

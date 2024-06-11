@@ -1,159 +1,21 @@
-import styled, { keyframes, css } from 'styled-components';
-import { useRecoilState } from 'recoil';
-import { deviceInfo, nowSongInfo } from '../../atoms';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { deviceInfo, nowSongInfo } from '../../state/atoms';
 import Cookies from 'js-cookie';
 import { useEffect, useRef, useState } from 'react';
+import { useToggleSong } from '../../utils/util';
+import * as S from './player.style';
 
-interface IPlaying {
-    is_playing: boolean;
-    item: { name: string; artists: { name: string }[]; album: { images: { url: string }[] } };
-}
-const marquee = keyframes`
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
-`;
-
-const Container = styled.div`
-    width: 100%;
-    /* height: 80px; */
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.9);
-    @media (max-width: 768px) {
-        bottom: 52px;
-        /* height: 50px; */
-    }
-`;
-
-const Wrap = styled.div`
-    max-width: 1180px;
-    height: 100%;
-    padding: 15px;
-    margin: auto;
-    @media (max-width: 768px) {
-        padding: 10px;
-    }
-`;
-
-const PlayerForm = styled.div`
-    height: 100%;
-    display: flex;
-    align-items: center;
-`;
-const PlayerLeft = styled.div`
-    display: flex;
-    align-items: center;
-    flex: 1;
-    overflow: hidden;
-`;
-const PlayerRight = styled.div`
-    flex: 1;
-    @media (max-width: 768px) {
-        display: none;
-    }
-`;
-
-const PlayerCenter = styled.div`
-    flex: 1;
-    text-align: center;
-    @media (max-width: 768px) {
-        text-align: right;
-    }
-`;
-const Cover = styled.img`
-    width: 50px;
-    height: 50px;
-    @media (max-width: 768px) {
-        width: 35px;
-        height: 35px;
-    }
-`;
-const InfoWrap = styled.div`
-    width: 100%;
-    margin-left: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    box-sizing: border-box;
-`;
-const Title = styled.p<{ shouldAnimate: boolean }>`
-    font-size: 14px;
-    display: inline-block;
-    /* padding-left: ${({ shouldAnimate }) => (shouldAnimate ? '100%' : '0')}; */
-    ${({ shouldAnimate }) =>
-        shouldAnimate &&
-        css`
-            animation: ${marquee} 10s linear infinite;
-        `}
-    @media (max-width: 768px) {
-        font-size: 14px;
-    }
-`;
-
-const Artists = styled.p`
-    font-size: 12px;
-    color: rgb(160, 160, 160);
-    margin-top: 5px;
-`;
-const SongBtn = styled.span`
-    background-color: white;
-    color: black;
-    font-size: 30px;
-    border-radius: 30px;
-`;
 export const Player = () => {
-    const [device, setDevice] = useRecoilState(deviceInfo);
-    const [song, setSong] = useRecoilState(nowSongInfo);
+    const setDevice = useSetRecoilState(deviceInfo);
+    const song = useRecoilValue(nowSongInfo);
+    const [shouldAnimate, setShouldAnimate] = useState(false);
     const textRef = useRef<HTMLParagraphElement>(null);
     const divRef = useRef<HTMLDivElement>(null);
-    const [shouldAnimate, setShouldAnimate] = useState(false);
+    const useToggle = useToggleSong();
+    const { toggleSong } = useToggle;
     const token = Cookies.get('accessToken');
-    console.log(shouldAnimate);
-    const resumeSong = async () => {
-        try {
-            const response = await fetch('https://api.spotify.com/v1/me/player/play', {
-                method: 'PUT',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
 
-            if (response.ok) {
-                console.log('노래를 다시 재생했습니다.');
-                setSong((prev) => {
-                    return { ...prev, is_playing: true };
-                });
-            } else {
-                console.error('노래를 다시 재생하는 중 오류가 발생했습니다:', response.status);
-            }
-        } catch (error) {
-            console.error('노래를 다시 재생하는 중 오류가 발생했습니다:', error);
-        }
-    };
-    const pauseSong = async () => {
-        try {
-            const response = await fetch('https://api.spotify.com/v1/me/player/pause', {
-                method: 'PUT',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (response.ok) {
-                console.log('노래를 정지했습니다.');
-                setSong((prev) => {
-                    return { ...prev, is_playing: false };
-                });
-            } else {
-                console.error('노래를 정지하는 중 오류가 발생했습니다:', response.status);
-            }
-        } catch (error) {
-            console.error('노래를 정지하는 중 오류가 발생했습니다:', error);
-        }
-    };
-
+    // 웹 플레이어 생성 로직
     useEffect(() => {
         if (token) {
             let script = document.querySelector('script[src="https://sdk.scdn.co/spotify-player.js"]');
@@ -175,7 +37,6 @@ export const Player = () => {
                     console.log('Ready with Device ID', device_id);
                     setDevice(device_id);
                 });
-
                 player.addListener('not_ready', ({ device_id }) => {
                     console.log('Device ID has gone offline', device_id);
                 });
@@ -196,11 +57,11 @@ export const Player = () => {
                     console.error('Playback Error:', message);
                 });
                 player.addListener('player_state_changed', (state) => {
+                    console.log('노래 끝');
                     if (!state) return;
                     if (state.paused && state.position === 0 && state.track_window.next_tracks.length > 0) {
                     }
                 });
-
                 player.connect();
             };
         } else {
@@ -211,12 +72,11 @@ export const Player = () => {
             }
         }
         return () => {
-            pauseSong();
+            toggleSong();
         };
     }, [token]);
+    // * 노래 제목 길면 애니메이션 작동
     useEffect(() => {
-        console.log(textRef);
-        console.log(divRef);
         if (textRef.current && divRef.current) {
             setShouldAnimate(textRef.current.clientWidth > divRef.current.clientWidth);
         }
@@ -225,33 +85,33 @@ export const Player = () => {
     return (
         <>
             {token && song.title && (
-                <Container>
-                    <Wrap>
-                        <PlayerForm>
-                            <PlayerLeft ref={divRef}>
-                                <Cover src={song.cover} />
-                                <InfoWrap>
-                                    <Title ref={textRef} shouldAnimate={shouldAnimate}>
+                <S.Container>
+                    <S.Wrap>
+                        <S.PlayerForm>
+                            <S.PlayerLeft ref={divRef}>
+                                <S.Cover src={song.cover} />
+                                <S.Info>
+                                    <S.Title ref={textRef} shouldAnimate={shouldAnimate}>
                                         {song.title}
-                                    </Title>
-                                    <Artists>{song.artist}</Artists>
-                                </InfoWrap>
-                            </PlayerLeft>
-                            <PlayerCenter>
+                                    </S.Title>
+                                    <S.Artists>{song.artist}</S.Artists>
+                                </S.Info>
+                            </S.PlayerLeft>
+                            <S.PlayerCenter>
                                 {song.is_playing ? (
-                                    <SongBtn className="material-symbols-outlined" onClick={pauseSong}>
+                                    <S.SongBtn className="material-symbols-outlined" onClick={toggleSong}>
                                         stop
-                                    </SongBtn>
+                                    </S.SongBtn>
                                 ) : (
-                                    <SongBtn className="material-symbols-outlined" onClick={resumeSong}>
+                                    <S.SongBtn className="material-symbols-outlined" onClick={toggleSong}>
                                         play_circle
-                                    </SongBtn>
+                                    </S.SongBtn>
                                 )}
-                            </PlayerCenter>
-                            <PlayerRight></PlayerRight>
-                        </PlayerForm>
-                    </Wrap>
-                </Container>
+                            </S.PlayerCenter>
+                            <S.PlayerRight></S.PlayerRight>
+                        </S.PlayerForm>
+                    </S.Wrap>
+                </S.Container>
             )}
         </>
     );
