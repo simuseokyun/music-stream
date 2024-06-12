@@ -61,11 +61,12 @@ const Follower = styled.span`
 export const ArtistCover = () => {
     const token = getLocalStorage('webAccessToken') || '';
     const { artistId } = useParams();
+    console.log(artistId, token);
     const {
         isLoading: artistLoading,
         data: artistInfo,
         isError,
-    } = useQuery<IArtistInfo>(['artist', artistId], async () => getArtist(token, artistId!));
+    } = useQuery<IArtistInfo>(['artist', artistId], () => getArtist(token, artistId!));
     if (artistLoading) {
         return <Message>Loading...</Message>;
     }

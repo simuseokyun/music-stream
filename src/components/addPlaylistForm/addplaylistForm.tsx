@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { addPlaylistState, clickMenuAlbum, clickMenuPlaylist, playlistList } from '../../state/atoms';
-import { useNavigate } from 'react-router-dom';
+
+import { Message } from '../../styles/common.style';
 import React, { useState, useRef } from 'react';
 
 const Container = styled.div`
@@ -122,7 +123,6 @@ const Btn = styled.button`
     border-radius: 20px;
     padding: 4px 8px;
 `;
-const SubMessage = styled.p``;
 
 export const AddPlaylistForm = () => {
     const addPlaylist = useSetRecoilState(playlistList);
@@ -131,12 +131,12 @@ export const AddPlaylistForm = () => {
     const setAlbumtState = useSetRecoilState(clickMenuAlbum);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const { register, handleSubmit, setValue } = useForm<{ title: string; file?: FileList }>();
     const handleClick = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
         }
     };
-    const { register, handleSubmit, setValue } = useForm<{ title: string; file?: FileList }>();
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -193,7 +193,7 @@ export const AddPlaylistForm = () => {
                                     alt="Preview"
                                 ></FormImg>
                                 <ImgOverlay onClick={handleClick}>
-                                    <SubMessage>사진 선택</SubMessage>
+                                    <Message>사진 선택</Message>
                                 </ImgOverlay>
                             </ImgWrap>
                             <Input

@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { openSearch, searchState } from '../../state/atoms';
+import { openSearch } from '../../state/atoms';
 import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div<{ open: boolean }>`
@@ -40,14 +40,12 @@ const Input = styled.input`
 `;
 
 export const SearchInput = () => {
-    const setSearch = useSetRecoilState(searchState);
     const navigate = useNavigate();
     const openSearch_ = useRecoilValue(openSearch);
-    const { register, setValue, handleSubmit } = useForm<{ track: string }>();
-    const onValid = ({ track }: { track: string }) => {
-        setSearch(track);
-        setValue('track', '');
-        navigate('search');
+    const { register, setValue, handleSubmit } = useForm<{ title: string }>();
+    const onValid = ({ title }: { title: string }) => {
+        setValue('title', '');
+        navigate(`search/${title}`);
     };
 
     return (
@@ -55,8 +53,8 @@ export const SearchInput = () => {
             <Form onSubmit={handleSubmit(onValid)}>
                 <Input
                     type="text"
-                    placeholder="Search for Music"
-                    {...register('track', {
+                    placeholder="제목을 입력하세요"
+                    {...register('title', {
                         minLength: { value: 1, message: '한 글자 이상 입력하세요' },
                         required: { value: true, message: '필수 값 입니다' },
                     })}

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Cookies from 'js-cookie';
-import { loginSpotify, logout } from '../../utils/util';
+import { loginSpotify, useLogoutSpotify } from '../../utils/util';
 import { useSetRecoilState } from 'recoil';
 import { deviceInfo } from '../../state/atoms';
 import { Button } from '../buttonForm/button';
@@ -20,19 +20,15 @@ const Logo = styled.img`
 
 export const MobileHeader = () => {
     const accessToken = Cookies.get('accessToken');
-    const setDevice = useSetRecoilState(deviceInfo);
+    const { logoutSpotify } = useLogoutSpotify();
 
-    const logoutBtn = () => {
-        logout();
-        setDevice(null);
-    };
     return (
         <Container>
             <Logo src="/images/spotifyLogo.png" alt="Logo" />
             {!accessToken ? (
                 <Button bgColor="#65d46e" onClick={loginSpotify} text="로그인" />
             ) : (
-                <Button bgColor="#65d46e" onClick={logoutBtn} text="로그아웃" />
+                <Button bgColor="#e2e2e2" onClick={logoutSpotify} text="로그아웃" />
             )}
         </Container>
     );

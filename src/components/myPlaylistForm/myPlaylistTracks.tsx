@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { playlistList } from '../../state/atoms';
 import { useRecoilState } from 'recoil';
-import { msTransform } from '../../utils/util';
+import { durationTransform } from '../../utils/util';
 import { IMyPlaylistTracks } from '../../types/myPlaylist';
-import { useHandleSongClick } from '../../utils/util';
+import { usePlayMusic } from '../../utils/util';
 import { Tbody, Tr } from '../../styles/common.style';
 
 const TdWrap = styled.div`
@@ -91,7 +91,7 @@ export const PlaylistTracks = ({
     uri,
 }: IMyPlaylistTracks) => {
     const [playlist, setPlaylist] = useRecoilState(playlistList);
-    const handleSongClick = useHandleSongClick();
+    const playMusic = usePlayMusic();
     const deleteTrack = () => {
         setPlaylist((prev) => {
             const index = playlist.findIndex((ele) => {
@@ -107,10 +107,7 @@ export const PlaylistTracks = ({
     return (
         <Tr>
             <Td>
-                <PlayBtn
-                    src="/images/playButton.png"
-                    onClick={() => handleSongClick(uri, title, cover, artists[0].name)}
-                />
+                <PlayBtn src="/images/playButton.png" onClick={() => playMusic(uri, title, cover, artists[0].name)} />
             </Td>
             <Td>
                 <TdWrap>
@@ -131,13 +128,13 @@ export const PlaylistTracks = ({
             <Td>
                 <Link to={`/home/album/${album_id}`}>{album_title}</Link>
             </Td>
-            <Td>{`${msTransform(duration).minutes}:${
-                String(msTransform(duration).seconds).length === 1
-                    ? `0${msTransform(duration).seconds}`
-                    : msTransform(duration).seconds
+            <Td>{`${durationTransform(duration).minutes}:${
+                String(durationTransform(duration).seconds).length === 1
+                    ? `0${durationTransform(duration).seconds}`
+                    : durationTransform(duration).seconds
             }`}</Td>
             <Td>
-                <DeleteBtn src="/images/deleteSong.png" onClick={deleteTrack} className="material-symbols-outlined" />
+                <DeleteBtn src="/images/deleteSong.png" onClick={deleteTrack} />
             </Td>
         </Tr>
     );

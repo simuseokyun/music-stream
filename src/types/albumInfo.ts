@@ -35,3 +35,15 @@ export interface IAlbumFirst {
     type: string;
     name: string;
 }
+
+export interface IArtistAlbumInfo {
+    items: { id: string; name: string; album_type: string; images: { url: string }[]; release_date: string }[];
+    next: string;
+}
+export interface IAllAlbum {
+    id: string;
+    name: string;
+    album_type: string;
+    images: { url: string }[];
+    release_date: string;
+}

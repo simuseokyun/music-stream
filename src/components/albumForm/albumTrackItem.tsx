@@ -2,7 +2,7 @@ import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { playlistList } from '../../state/atoms';
-import { msTransform, useHandleSongClick } from '../../utils/util';
+import { durationTransform, usePlayMusic } from '../../utils/util';
 import { ITrackInfo } from '../../types/albumInfo';
 import { useAddPlaylist, useAddTrack } from '../../utils/util';
 import { Category, CategoryList } from '../../styles/common.style';
@@ -64,7 +64,7 @@ const PlayBtn = styled.img`
 `;
 export const AlbumTracks = ({ name, duration_ms, cover, album_title, artists, album_id, uri }: ITrackInfo) => {
     const playlists = useRecoilValue(playlistList);
-    const handleSongClick = useHandleSongClick();
+    const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const useTrack = useAddTrack(name, duration_ms, cover, album_title, artists, album_id, uri);
     const { open, toggleAddBtn, mouseLeave } = usePlaylist;
@@ -73,10 +73,7 @@ export const AlbumTracks = ({ name, duration_ms, cover, album_title, artists, al
     return (
         <Tr key={name} onMouseLeave={mouseLeave}>
             <Td>
-                <PlayBtn
-                    src="/images/playButton.png"
-                    onClick={() => handleSongClick(uri, name, cover, artists[0].name)}
-                />
+                <PlayBtn src="/images/playButton.png" onClick={() => playMusic(uri, name, cover, artists[0].name)} />
             </Td>
             <Td>
                 <ArtistName>{name}</ArtistName>
@@ -87,10 +84,10 @@ export const AlbumTracks = ({ name, duration_ms, cover, album_title, artists, al
                     </TrackArtist>
                 ))}
             </Td>
-            <Td>{`${msTransform(duration_ms).minutes}:${
-                String(msTransform(duration_ms).seconds).length === 1
-                    ? `0${msTransform(duration_ms).seconds}`
-                    : msTransform(duration_ms).seconds
+            <Td>{`${durationTransform(duration_ms).minutes}:${
+                String(durationTransform(duration_ms).seconds).length === 1
+                    ? `0${durationTransform(duration_ms).seconds}`
+                    : durationTransform(duration_ms).seconds
             }`}</Td>
             <Td>
                 <AddBtn onClick={toggleAddBtn} style={{ position: 'relative' }} className="material-symbols-outlined">

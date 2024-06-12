@@ -15,7 +15,7 @@ const Container = styled.div`
     border-radius: 8px;
     margin-bottom: 140px;
     @media (max-width: 768px) {
-        padding: 20px;
+        padding: 10px;
         background: black;
     }
 `;
@@ -29,14 +29,14 @@ const AlbumList = styled.ul<{ state: string }>`
     grid-template-columns: ${({ state }) => `repeat(${state === 'true' ? 3 : 4}, 1fr)`};
 `;
 
-export const AllAlbum = () => {
+export const AllAlbumPage = () => {
     const token = getLocalStorage('webAccessToken') || '';
+    const isMobile = useRecoilValue(setMobile);
     const { artistId } = useParams();
     const { isLoading, data: allAlbumList } = useQuery('albumList', async () => {
         const response = await getAllAlbums(token, artistId!);
         return response;
     });
-    const isMobile = useRecoilValue(setMobile);
     if (isLoading) {
         return <Message>로딩 중</Message>;
     }
@@ -56,7 +56,6 @@ export const AllAlbum = () => {
                         />
                     ))}
             </AlbumList>
-            )
         </Container>
     );
 };

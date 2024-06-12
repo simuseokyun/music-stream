@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
-import { getToken, getSdkToken, refreshToken } from '../api/api';
+import { getWebToken, getSdkToken, refreshToken } from '../api/api';
 import Cookies from 'js-cookie';
 import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { setLocalStorage } from '../utils/util';
-import { nowSongInfo, searchState, playlistFixState, addPlaylistState, setMobile } from '../state/atoms';
+import { playlistFixState, addPlaylistState, setMobile } from '../state/atoms';
 import { Outlet } from 'react-router-dom';
 import { SideBar } from '../components/navForm/sideBar';
 import { SearchInput } from '../components/searchForm/searchInput';
@@ -33,14 +33,14 @@ const Content = styled.div`
     }
 `;
 
-export const Home = () => {
+export const HomePage = () => {
     const openPlaylist = useRecoilValue(addPlaylistState);
     const fixState = useRecoilValue(playlistFixState);
     const setM = useSetRecoilState(setMobile);
     const [isMobile, setIsMobile] = useState(false);
     const accessToken = Cookies.get('accessToken');
 
-    const { isLoading: tokenLoading, data: tokenData } = useQuery<ISpotifyWebToken>('getWebToken', getToken, {
+    const { isLoading: tokenLoading, data: tokenData } = useQuery<ISpotifyWebToken>('getWebToken', getWebToken, {
         onSuccess: (data) => {
             setLocalStorage('webAccessToken', data.access_token);
             setLocalStorage('webExpiration', data.expires_in);

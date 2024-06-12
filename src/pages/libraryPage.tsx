@@ -45,7 +45,7 @@ const AddPlaylistBtn = styled.img`
     border-radius: 10px;
 `;
 
-export const Library = () => {
+export const LibraryPage = () => {
     const setPlaylist = useSetRecoilState(addPlaylistState);
     const [playlistState, setPlaylistState] = useRecoilState(clickMenuPlaylist);
     const setAlbumState = useSetRecoilState(clickMenuAlbum);

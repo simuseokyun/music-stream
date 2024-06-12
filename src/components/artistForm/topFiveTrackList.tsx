@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Table, Thead, Tbody, Tr } from '../../styles/albumPage.style';
+import { Table, Thead, Tbody, Tr } from '../../styles/common.style';
 import { useQuery } from 'react-query';
 import { IArtistTopTracks } from '../../types/artistInfo';
 import { useParams } from 'react-router-dom';

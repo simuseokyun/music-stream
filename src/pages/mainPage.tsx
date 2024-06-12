@@ -15,7 +15,7 @@ const Container = styled.div`
     }
 `;
 
-export const Main = () => {
+export const MainPage = () => {
     return (
         <Container>
             <NewAlbum></NewAlbum>

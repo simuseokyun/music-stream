@@ -28,10 +28,6 @@ export interface IAlbum {
     artist: string;
 }
 
-export const searchState = atom({
-    key: 'searchState',
-    default: '',
-});
 export const setMobile = atom({
     key: 'isMobile',
     default: false,

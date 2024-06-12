@@ -1,12 +1,11 @@
 import { useQuery } from 'react-query';
-import styled, { keyframes } from 'styled-components';
-import { useRecoilValue } from 'recoil';
-import { searchState } from '../state/atoms';
+import styled from 'styled-components';
 import { searchTrack } from '../api/api';
-import { SearchTrackList } from '../components/searchResultForm/searchResultList';
+import { SearchTrackItem } from '../components/searchResultForm/searchResultItem';
 import { getLocalStorage } from '../utils/util';
 import { ISearchTracks } from '../types/searchTracksInfo';
 import { Message } from '../styles/common.style';
+import { useParams } from 'react-router-dom';
 
 const Container = styled.div`
     padding: 20px;
@@ -19,6 +18,7 @@ const Container = styled.div`
     @media (max-width: 768px) {
         background-color: black;
         padding: 10px;
+        height: 100vh;
     }
 `;
 const ResultMessage = styled.h1`
@@ -73,50 +73,48 @@ const Th = styled.th`
     }
 `;
 
-export const SearchResult = () => {
-    const search = useRecoilValue(searchState);
+export const SearchPage = () => {
+    const { title } = useParams();
     const token = getLocalStorage('webAccessToken');
-    const { isLoading: TrackLoading, data: trackData } = useQuery<ISearchTracks>(['searchResult', search], async () => {
-        if (token) {
-            const trackData = await searchTrack(token, search);
+    const { isLoading: trackLoading, data: trackData } = useQuery<ISearchTracks>(['searchResult', title], async () => {
+        if (token && title) {
+            const trackData = await searchTrack(token, title);
             return trackData;
         }
     });
-
+    if (trackLoading) {
+        return <Message>로딩 중</Message>;
+    }
     return (
         <Container>
-            <ResultMessage>{search ? `"${search}"에 대한 검색결과` : '검색 결과가 없습니다'}</ResultMessage>
-            {TrackLoading ? (
-                <Message>로딩 중</Message>
-            ) : (
-                <Table>
-                    <Thead>
-                        <Tr>
-                            <Th></Th>
-                            <Th></Th>
-                            <Th></Th>
-                            <Th></Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {trackData?.tracks?.items?.map((item, i) => {
-                            return (
-                                <SearchTrackList
-                                    key={item.id}
-                                    id={item.id}
-                                    cover={item.album.images[0].url}
-                                    title={item.name}
-                                    artists={item.album.artists}
-                                    album_id={item.album.id}
-                                    album_title={item.album.name}
-                                    duration_ms={item.duration_ms}
-                                    uri={item.uri}
-                                />
-                            );
-                        })}
-                    </Tbody>
-                </Table>
-            )}
+            <ResultMessage>{title ? `"${title}"에 대한 검색결과` : '검색 결과가 없습니다'}</ResultMessage>
+            <Table>
+                <Thead>
+                    <Tr>
+                        <Th></Th>
+                        <Th></Th>
+                        <Th></Th>
+                        <Th></Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    {trackData?.tracks?.items?.map((item) => {
+                        return (
+                            <SearchTrackItem
+                                key={item.id}
+                                id={item.id}
+                                cover={item.album.images[0].url}
+                                title={item.name}
+                                artists={item.album.artists}
+                                album_id={item.album.id}
+                                album_title={item.album.name}
+                                duration_ms={item.duration_ms}
+                                uri={item.uri}
+                            />
+                        );
+                    })}
+                </Tbody>
+            </Table>
         </Container>
     );
 };

@@ -12,8 +12,8 @@ export const Message = styled.p`
 export const PrevBtn = styled.img`
     display: inline-block;
     background-color: rgba(255, 255, 255, 0.4);
-    width: 24px;
-    height: 24px;
+    width: 25px;
+    height: 25px;
     padding: 4px;
     border-radius: 24px;
     @media (max-width: 768px) {

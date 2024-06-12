@@ -32,9 +32,8 @@ const AllShow = styled.p`
     text-align: right;
 `;
 
-export const ArtistForm = () => {
+export const ArtistPage = () => {
     const { artistId } = useParams();
-
     return (
         <Container>
             <ArtistCover />

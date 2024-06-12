@@ -1,24 +1,21 @@
 import styled from 'styled-components';
-import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
-import { useState } from 'react';
-import { deviceInfo, nowSongInfo, setMobile, addPlaylistState, playlistList } from '../../state/atoms';
-import { playSong, msTransform } from '../../utils/util';
-import Cookies from 'js-cookie';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { setMobile, playlistList } from '../../state/atoms';
+import { durationTransform } from '../../utils/util';
 import { IArtistsTopTrack } from '../../types/artistInfo';
-import { Tr } from '../../styles/albumPage.style';
-import { useHandleSongClick, useAddPlaylist, useAddTrack } from '../../utils/util';
-import { Category, CategoryList, PlayBtn } from '../../styles/common.style';
+import { usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
+import { Category, CategoryList, PlayBtn, Tr } from '../../styles/common.style';
 
 const TdWrap = styled.div`
     display: flex;
     align-items: center;
 `;
-const TrackImg = styled.img`
+const Cover = styled.img`
     width: 45px;
     height: 45px;
     border-radius: 8px;
 `;
-const TrackTitle = styled.p`
+const Title = styled.p`
     margin-left: 10px;
 `;
 
@@ -45,12 +42,19 @@ const Td = styled.td`
     }
 `;
 
-const AddBtn = styled.span<{ state: string }>``;
+const AddBtn = styled.img<{ state: string }>`
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    padding: 4px;
+    border-radius: 20px;
+    display: inline-block;
+`;
 
 export const TopFiveTracks = ({ cover, title, artists, album_id, album_title, duration_ms, uri }: IArtistsTopTrack) => {
     const [playlists, setPlaylist] = useRecoilState(playlistList);
     const isMobile = useRecoilValue(setMobile);
-    const handleSongClick = useHandleSongClick();
+    const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const { open, toggleAddBtn, mouseLeave } = usePlaylist;
     const useTrack = useAddTrack(title, duration_ms, cover, album_title, artists, album_id, uri);
@@ -62,30 +66,24 @@ export const TopFiveTracks = ({ cover, title, artists, album_id, album_title, du
                 <PlayBtn
                     src="/images/playButton.png"
                     onClick={() => {
-                        handleSongClick(uri, title, cover, artists[0].name);
+                        playMusic(uri, title, cover, artists[0].name);
                     }}
                 />
             </Td>
             <Td>
                 <TdWrap>
-                    <TrackImg src={cover} alt="album_cover" />
-                    <TrackTitle>{title}</TrackTitle>
+                    <Cover src={cover} alt="album_cover" />
+                    <Title>{title}</Title>
                 </TdWrap>
             </Td>
-            <Td>{`${msTransform(duration_ms).minutes}:${
-                String(msTransform(duration_ms).seconds).length === 1
-                    ? `0${msTransform(duration_ms).seconds}`
-                    : msTransform(duration_ms).seconds
+            <Td>{`${durationTransform(duration_ms).minutes}:${
+                String(durationTransform(duration_ms).seconds).length === 1
+                    ? `0${durationTransform(duration_ms).seconds}`
+                    : durationTransform(duration_ms).seconds
             }`}</Td>
-            <Td>
-                <AddBtn
-                    onClick={toggleAddBtn}
-                    style={{ position: 'relative' }}
-                    state={isMobile.toString()}
-                    className="material-symbols-outlined"
-                >
-                    add_circle
-                </AddBtn>
+            <Td style={{ position: 'relative' }}>
+                <AddBtn src="/images/addButton.png" onClick={toggleAddBtn} state={isMobile.toString()} />
+
                 {open ? (
                     <Category>
                         {playlists.map((playlist) => {

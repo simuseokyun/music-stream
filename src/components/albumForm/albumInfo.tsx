@@ -30,8 +30,8 @@ const Info = styled.div`
         margin: 10px 0 0 0;
     }
 `;
-export const Type = styled.p``;
-export const Title = styled.h2`
+const Type = styled.p``;
+const Title = styled.h2`
     font-size: 40px;
     font-weight: 700;
     margin: 10px 0;
@@ -40,19 +40,19 @@ export const Title = styled.h2`
         margin: 5px 0;
     }
 `;
-export const Artist = styled.span`
+const Artist = styled.span`
     font-weight: 700;
     @media (max-width: 768px) {
         font-size: 14px;
     }
 `;
-export const Year = styled.span`
+const Year = styled.span`
     margin-left: 10px;
     @media (max-width: 768px) {
         font-size: 14px;
     }
 `;
-export const TotalTracks = styled(Year)`
+const TotalTracks = styled(Year)`
     @media (max-width: 768px) {
         font-size: 14px;
     }
@@ -73,7 +73,7 @@ export const TrackLists = styled.table`
 interface Test {
     id: string;
     name: string;
-    artist: string;
+    artist: { id: string; name: string };
     cover: string;
     type: string;
     year: string;
@@ -81,6 +81,7 @@ interface Test {
 }
 
 export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: Test) => {
+    console.log(id, name, cover, type, year, trackLength, artist);
     const [albums, setAlbum] = useRecoilState(saveAlbumList);
     const clickPlaylistState = useSetRecoilState(clickMenuPlaylist);
     const clickAlbumState = useSetRecoilState(clickMenuAlbum);
@@ -89,7 +90,7 @@ export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: 
     });
     const saveAlbum = () => {
         setAlbum((prev) => {
-            return [...prev, { cover, name, artist, id }];
+            return [...prev, { cover, name, artist: artist.name, id }];
         });
         clickAlbumState(true);
         clickPlaylistState(false);
@@ -110,7 +111,7 @@ export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: 
                 <Title>{name}</Title>
                 <SpanWrap>
                     <Artist>
-                        <Link to={`/home/artist/${id}`}>{name}</Link>
+                        <Link to={`/home/artist/${artist.id}`}>{artist.name}</Link>
                     </Artist>
                     <Year>{year}</Year>
                     <TotalTracks>{trackLength}곡</TotalTracks>

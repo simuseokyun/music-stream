@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { deviceInfo, openSearch } from '../../state/atoms';
+import { openSearch } from '../../state/atoms';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { loginSpotify, logout } from '../../utils/util';
+import { loginSpotify, useLogoutSpotify } from '../../utils/util';
 
 const SideBarWrap = styled.div`
     width: 100%;
@@ -46,12 +46,9 @@ const TopList = styled.li`
 export const SideBar = () => {
     const accessToken = Cookies.get('accessToken');
     const searchState = useSetRecoilState(openSearch);
-    const setDevice = useSetRecoilState(deviceInfo);
     const navigate = useNavigate();
-    const logoutSpotify = () => {
-        logout();
-        setDevice(null);
-    };
+    const { logoutSpotify } = useLogoutSpotify();
+
     const setSearch = () => {
         searchState((prev) => {
             return !prev;

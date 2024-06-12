@@ -36,7 +36,7 @@ const PlaylistBot = styled.div`
     }
 `;
 
-export const PlaylistForm = () => {
+export const MyPlaylistPage = () => {
     const playlist = useRecoilValue(playlistFilter);
     console.log(playlist);
     return (

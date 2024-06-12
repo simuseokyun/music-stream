@@ -60,16 +60,11 @@ const Copyright = styled.p`
     color: #e2e2e2;
 `;
 
-export const AlbumForm = () => {
+export const AlbumPage = () => {
     const navigate = useNavigate();
-    const onClose = () => {
-        navigate(-1);
-    };
+
     const { albumId } = useParams();
     const token = getLocalStorage('webAccessToken');
-    const [albums, setAlbum] = useRecoilState(saveAlbumList);
-    const clickPlaylistState = useSetRecoilState(clickMenuPlaylist);
-    const clickAlbumState = useSetRecoilState(clickMenuAlbum);
     const { isLoading, data } = useQuery<IAlbumInfo>([albumId], () => {
         if (token) {
             return getAlbum(token, albumId!);
@@ -77,7 +72,10 @@ export const AlbumForm = () => {
         return Promise.resolve(null);
     });
     console.log(data);
-    console.log(data?.tracks.items);
+
+    const onClose = () => {
+        navigate(-1);
+    };
     if (isLoading) {
         return <Message>로딩 중</Message>;
     }
@@ -91,7 +89,7 @@ export const AlbumForm = () => {
                     <AlbumInfo
                         id={data?.id}
                         name={data?.name}
-                        artist={data?.artists[0].name}
+                        artist={data?.artists[0]}
                         cover={data?.images[0].url}
                         type={data?.album_type! === 'single' ? typeTransform.single : typeTransform.album}
                         year={data?.release_date.slice(0, 4)}

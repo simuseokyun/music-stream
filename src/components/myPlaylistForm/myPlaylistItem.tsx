@@ -50,7 +50,7 @@ export const MyPlaylistItem = ({ id, cover, name, top }: IMyPlaylist) => {
         setChangeForm(false);
     };
     return (
-        <Item key={id} onClick={clickPlaylist}>
+        <Item onClick={clickPlaylist}>
             <Cover src={cover} />
             <Info>
                 <Title>

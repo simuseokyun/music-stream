@@ -16,6 +16,7 @@ export const PlaylistList = () => {
                 playlists.map((playlist) => {
                     return (
                         <MyPlaylistItem
+                            key={playlist.id}
                             id={playlist.id}
                             cover={playlist.img ? playlist.img : '/images/basicPlaylist.png'}
                             top={playlist.top && playlist.top}

@@ -16,7 +16,7 @@ const Logo = styled.img`
     margin-bottom: 20px;
 `;
 
-export const InitForm = () => {
+export const InitPage = () => {
     const navigate = useNavigate();
     const navigateHome = () => {
         navigate('/home');

@@ -31,13 +31,13 @@ const PlaylistWrap = styled.div`
     }
 `;
 
-export const PopularPlaylistForm = () => {
+export const PopularPlaylistPage = () => {
     // window.scrollTo(0, 0); 페이지 이동 시 스크롤 초기화 코드
-    const { id } = useParams();
+    const { playlistId } = useParams();
     const token = getLocalStorage('webAccessToken');
     const { isLoading: popularLoading, data: popularData } = useQuery<IPopularPlaylistInfo>('popularId', async () => {
-        if (token && id) {
-            return await getPopularPlaylist(token, id);
+        if (token && playlistId) {
+            return await getPopularPlaylist(token, playlistId);
         }
     });
     if (popularLoading) {

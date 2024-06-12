@@ -17,6 +17,10 @@ export const getLocalStorage = (name: string) => {
 export const loginSpotify = () => {
     const client_id = process.env.REACT_APP_CLIENT_ID || '';
     const redirect_uri = process.env.REACT_APP_REDIRECT_URI || '';
+    if (!client_id || !redirect_uri) {
+        console.error('클라이언트 아이디 or 리다이렉트 URI 없음');
+        return;
+    }
     const scopes = 'user-read-private user-read-email user-read-playback-state user-modify-playback-state streaming';
     const state = Math.random().toString(36).substring(7);
     const queryParams = new URLSearchParams({
@@ -29,9 +33,19 @@ export const loginSpotify = () => {
     const authUrl = `https://accounts.spotify.com/authorize?${queryParams.toString()}`;
     window.location.href = authUrl;
 };
+export const useLogoutSpotify = () => {
+    const setDevice = useSetRecoilState(deviceInfo);
+    const logoutSpotify = () => {
+        Cookies.remove('accessToken');
+        Cookies.remove('refreshToken');
+        window.location.href = '/';
+        setDevice(null);
+    };
+    return { logoutSpotify };
+};
 
-export const msTransform = (ms: number) => {
-    const totalSeconds = ms / 1000;
+export const durationTransform = (duration: number) => {
+    const totalSeconds = duration / 1000;
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = Math.floor(totalSeconds % 60);
     return { minutes, seconds };
@@ -39,11 +53,7 @@ export const msTransform = (ms: number) => {
 export const commaSeparate = (num: number) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
-export const logout = () => {
-    Cookies.remove('accessToken');
-    Cookies.remove('refreshToken');
-    window.location.href = '/';
-};
+
 export async function playSong(trackUri?: string, deviceId?: string) {
     const token = Cookies.get('accessToken');
     const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
@@ -88,12 +98,13 @@ export async function playSong(trackUri?: string, deviceId?: string) {
     //     return;
     // }
 }
-
-export const useHandleSongClick = () => {
+// * 노래 재생 로직
+export const usePlayMusic = () => {
     const accessToken = Cookies.get('accessToken');
     const deviceId = useRecoilValue(deviceInfo);
-    const [song, setNowSong] = useRecoilState(nowSongInfo);
-    const handleSongClick = async (trackUri: string, title: string, cover: string, artist: string) => {
+    const setNowSong = useSetRecoilState(nowSongInfo);
+    const { logoutSpotify } = useLogoutSpotify();
+    const playMusic = async (trackUri: string, title: string, cover: string, artist: string) => {
         try {
             if (!accessToken) {
                 alert('로그인이 필요한 서비스입니다');
@@ -105,7 +116,7 @@ export const useHandleSongClick = () => {
                     return { title, cover, artist, is_playing: true };
                 });
             } else {
-                logout();
+                logoutSpotify();
                 alert('웹 플레이어를 생성하기 위해 로그아웃 하겠습니다');
                 return;
             }
@@ -116,12 +127,11 @@ export const useHandleSongClick = () => {
             });
         }
     };
-
-    return handleSongClick;
+    return playMusic;
 };
 
 export const useAddPlaylist = () => {
-    const [playlists, setPlaylist] = useRecoilState(playlistList);
+    const playlists = useRecoilValue(playlistList);
     const addPlaylistFormState = useSetRecoilState(addPlaylistState);
     const [open, setOpen] = useState(false);
     const toggleAddBtn = () => {
@@ -148,7 +158,7 @@ export const useAddTrack = (
     album_id: string,
     uri: string
 ) => {
-    const [playlists, setPlaylist] = useRecoilState(playlistList);
+    const setPlaylist = useSetRecoilState(playlistList);
     const addTrack = (event: React.MouseEvent<HTMLLIElement>) => {
         const {
             currentTarget: { textContent, id },
