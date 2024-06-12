@@ -5,6 +5,7 @@ import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import { nowSongInfo, playlistList } from '../state/atoms';
 import { useState } from 'react';
 import { addPlaylistState } from '../state/atoms';
+import { access } from 'fs';
 
 export const setLocalStorage = (name: string, value: string) => {
     localStorage.setItem(name, value);
@@ -116,6 +117,7 @@ export const usePlayMusic = () => {
                     return { title, cover, artist, is_playing: true };
                 });
             } else {
+                console.log(accessToken, deviceId);
                 // logoutSpotify();
                 // alert('웹 플레이어를 생성하기 위해 로그아웃 하겠습니다');
                 console.log('이유가 뭘까 ?');
