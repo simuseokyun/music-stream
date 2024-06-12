@@ -1,10 +1,14 @@
 import Cookies from 'js-cookie';
+import { IAllAlbum, IArtistAlbumInfo } from '../types/albumInfo';
+import { getLocalStorage } from '../utils/util';
 
-export const getToken = async () => {
-    const access_token = localStorage.getItem('webAccessToken');
-    const expires_in = localStorage.getItem('webExpiration');
+export const getWebToken = async () => {
+    const access_token = getLocalStorage('webAccessToken');
+    const expires_in = getLocalStorage('webExpiration');
     const now = new Date();
     const nowTimeNumber = now.getTime();
+    const client_id = process.env.REACT_APP_CLIENT_ID || '';
+    const client_secret = process.env.REACT_APP_SECRET_ID || '';
     if (access_token && expires_in && parseInt(expires_in, 10) > nowTimeNumber) {
         return { access_token, expires_in };
     }
@@ -15,20 +19,22 @@ export const getToken = async () => {
         },
         body: new URLSearchParams({
             grant_type: 'client_credentials',
-            client_id: process.env.REACT_APP_CLIENT_ID || '',
-            client_secret: process.env.REACT_APP_SECRET_ID || '',
+            client_id,
+            client_secret,
         }),
     });
     if (!response.ok) {
         console.log('네트워크 오류');
     }
     const json = await response.json();
-    const newToken = json.access_token;
+    const newWebToken = json.access_token;
     const newExpiration = (now.getTime() + 59 * 60 * 1000).toString();
-    return { access_token: newToken, expires_in: newExpiration };
+    return { access_token: newWebToken, expires_in: newExpiration };
 };
 
 export const getSdkToken = async (code: string) => {
+    const client_id = process.env.REACT_APP_CLIENT_ID || '';
+    const client_secret = process.env.REACT_APP_SECRET_ID || '';
     const redirect_uri = process.env.REACT_APP_REDIRECT_URI || '';
     const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -39,12 +45,11 @@ export const getSdkToken = async (code: string) => {
             code: code,
             redirect_uri: redirect_uri,
             grant_type: 'authorization_code',
-            client_id: process.env.REACT_APP_CLIENT_ID || '',
-            client_secret: process.env.REACT_APP_SECRET_ID || '',
+            client_id,
+            client_secret,
         }),
     });
     const json = await response.json();
-    console.log(json);
     return json;
 };
 export const refreshToken = async () => {
@@ -60,20 +65,6 @@ export const refreshToken = async () => {
             client_id: process.env.REACT_APP_CLIENT_ID || '',
             client_secret: process.env.REACT_APP_SECRET_ID || '',
         }),
-    });
-    const json = await response.json();
-    console.log('리프레쉬 들렷다감', json);
-    return json;
-};
-
-export const deviceId = async () => {
-    const token = Cookies.get('accessToken');
-    const response = await fetch('https://api.spotify.com/v1/me/player', {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${token}}`,
-            'Content-Type': 'application/json',
-        },
     });
     const json = await response.json();
     return json;
@@ -94,7 +85,7 @@ const fetchWithToken = async (url: string, token: string) => {
     if (response.status === 401) {
         const errorData = await response.json();
         if (errorData.error && errorData.error.message === 'The access token expired') {
-            const newTokenData = await getToken();
+            const newTokenData = await getWebToken();
             response = await makeRequest(newTokenData.access_token);
         }
     }
@@ -117,7 +108,32 @@ export const searchTrack = async (token: string, search: string) => {
         return null;
     }
 };
+export const getAllAlbums = async (token: string, artistId: string) => {
+    let allAlbums: IAllAlbum[] = [];
+    let nextUrl: string | null = `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=album,single`;
+    while (nextUrl) {
+        let response = await fetch(nextUrl, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (!response.ok) {
+            const newTokenData = await getWebToken();
+            response = await fetch(nextUrl, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${newTokenData.access_token}`,
+                },
+            });
+        }
+        const json: IArtistAlbumInfo = await response.json();
+        allAlbums = [...allAlbums, ...json.items];
+        nextUrl = json.next;
+    }
 
+    return allAlbums;
+};
 export const getFeaturePlaylist = async (token: string) => {
     return await fetchWithToken(`https://api.spotify.com/v1/browse/featured-playlists`, token);
 };
@@ -137,57 +153,4 @@ export const getArtistAlbum = async (token: string, artistId: string) => {
 };
 export const getArtistTopTrack = async (token: string, artistId: string) => {
     return await fetchWithToken(`https://api.spotify.com/v1/artists/${artistId}/top-tracks`, token);
-};
-
-interface AlbumResponse {
-    items: { id: string; name: string; album_type: string; images: { url: string }[]; release_date: string }[];
-    next: string;
-}
-interface IAlbum {
-    id: string;
-    name: string;
-    album_type: string;
-    images: { url: string }[];
-    release_date: string;
-}
-export const getAllAlbums = async (token: string, artistId: string) => {
-    let allAlbums: IAlbum[] = [];
-    let nextUrl: string | null = `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=album,single`;
-    while (nextUrl) {
-        let response = await fetch(nextUrl, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        // if (!response.ok) {
-        //     const newTokenData = await getToken();
-        //     let response = await fetch(nextUrl, {
-        //         method: 'GET',
-        //         headers: {
-        //             Authorization: `Bearer ${newTokenData}`,
-        //         },
-        //     });
-        // }
-        console.log(response);
-        const json: AlbumResponse = await response.json();
-        allAlbums = [...allAlbums, ...json.items];
-        nextUrl = json.next;
-    }
-
-    return allAlbums;
-};
-
-export const nowSong = async () => {
-    const token = Cookies.get('accessToken');
-    const response = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-    if (!response.ok) {
-    }
-    const json = await response.json();
-    return json;
 };
