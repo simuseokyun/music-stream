@@ -41,11 +41,11 @@ export const theme: DefaultTheme = {
         xlarge: '32px',
     },
     spacing: {
-        xs: '4px', // 매우 작은 여백
-        sm: '8px', // 작은 여백
-        md: '16px', // 중간 여백
-        lg: '24px', // 큰 여백
-        xl: '32px', // 매우 큰 여백
+        xs: '4px',
+        sm: '8px',
+        md: '16px',
+        lg: '24px',
+        xl: '32px',
     },
     breakpoints: {
         mobile: '425px',
