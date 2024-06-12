@@ -7,8 +7,8 @@ import { router } from './router';
 import { CookiesProvider } from 'react-cookie';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './theme';
-const client = new QueryClient();
 
+const client = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
     <React.StrictMode>
