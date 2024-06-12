@@ -4,7 +4,7 @@ import { setMobile, playlistList } from '../../state/atoms';
 import { durationTransform } from '../../utils/util';
 import { IArtistsTopTrack } from '../../types/artistInfo';
 import { usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
-import { Category, CategoryList, PlayBtn, Tr } from '../../styles/common.style';
+import { Category, CategoryList, PlayBtn, Tr, AddBtn } from '../../styles/common.style';
 
 const TdWrap = styled.div`
     display: flex;
@@ -42,18 +42,8 @@ const Td = styled.td`
     }
 `;
 
-const AddBtn = styled.img<{ state: string }>`
-    width: 20px;
-    height: 20px;
-    background-color: white;
-    padding: 4px;
-    border-radius: 20px;
-    display: inline-block;
-`;
-
 export const TopFiveTracks = ({ cover, title, artists, album_id, album_title, duration_ms, uri }: IArtistsTopTrack) => {
     const [playlists, setPlaylist] = useRecoilState(playlistList);
-    const isMobile = useRecoilValue(setMobile);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const { open, toggleAddBtn, mouseLeave } = usePlaylist;
@@ -82,7 +72,7 @@ export const TopFiveTracks = ({ cover, title, artists, album_id, album_title, du
                     : durationTransform(duration_ms).seconds
             }`}</Td>
             <Td style={{ position: 'relative' }}>
-                <AddBtn src="/images/addButton.png" onClick={toggleAddBtn} state={isMobile.toString()} />
+                <AddBtn src="/images/addButton.png" onClick={toggleAddBtn} />
 
                 {open ? (
                     <Category>

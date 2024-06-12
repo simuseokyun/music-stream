@@ -18,12 +18,8 @@ const Th = styled.th`
         overflow: hidden;
         white-space: nowrap;
     }
-    &:nth-child(3) {
-        @media (max-width: 768px) {
-            display: none;
-        }
-    }
-    &:nth-child(4) {
+
+    &:last-child {
         text-align: right;
     }
 `;
@@ -52,9 +48,6 @@ export const AlbumTrackList = ({ data }: IData) => {
                 <Tr>
                     <Th>#</Th>
                     <Th>제목</Th>
-                    <Th>
-                        <span className="material-symbols-outlined">schedule</span>
-                    </Th>
                     <Th></Th>
                 </Tr>
             </Thead>

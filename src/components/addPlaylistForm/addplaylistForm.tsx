@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { addPlaylistState, clickMenuAlbum, clickMenuPlaylist, playlistList } from '../../state/atoms';
-
+import { CloseBtn } from '../../styles/common.style';
 import { Message } from '../../styles/common.style';
 import React, { useState, useRef } from 'react';
 
@@ -95,16 +95,7 @@ const Input = styled.input`
     border: 1px solid transparent;
     background-color: rgb(40, 40, 40);
 `;
-const CloseBtn = styled.span`
-    background-color: rgba(0, 0, 0, 0.4);
-    font-size: 15px;
-    border-radius: 25px;
-    padding: 5px;
-    cursor: pointer;
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.8);
-    }
-`;
+
 const Title = styled.p`
     margin-bottom: 2px;
     @media (max-width: 768px) {
@@ -180,9 +171,7 @@ export const AddPlaylistForm = () => {
             <Form>
                 <FormTop>
                     <FormTitle>플레이리스트 생성</FormTitle>
-                    <CloseBtn className="material-symbols-outlined" onClick={onClose}>
-                        close
-                    </CloseBtn>
+                    <CloseBtn src="/images/closeButton.png" onClick={onClose} />
                 </FormTop>
                 <AddForm onSubmit={handleSubmit(onValid)}>
                     <AddFormWrap>

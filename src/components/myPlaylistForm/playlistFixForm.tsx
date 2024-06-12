@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { playlistFilter, playlistFixState, playlistList } from '../../state/atoms';
 import { useRef } from 'react';
+import { Message } from '../../styles/common.style';
+import { Button } from '../buttonForm/button';
 
 const Container = styled.div`
     width: 100%;
@@ -112,12 +114,10 @@ const Btn = styled.button`
     border-radius: 20px;
     padding: 4px 8px;
 `;
-const SubMessage = styled.p``;
 
 export const PlaylistFixForm = () => {
     const playlist = useRecoilValue(playlistFilter);
-    console.log(playlist);
-    const [playlists, setPlaylists] = useRecoilState(playlistList);
+    const setPlaylists = useSetRecoilState(playlistList);
     const [value, setValue] = useState(playlist?.title || '');
     const setPlaylist = useSetRecoilState(playlistFixState);
     const [imagePreview, setImagePreview] = useState<string | null>(playlist?.img || '');
@@ -154,6 +154,9 @@ export const PlaylistFixForm = () => {
         });
         setPlaylist(false);
     };
+    const closeForm = () => {
+        setPlaylist(() => false);
+    };
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -186,7 +189,7 @@ export const PlaylistFixForm = () => {
                                 alt="Preview"
                             ></FormImg>
                             <ImgOverlay onClick={handleClick}>
-                                <SubMessage>사진 선택</SubMessage>
+                                <Message>사진 선택</Message>
                             </ImgOverlay>
                         </ImgWrap>
                         <Input
@@ -203,15 +206,8 @@ export const PlaylistFixForm = () => {
                     </FormRight>
                 </AddFormWrap>
                 <BtnWrap>
-                    <Btn onClick={submitInfo}>수정</Btn>
-                    <Btn
-                        style={{ marginLeft: '5px', background: 'white' }}
-                        onClick={() => {
-                            setPlaylist(() => false);
-                        }}
-                    >
-                        취소
-                    </Btn>
+                    <Button text="수정" bgColor="#65d46e" onClick={submitInfo} />
+                    <Button text="취소" margin="0 0 0 5px" bgColor="white" onClick={submitInfo} />
                 </BtnWrap>
             </FixForm>
         </Container>

@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { playlistList, setMobile } from '../../state/atoms';
 import { IPopularPlaylistInfoProp } from '../../types/popularPlaylists';
 import { usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
-import { Category, CategoryList, PlayBtn, Tr } from '../../styles/common.style';
+import { Category, CategoryList, PlayBtn, Tr, AddBtn } from '../../styles/common.style';
 
 const TdWrap = styled.div`
     display: flex;
@@ -68,8 +68,6 @@ const ArtistNameWrap = styled.p`
     }
 `;
 
-const AddBtn = styled.span``;
-
 const Dot = styled.span`
     color: rgb(160, 160, 160);
     margin: 0 2px;
@@ -84,7 +82,6 @@ export const PopularPlaylistTrack = ({
     album_title,
     uri,
 }: IPopularPlaylistInfoProp) => {
-    const isMobile = useRecoilValue(setMobile);
     const playlists = useRecoilValue(playlistList);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
@@ -116,9 +113,8 @@ export const PopularPlaylistTrack = ({
                 <Link to={`/home/album/${album_id}`}>{album_title}</Link>
             </Td>
             <Td>
-                <AddBtn onClick={toggleAddBtn} style={{ position: 'relative' }} className="material-symbols-outlined">
-                    add_circle
-                </AddBtn>
+                <AddBtn src="/images/addButton.png" onClick={toggleAddBtn} style={{ position: 'relative' }} />
+
                 {open ? (
                     <Category>
                         {playlists.map((playlist) => {

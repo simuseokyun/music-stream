@@ -28,6 +28,22 @@ export const PlayBtn = styled.img`
     width: 25px;
     height: 25px;
 `;
+export const AddBtn = styled.img`
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    padding: 4px;
+    border-radius: 20px;
+    display: inline-block;
+`;
+export const CloseBtn = styled.img`
+    width: 30px;
+    height: 30px;
+    padding: 4px;
+    border-radius: 20px;
+    display: inline-block;
+    cursor: pointer;
+`;
 export const Category = styled.ul`
     position: absolute;
     right: 0;

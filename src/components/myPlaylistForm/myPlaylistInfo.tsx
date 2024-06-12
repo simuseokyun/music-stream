@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { playlistFixState, playlistList } from '../../state/atoms';
+import { Button } from '../buttonForm/button';
 const Container = styled.div`
     display: flex;
     align-items: end;
@@ -36,20 +37,18 @@ const Title = styled.p`
         font-size: 20px;
     }
 `;
-const SetIcon = styled.span`
-    font-size: 24px;
-    vertical-align: middle;
-`;
+
 const Length = styled.p`
     margin-bottom: 10px;
 `;
+
 const Btn = styled.button`
     display: inline-block;
     text-align: center;
     background-color: #65d46e;
     border: none;
     border-radius: 20px;
-    padding: 4px 8px;
+    padding: 2px 6px;
 `;
 export const MyPlaylistInfo = ({
     cover,
@@ -133,9 +132,7 @@ export const MyPlaylistInfo = ({
             <Info>
                 <Title>
                     {name}
-                    <SetIcon className="material-symbols-outlined" onClick={() => setFixForm(() => true)}>
-                        border_color
-                    </SetIcon>
+                    <Button text="수정" margin="0 0 0 5px" bgColor="white" onClick={() => setFixForm(() => true)} />
                 </Title>
                 <Length>{length + '곡'}</Length>
                 {top ? (

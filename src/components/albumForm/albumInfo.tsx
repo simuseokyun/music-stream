@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { clickMenuAlbum, clickMenuPlaylist } from '../../state/atoms';
 import { saveAlbumList } from '../../state/atoms';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     display: flex;
+    position: relative;
     background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, #392f31);
     align-items: end;
     padding: 20px;
@@ -61,15 +63,6 @@ const SpanWrap = styled.div`
     margin-bottom: 10px;
 `;
 
-export const TrackListsWrap = styled.div`
-    padding: 20px;
-    background: linear-gradient(90deg, black 0%, #392f31);
-`;
-export const TrackLists = styled.table`
-    width: 100%;
-    height: 100%;
-    border-collapse: collapse;
-`;
 interface Test {
     id: string;
     name: string;
@@ -85,6 +78,7 @@ export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: 
     const [albums, setAlbum] = useRecoilState(saveAlbumList);
     const clickPlaylistState = useSetRecoilState(clickMenuPlaylist);
     const clickAlbumState = useSetRecoilState(clickMenuAlbum);
+    const navigate = useNavigate();
     const saveAlbumState = [...albums].find((album) => {
         return album.name === name;
     });
@@ -103,6 +97,7 @@ export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: 
             return newArr;
         });
     };
+
     return (
         <Container>
             <Cover src={cover} />

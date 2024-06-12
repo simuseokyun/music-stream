@@ -49,12 +49,8 @@ const Td = styled.td`
         overflow: hidden;
         white-space: nowrap;
     }
-    &:nth-child(3) {
-        @media (max-width: 768px) {
-            display: none;
-        }
-    }
-    &:nth-child(4) {
+
+    &:last-child {
         text-align: right;
     }
 `;
@@ -84,11 +80,7 @@ export const AlbumTracks = ({ name, duration_ms, cover, album_title, artists, al
                     </TrackArtist>
                 ))}
             </Td>
-            <Td>{`${durationTransform(duration_ms).minutes}:${
-                String(durationTransform(duration_ms).seconds).length === 1
-                    ? `0${durationTransform(duration_ms).seconds}`
-                    : durationTransform(duration_ms).seconds
-            }`}</Td>
+
             <Td>
                 <AddBtn onClick={toggleAddBtn} style={{ position: 'relative' }} className="material-symbols-outlined">
                     add_circle

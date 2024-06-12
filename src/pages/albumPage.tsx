@@ -2,14 +2,13 @@ import { useParams } from 'react-router-dom';
 import { clickMenuAlbum, clickMenuPlaylist, saveAlbumList, typeTransform } from '../state/atoms';
 import { useQuery } from 'react-query';
 import { getAlbum } from '../api/api';
-import { useNavigate, Link } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { AlbumTracks } from '../components/albumForm/albumTrackItem';
+import { useNavigate } from 'react-router-dom';
+
 import { getLocalStorage } from '../utils/util';
 import styled from 'styled-components';
-import { Button } from '../components/buttonForm/button';
 import { IAlbumInfo } from '../types/albumInfo';
-import { Message } from '../styles/common.style';
+import { CloseBtn, Message } from '../styles/common.style';
+
 import { AlbumInfo } from '../components/albumForm/albumInfo';
 import { AlbumTrackList } from '../components/albumForm/albumTrackList';
 
@@ -40,19 +39,6 @@ const TrackListsWrap = styled.div`
     padding: 20px;
     background: linear-gradient(90deg, black 0%, #392f31);
 `;
-const CloseBtn = styled.span`
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background-color: rgba(0, 0, 0, 0.4);
-    font-size: 25px;
-    border-radius: 25px;
-    padding: 5px;
-    cursor: pointer;
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.8);
-    }
-`;
 
 const Copyright = styled.p`
     font-size: 12px;
@@ -71,11 +57,7 @@ export const AlbumPage = () => {
         }
         return Promise.resolve(null);
     });
-    console.log(data);
 
-    const onClose = () => {
-        navigate(-1);
-    };
     if (isLoading) {
         return <Message>로딩 중</Message>;
     }
@@ -83,9 +65,6 @@ export const AlbumPage = () => {
         <Container>
             {data && (
                 <AlbumWrap>
-                    <CloseBtn className="material-symbols-outlined" onClick={onClose}>
-                        close
-                    </CloseBtn>
                     <AlbumInfo
                         id={data?.id}
                         name={data?.name}
