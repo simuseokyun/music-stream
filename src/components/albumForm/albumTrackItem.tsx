@@ -5,7 +5,7 @@ import { playlistList } from '../../state/atoms';
 import { durationTransform, usePlayMusic } from '../../utils/util';
 import { ITrackInfo } from '../../types/albumInfo';
 import { useAddPlaylist, useAddTrack } from '../../utils/util';
-import { Category, CategoryList } from '../../styles/common.style';
+import { Category, CategoryList, Dot } from '../../styles/common.style';
 
 const Tr = styled.tr`
     border-radius: 5px;
@@ -76,7 +76,7 @@ export const AlbumTracks = ({ name, duration_ms, cover, album_title, artists, al
                 {artists.map((artist, i) => (
                     <TrackArtist key={artist.name}>
                         <Link to={`/home/artist/${artist.id}`}>{artist.name}</Link>
-                        {artists.length == 1 ? undefined : artists[i + 1] ? ',' : undefined}
+                        {artists.length == 1 ? undefined : artists[i + 1] ? <Dot>,</Dot> : undefined}
                     </TrackArtist>
                 ))}
             </Td>

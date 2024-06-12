@@ -62,7 +62,16 @@ const TotalTracks = styled(Year)`
 const SpanWrap = styled.div`
     margin-bottom: 10px;
 `;
-
+const CloseBtn = styled.button`
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 4px 6px;
+    font-weight: 700;
+    background-color: #e2e2e2;
+    border-radius: 4px;
+    border: none;
+`;
 interface Test {
     id: string;
     name: string;
@@ -79,6 +88,9 @@ export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: 
     const clickPlaylistState = useSetRecoilState(clickMenuPlaylist);
     const clickAlbumState = useSetRecoilState(clickMenuAlbum);
     const navigate = useNavigate();
+    const onClose = () => {
+        navigate(-1);
+    };
     const saveAlbumState = [...albums].find((album) => {
         return album.name === name;
     });
@@ -117,6 +129,7 @@ export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: 
                     <Button bgColor="#65d46e" text="앨범 찜하기" onClick={saveAlbum} />
                 )}
             </Info>
+            <CloseBtn onClick={onClose}>X</CloseBtn>
         </Container>
     );
 };

@@ -14,7 +14,6 @@ const Container = styled.div`
     background: #131212;
     border-radius: 8px;
     margin-bottom: 140px;
-
     @media (max-width: 768px) {
         padding: 10px;
         background: black;

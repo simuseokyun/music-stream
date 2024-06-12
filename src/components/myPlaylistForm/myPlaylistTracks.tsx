@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil';
 import { durationTransform } from '../../utils/util';
 import { IMyPlaylistTracks } from '../../types/myPlaylist';
 import { usePlayMusic } from '../../utils/util';
-import { Tbody, Tr } from '../../styles/common.style';
+import { Tr, Dot } from '../../styles/common.style';
 
 const TdWrap = styled.div`
     display: flex;
@@ -118,7 +118,7 @@ export const PlaylistTracks = ({
                             {artists.map((artist, i) => (
                                 <Artist>
                                     <Link to={`/home/artist/${artist.id}`}>{artist.name}</Link>
-                                    {artists.length == 1 ? null : artists[i + 1] ? ',' : null}
+                                    {artists.length == 1 ? null : artists[i + 1] ? <Dot>,</Dot> : null}
                                 </Artist>
                             ))}
                         </ArtistsWrap>

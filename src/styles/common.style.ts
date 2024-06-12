@@ -61,3 +61,8 @@ export const CategoryList = styled.li`
         background-color: #3e3d3d;
     }
 `;
+
+export const Dot = styled.span`
+    color: rgb(160, 160, 160);
+    margin: 0 2px;
+`;
