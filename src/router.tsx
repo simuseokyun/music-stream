@@ -1,15 +1,16 @@
-import { createBrowserRouter } from 'react-router-dom';
 import Root from './root';
-import { Home } from './pages/homePage';
-import { AlbumForm } from './pages/albumPage';
-import { ArtistForm } from './pages/artistPage';
-import { SearchResult } from './pages/searchPage';
-import { PlaylistForm } from './pages/myPlaylistPage';
-import { Main } from './pages/mainPage';
-import { AllAlbum } from './pages/allAlbumPage';
-import { PopularPlaylistForm } from './pages/popularPlaylistPage';
-import { Library } from './pages/libraryPage';
-import { InitForm } from './pages/initPage';
+import { createBrowserRouter } from 'react-router-dom';
+import { HomePage } from './pages/homePage';
+import { AlbumPage } from './pages/albumPage';
+import { ArtistPage } from './pages/artistPage';
+import { SearchPage } from './pages/searchPage';
+import { MyPlaylistPage } from './pages/myPlaylistPage';
+import { MainPage } from './pages/mainPage';
+import { AllAlbumPage } from './pages/allAlbumPage';
+import { PopularPlaylistPage } from './pages/popularPlaylistPage';
+import { LibraryPage } from './pages/libraryPage';
+import { InitPage } from './pages/initPage';
+import { NotFound } from './pages/notFound';
 
 export const router = createBrowserRouter([
     {
@@ -18,46 +19,47 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: '',
-                element: <InitForm />,
+                element: <InitPage />,
             },
             {
                 path: 'home',
-                element: <Home />,
+                element: <HomePage />,
                 children: [
                     {
                         path: '',
-                        element: <Main />,
+                        element: <MainPage />,
                     },
                     {
-                        path: 'search',
-                        element: <SearchResult />,
+                        path: 'search/:title',
+                        element: <SearchPage />,
                     },
                     {
                         path: 'artist/:artistId',
-                        element: <ArtistForm />,
+                        element: <ArtistPage />,
                     },
                     {
                         path: 'playlist/:playlistId',
-                        element: <PlaylistForm />,
+                        element: <MyPlaylistPage />,
                     },
                     {
                         path: 'album/:albumId',
-                        element: <AlbumForm />,
+                        element: <AlbumPage />,
                     },
                     {
-                        path: 'popularPlaylist/:id',
-                        element: <PopularPlaylistForm />,
+                        path: 'popularPlaylist/:playlistId',
+                        element: <PopularPlaylistPage />,
                     },
                     {
                         path: 'allAlbum/:artistId',
-                        element: <AllAlbum />,
+                        element: <AllAlbumPage />,
                     },
                     {
                         path: 'library',
-                        element: <Library />,
+                        element: <LibraryPage />,
                     },
                 ],
             },
         ],
+        errorElement: <NotFound />,
     },
 ]);
