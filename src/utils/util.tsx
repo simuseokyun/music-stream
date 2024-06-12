@@ -116,9 +116,10 @@ export const usePlayMusic = () => {
                     return { title, cover, artist, is_playing: true };
                 });
             } else {
-                logoutSpotify();
-                alert('웹 플레이어를 생성하기 위해 로그아웃 하겠습니다');
-                return;
+                // logoutSpotify();
+                // alert('웹 플레이어를 생성하기 위해 로그아웃 하겠습니다');
+                console.log('이유가 뭘까 ?');
+                // return;
             }
         } catch (error) {
             console.error('노래를 재생하는 중 에러 발생:', error);
