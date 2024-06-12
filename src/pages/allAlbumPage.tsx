@@ -14,6 +14,7 @@ const Container = styled.div`
     background: #131212;
     border-radius: 8px;
     margin-bottom: 140px;
+
     @media (max-width: 768px) {
         padding: 10px;
         background: black;
@@ -26,6 +27,7 @@ const Title = styled.h1`
 const AlbumList = styled.ul<{ state: string }>`
     width: 100%;
     display: grid;
+    gap: 20px 5px;
     grid-template-columns: ${({ state }) => `repeat(${state === 'true' ? 3 : 4}, 1fr)`};
 `;
 
