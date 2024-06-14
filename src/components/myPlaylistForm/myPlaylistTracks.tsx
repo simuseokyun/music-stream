@@ -42,7 +42,7 @@ const Td = styled.td`
         width: 2%;
     }
     &:nth-child(2) {
-        width: 60%;
+        width: 70%;
         text-align: left;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -50,7 +50,7 @@ const Td = styled.td`
         max-width: 0;
     }
     &:nth-child(3) {
-        width: 30%;
+        width: 25%;
         text-align: left;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -60,13 +60,9 @@ const Td = styled.td`
             display: none;
         }
     }
-    &:nth-child(4) {
-        width: 10%;
-        @media (max-width: 768px) {
-            display: none;
-        }
-    }
-    &:last-child() {
+
+    &:last-child {
+        text-align: right;
         width: 10%;
     }
 `;
@@ -75,6 +71,7 @@ const DeleteBtn = styled.img`
     height: 25px;
     background-color: white;
     border-radius: 25px;
+    display: inline-block;
 `;
 const PlayBtn = styled.img`
     width: 25px;
@@ -86,7 +83,6 @@ export const PlaylistTracks = ({
     album_id,
     artists,
     album_title,
-    duration,
     playlist_id,
     uri,
 }: IMyPlaylistTracks) => {
@@ -115,10 +111,10 @@ export const PlaylistTracks = ({
                     <TitleWrap>
                         <Title>{title}</Title>
                         <ArtistsWrap>
-                            {artists.map((artist, i) => (
-                                <Artist>
+                            {artists.map((artist, index) => (
+                                <Artist key={index}>
                                     <Link to={`/home/artist/${artist.id}`}>{artist.name}</Link>
-                                    {artists.length == 1 ? null : artists[i + 1] ? <Dot>,</Dot> : null}
+                                    {artists.length == 1 ? null : artists[index + 1] ? <Dot>,</Dot> : null}
                                 </Artist>
                             ))}
                         </ArtistsWrap>
@@ -128,11 +124,7 @@ export const PlaylistTracks = ({
             <Td>
                 <Link to={`/home/album/${album_id}`}>{album_title}</Link>
             </Td>
-            <Td>{`${durationTransform(duration).minutes}:${
-                String(durationTransform(duration).seconds).length === 1
-                    ? `0${durationTransform(duration).seconds}`
-                    : durationTransform(duration).seconds
-            }`}</Td>
+
             <Td>
                 <DeleteBtn src="/images/deleteSong.png" onClick={deleteTrack} />
             </Td>

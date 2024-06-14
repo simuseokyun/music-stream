@@ -9,9 +9,9 @@ import { playlistFixState, addPlaylistState, setMobile } from '../state/atoms';
 import { Outlet } from 'react-router-dom';
 import { SideBar } from '../components/navForm/sideBar';
 import { SearchInput } from '../components/searchForm/searchInput';
-import { AddPlaylistForm } from '../components/addPlaylistForm/addplaylistForm';
+import { AddPlaylistForm } from '../components/myPlaylistForm/addMyPlaylist';
 import { MobileHeader } from '../components/mobileHeaderForm/mobileHeader';
-import { PlaylistFixForm } from '../components/myPlaylistForm/playlistFixForm';
+import { FixPlaylistForm } from '../components/myPlaylistForm/fixMyplaylist';
 import { BottomBar } from '../components/navForm/bottomBar';
 import { Player } from '../components/playerForm/player';
 import { ISpotifySdkToken, ISpotifyWebToken } from '../types/auth';
@@ -34,7 +34,7 @@ const Content = styled.div`
 `;
 
 export const HomePage = () => {
-    const openPlaylist = useRecoilValue(addPlaylistState);
+    const addState = useRecoilValue(addPlaylistState);
     const fixState = useRecoilValue(playlistFixState);
     const setM = useSetRecoilState(setMobile);
     const [isMobile, setIsMobile] = useState(false);
@@ -109,8 +109,8 @@ export const HomePage = () => {
 
     return (
         <Container>
-            {openPlaylist && <AddPlaylistForm />}
-            {fixState && <PlaylistFixForm />}
+            {addState && <AddPlaylistForm />}
+            {fixState && <FixPlaylistForm />}
             <SearchInput />
             <Content>
                 {isMobile ? <MobileHeader /> : <SideBar />}

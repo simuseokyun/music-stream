@@ -63,7 +63,9 @@ export const Info = styled.div`
     white-space: nowrap;
     box-sizing: border-box;
 `;
-export const Title = styled.p<{ shouldAnimate: boolean }>`
+export const Title = styled.p.withConfig({
+    shouldForwardProp: (prop) => prop !== 'shouldAnimate',
+})<{ shouldAnimate: boolean }>`
     font-size: 14px;
     display: inline-block;
     ${({ shouldAnimate }) =>

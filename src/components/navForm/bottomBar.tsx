@@ -11,15 +11,15 @@ const Container = styled.div`
     background-color: rgba(0, 0, 0, 0.8);
     z-index: 10;
 `;
-const NavWrap = styled.div`
+const Wrap = styled.div`
     margin: auto;
     max-width: 1180px;
-    width: 70%;
+    width: 80%;
 `;
-const NavList = styled.ul`
+const List = styled.ul`
     display: flex;
 `;
-const NavItem = styled.li`
+const Item = styled.li`
     font-size: 12px;
     padding: 20px 10px;
     text-align: center;
@@ -33,17 +33,17 @@ export const BottomBar = () => {
     };
     return (
         <Container>
-            <NavWrap>
-                <NavList>
-                    <NavItem>
+            <Wrap>
+                <List>
+                    <Item>
                         <Link to="/home">홈</Link>
-                    </NavItem>
-                    <NavItem onClick={setSearch}>검색</NavItem>
-                    <NavItem>
+                    </Item>
+                    <Item onClick={setSearch}>검색</Item>
+                    <Item>
                         <Link to="/home/library">라이브러리</Link>
-                    </NavItem>
-                </NavList>
-            </NavWrap>
+                    </Item>
+                </List>
+            </Wrap>
         </Container>
     );
 };

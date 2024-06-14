@@ -14,8 +14,10 @@ export const Player = () => {
     const useToggle = useToggleSong();
     const { toggleSong } = useToggle;
     const token = Cookies.get('accessToken');
+    console.log('플레이어 랜더링');
 
     // 웹 플레이어 생성 로직
+    function makePlayer() {}
     useEffect(() => {
         if (token) {
             let script = document.querySelector('script[src="https://sdk.scdn.co/spotify-player.js"]');
@@ -84,7 +86,7 @@ export const Player = () => {
 
     return (
         <>
-            {token && song.title && (
+            {token && (
                 <S.Container>
                     <S.Wrap>
                         <S.PlayerForm>

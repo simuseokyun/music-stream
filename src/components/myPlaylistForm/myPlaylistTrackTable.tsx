@@ -8,7 +8,7 @@ const Th = styled.th`
         width: 2%;
     }
     &:nth-child(2) {
-        width: 60%;
+        width: 70%;
         text-align: left;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -16,7 +16,7 @@ const Th = styled.th`
         max-width: 0;
     }
     &:nth-child(3) {
-        width: 30%;
+        width: 25%;
         text-align: left;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -26,17 +26,11 @@ const Th = styled.th`
             display: none;
         }
     }
-    &:nth-child(4) {
-        width: 10%;
-        @media (max-width: 768px) {
-            display: none;
-        }
-    }
-    &:last-child() {
+
+    &:last-child {
         width: 10%;
     }
 `;
-const PlayTime = styled.span``;
 
 interface asd {
     tracks: {
@@ -60,9 +54,6 @@ export const MyPlaylistTrackTable = ({ tracks, playlist_id }: asd) => {
                     <Th>#</Th>
                     <Th>제목</Th>
                     <Th>앨범</Th>
-                    <Th>
-                        <PlayTime className="material-symbols-outlined">schedule</PlayTime>
-                    </Th>
                     <Th></Th>
                 </Tr>
             </Thead>

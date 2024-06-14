@@ -115,7 +115,7 @@ const Btn = styled.button`
     padding: 4px 8px;
 `;
 
-export const PlaylistFixForm = () => {
+export const FixPlaylistForm = () => {
     const playlist = useRecoilValue(playlistFilter);
     const setPlaylists = useSetRecoilState(playlistList);
     const [value, setValue] = useState(playlist?.title || '');
