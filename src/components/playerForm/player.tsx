@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import { useEffect, useRef, useState } from 'react';
 import { useToggleSong } from '../../utils/util';
 import * as S from './player.style';
+import { refreshToken } from '../../api/api';
 
 export const Player = () => {
     const setDevice = useSetRecoilState(deviceInfo);
@@ -17,7 +18,6 @@ export const Player = () => {
     console.log('플레이어 랜더링');
 
     // 웹 플레이어 생성 로직
-    function makePlayer() {}
     useEffect(() => {
         if (token) {
             let script = document.querySelector('script[src="https://sdk.scdn.co/spotify-player.js"]');
@@ -27,6 +27,7 @@ export const Player = () => {
                 script.async = true;
                 document.body.appendChild(script);
             }
+
             window.onSpotifyWebPlaybackSDKReady = () => {
                 const player = new window.Spotify.Player({
                     name: '뮤직 플레이어',
@@ -48,7 +49,7 @@ export const Player = () => {
                 });
 
                 player.addListener('authentication_error', ({ message }) => {
-                    console.error('Authentication Error:', message);
+                    console.log(message);
                 });
 
                 player.addListener('account_error', ({ message }) => {
@@ -73,9 +74,7 @@ export const Player = () => {
                 setDevice(null);
             }
         }
-        return () => {
-            toggleSong();
-        };
+        return () => {};
     }, [token]);
     // * 노래 제목 길면 애니메이션 작동
     useEffect(() => {
@@ -86,7 +85,7 @@ export const Player = () => {
 
     return (
         <>
-            {token && (
+            {token && song.title && (
                 <S.Container>
                     <S.Wrap>
                         <S.PlayerForm>
