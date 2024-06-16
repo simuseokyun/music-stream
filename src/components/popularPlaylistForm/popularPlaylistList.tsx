@@ -1,41 +1,6 @@
 import styled from 'styled-components';
-import { Table, Thead, Tbody, Tr } from '../../styles/common.style';
+import { Table, Thead, Tbody, Tr, Th } from '../../styles/common.style';
 import { PopularPlaylistTrack } from './popularPlaylistItem';
-
-const Th = styled.th`
-    padding: 5px 0;
-    &:first-child {
-        width: 6%;
-        text-align: left;
-        @media (max-width: 768px) {
-            width: 100px;
-        }
-    }
-
-    &:nth-child(2) {
-        width: 50%;
-        text-align: left;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        @media (max-width: 768px) {
-            width: 80%;
-        }
-    }
-    &:nth-child(3) {
-        width: 30%;
-        text-align: left;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        @media (max-width: 768px) {
-            display: none;
-        }
-    }
-    &:nth-child(4) {
-        width: 10%;
-    }
-`;
 
 interface Data {
     data: {
