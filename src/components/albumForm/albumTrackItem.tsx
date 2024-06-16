@@ -6,6 +6,7 @@ import { durationTransform, usePlayMusic } from '../../utils/util';
 import { ITrackInfo } from '../../types/albumInfo';
 import { useAddPlaylist, useAddTrack } from '../../utils/util';
 import { Category, CategoryList, Dot } from '../../styles/common.style';
+import { IAddTrack } from '../../types/myPlaylist';
 
 const Tr = styled.tr`
     border-radius: 5px;
@@ -58,11 +59,11 @@ const PlayBtn = styled.img`
     width: 25px;
     height: 25px;
 `;
-export const AlbumTracks = ({ name, duration_ms, cover, album_title, artists, album_id, uri }: ITrackInfo) => {
+export const AlbumTracks = ({ id, name, duration_ms, cover, album_title, artists, album_id, uri }: IAddTrack) => {
     const playlists = useRecoilValue(playlistList);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
-    const useTrack = useAddTrack(name, duration_ms, cover, album_title, artists, album_id, uri);
+    const useTrack = useAddTrack(id, name, duration_ms, cover, album_title, artists, album_id, uri);
     const { open, toggleAddBtn, mouseLeave } = usePlaylist;
     const { addTrack } = useTrack;
 

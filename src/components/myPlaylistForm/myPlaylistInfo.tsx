@@ -48,7 +48,7 @@ const Btn = styled.button`
     background-color: #65d46e;
     border: none;
     border-radius: 20px;
-    padding: 2px 6px;
+    padding: 4px 8px;
 `;
 export const MyPlaylistInfo = ({
     cover,

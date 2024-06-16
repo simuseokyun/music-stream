@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { playlistFilter } from '../state/atoms';
+import { selectPlaylist } from '../state/atoms';
 import { useRecoilValue } from 'recoil';
 import { MyPlaylistInfo } from '../components/myPlaylistForm/myPlaylistInfo';
 import { Message } from '../styles/common.style';
@@ -37,14 +37,14 @@ const PlaylistBot = styled.div`
 `;
 
 export const MyPlaylistPage = () => {
-    const playlist = useRecoilValue(playlistFilter);
+    const playlist = useRecoilValue(selectPlaylist);
     console.log(playlist);
     return (
         <Container>
             {playlist ? (
                 <PlaylistWrap>
                     <MyPlaylistInfo
-                        cover={playlist.img!}
+                        cover={playlist.cover}
                         name={playlist.title}
                         length={playlist.tracks.length}
                         top={playlist.top}

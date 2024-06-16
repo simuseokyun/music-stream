@@ -89,13 +89,13 @@ const Dot = styled.span`
     margin: 0 2px;
 `;
 export const SearchTrackItem = ({
+    id,
     cover,
     title,
     album_id,
     album_title,
     artists,
     duration_ms,
-    id,
     uri,
 }: ISearchTrackProp) => {
     const playlists = useRecoilValue(playlistList);
@@ -103,7 +103,7 @@ export const SearchTrackItem = ({
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const { open, toggleAddBtn, mouseLeave } = usePlaylist;
-    const useTrack = useAddTrack(title, duration_ms, cover, album_title, artists, album_id, uri);
+    const useTrack = useAddTrack(id, title, duration_ms, cover, album_title, artists, album_id, uri);
     const { addTrack } = useTrack;
 
     return (

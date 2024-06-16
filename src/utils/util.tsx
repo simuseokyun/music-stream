@@ -56,7 +56,7 @@ export const commaSeparate = (num: number) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
-export async function playSong(trackUri?: string, deviceId?: string) {
+export async function playSong(trackUri: string, deviceId?: string) {
     const token = Cookies.get('accessToken');
     const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
         method: 'PUT',
@@ -82,30 +82,21 @@ export async function playSong(trackUri?: string, deviceId?: string) {
                     uris: [trackUri],
                 }),
             });
-
             if (retryResponse.status === 204) {
                 console.log('노래를 성공적으로 재생했습니다.');
             } else {
-                console.error('노래를 재생하는 중 문제가 발생했습니다.', retryResponse.status);
+                console.error('노래를 재생하는 중 문제가 발생했습니다.');
             }
         } catch (error) {
             alert('로그인이 필요한 서비스입니다.');
         }
     }
-    // if (response.status == 404) {
-    //     alert('웹 플레이어를 다시 생성하기 위해 로그아웃 하겠습니다.');
-    //     Cookies.remove('accessToken');
-    //     Cookies.remove('refreshToken');
-    //     window.location.href = '/';
-    //     return;
-    // }
 }
 // * 노래 재생 로직
 export const usePlayMusic = () => {
     const accessToken = Cookies.get('accessToken');
     const deviceId = useRecoilValue(deviceInfo);
     const setNowSong = useSetRecoilState(nowSongInfo);
-    const { logoutSpotify } = useLogoutSpotify();
     const playMusic = async (trackUri: string, title: string, cover: string, artist: string) => {
         try {
             if (!accessToken) {
@@ -118,16 +109,12 @@ export const usePlayMusic = () => {
                     return { title, cover, artist, is_playing: true };
                 });
             } else {
-                console.log(accessToken, deviceId);
-                // logoutSpotify();
-                // alert('웹 플레이어를 생성하기 위해 로그아웃 하겠습니다');
                 console.log('이유가 뭘까 ?');
-                // return;
             }
         } catch (error) {
-            console.error('노래를 재생하는 중 에러 발생:', error);
+            console.error('노래를 재생하는 중 에러 발생:');
             setNowSong((prev) => {
-                return { title: '실행 오류', cover: '', artist: '', is_playing: false };
+                return { title: '실행 오류', cover: '/images/basicPlaylist.png', artist: '', is_playing: false };
             });
         }
     };
@@ -154,6 +141,7 @@ export const useAddPlaylist = () => {
 };
 
 export const useAddTrack = (
+    id: string,
     name: string,
     duration_ms: number,
     cover: string,
@@ -165,14 +153,14 @@ export const useAddTrack = (
     const setPlaylist = useSetRecoilState(playlistList);
     const addTrack = (event: React.MouseEvent<HTMLLIElement>) => {
         const {
-            currentTarget: { textContent, id },
+            currentTarget: { textContent },
         } = event;
         setPlaylist((prev) => {
-            const newTrack = { id: name, title: name, duration_ms, cover, album_title, artists, album_id, uri };
+            const newTrack = { id, title: name, duration_ms, cover, album_title, artists, album_id, uri };
             const prevArray = prev.map((prev) => {
                 if (prev.title === textContent) {
-                    const confirm = prev.tracks.find((ele) => {
-                        return ele.title === name;
+                    const confirm = prev.tracks.find((track) => {
+                        return track.uri === uri;
                     });
                     if (confirm) {
                         alert('이미 플레이리스트에 곡이 존재합니다');
@@ -205,20 +193,15 @@ export const useToggleSong = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
             if (response.ok) {
-                console.log(`노래를 ${endpoint === 'pause' ? '정지' : '재생'}했습니다.`);
                 setSong((prev) => {
                     return { ...prev, is_playing: !prev.is_playing };
                 });
             } else {
-                console.error(
-                    `노래를 ${endpoint === 'pause' ? '정지' : '재생'}하는 중 오류가 발생했습니다:`,
-                    response.status
-                );
+                console.error(response.status);
             }
         } catch (error) {
-            console.error(`노래를 ${endpoint === 'pause' ? '정지' : '재생'}하는 중 오류가 발생했습니다:`, error);
+            console.error(error);
         }
     };
     return { toggleSong };

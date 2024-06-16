@@ -48,6 +48,7 @@ export const TopFiveTracksTable = () => {
                         .map((track) => (
                             <TopFiveTracks
                                 key={track.id}
+                                id={track.id}
                                 cover={track.album.images[0].url}
                                 title={track.name}
                                 artists={track.artists}

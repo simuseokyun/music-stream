@@ -15,10 +15,10 @@ export const Player = () => {
     const useToggle = useToggleSong();
     const { toggleSong } = useToggle;
     const token = Cookies.get('accessToken');
-    console.log('플레이어 랜더링');
-
     // 웹 플레이어 생성 로직
     useEffect(() => {
+        console.log('플레이어 랜더링');
+        console.log(token);
         if (token) {
             let script = document.querySelector('script[src="https://sdk.scdn.co/spotify-player.js"]');
             if (!script) {
@@ -37,19 +37,56 @@ export const Player = () => {
                     volume: 0.5,
                 });
                 player.addListener('ready', ({ device_id }) => {
-                    console.log('Ready with Device ID', device_id);
                     setDevice(device_id);
+                    // console.log(device_id);
                 });
-                player.addListener('not_ready', ({ device_id }) => {
-                    console.log('Device ID has gone offline', device_id);
-                });
+                player.addListener('not_ready', ({ device_id }) => {});
 
-                player.addListener('initialization_error', ({ message }) => {
-                    console.error('Initialization Error:', message);
-                });
+                player.addListener('initialization_error', ({ message }) => {});
 
-                player.addListener('authentication_error', ({ message }) => {
+                player.addListener('authentication_error', async ({ message }) => {
                     console.log(message);
+                    try {
+                        // 새로운 액세스토큰 받기
+                        const newTokenData = await refreshToken();
+                        const newAccessToken = newTokenData.access_token;
+                        Cookies.set('accessToken', newAccessToken);
+                        // 플레이어 생성
+                        const player = new window.Spotify.Player({
+                            name: '뮤직 플레이어',
+                            getOAuthToken: (cb) => {
+                                cb(newAccessToken);
+                            },
+                            volume: 0.5,
+                        });
+                        player.addListener('ready', ({ device_id }) => {
+                            setDevice(device_id);
+                        });
+
+                        player.addListener('not_ready', ({ device_id }) => {});
+
+                        player.addListener('initialization_error', ({ message }) => {});
+
+                        player.addListener('authentication_error', ({ message }) => {});
+
+                        player.addListener('account_error', ({ message }) => {});
+
+                        player.addListener('playback_error', ({ message }) => {
+                            console.error('Playback Error:', message);
+                        });
+
+                        player.addListener('player_state_changed', (state) => {
+                            console.log('노래 끝');
+                            if (!state) return;
+                            if (state.paused && state.position === 0 && state.track_window.next_tracks.length > 0) {
+                                // 다음 곡 재생 로직 추가
+                            }
+                        });
+
+                        player.connect();
+                    } catch (error) {
+                        console.error(error);
+                    }
                 });
 
                 player.addListener('account_error', ({ message }) => {

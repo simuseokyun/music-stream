@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { clickMenuAlbum, clickMenuPlaylist, saveAlbumList, typeTransform } from '../state/atoms';
+import { libraryAlbumState, libraryPliState, typeTransform } from '../state/atoms';
 import { useQuery } from 'react-query';
 import { getAlbum } from '../api/api';
 import { useNavigate } from 'react-router-dom';
@@ -47,8 +47,6 @@ const Copyright = styled.p`
 `;
 
 export const AlbumPage = () => {
-    const navigate = useNavigate();
-
     const { albumId } = useParams();
     const token = getLocalStorage('webAccessToken');
     const { isLoading, data } = useQuery<IAlbumInfo>([albumId], () => {

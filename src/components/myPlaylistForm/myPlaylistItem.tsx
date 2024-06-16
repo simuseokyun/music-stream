@@ -33,11 +33,12 @@ const Title = styled.h1`
     white-space: nowrap;
 `;
 
-const Pin = styled.span`
+const Pin = styled.img`
+    width: 15px;
+    height: 15px;
+    display: inline-block;
     vertical-align: middle;
-    font-size: 16px;
-    color: #65d46e;
-    margin-right: 2px;
+    margin-left: 4px;
 `;
 
 export const MyPlaylistItem = ({ id, cover, name, top }: IMyPlaylist) => {
@@ -55,7 +56,7 @@ export const MyPlaylistItem = ({ id, cover, name, top }: IMyPlaylist) => {
             <Info>
                 <Title>
                     {name}
-                    {top && <Pin className="material-symbols-outlined">check</Pin>}
+                    {top && <Pin src="/images/check.png"></Pin>}
                 </Title>
             </Info>
         </Item>

@@ -3,7 +3,6 @@ import { useQuery } from 'react-query';
 import { getPopularPlaylist } from '../api/api';
 import { commaSeparate, getLocalStorage } from '../utils/util';
 import { useParams } from 'react-router-dom';
-import { PopularPlaylistTrack } from '../components/popularPlaylistForm/popularPlaylistItem';
 import { IPopularPlaylistInfo } from '../types/popularPlaylists';
 import { PopularPlaylistInfo } from '../components/popularPlaylistForm/popularPlaylistInfo';
 import { PopularPlaylistList } from '../components/popularPlaylistForm/popularPlaylistList';
@@ -43,6 +42,7 @@ export const PopularPlaylistPage = () => {
     if (popularLoading) {
         return <Message>로딩 중</Message>;
     }
+    console.log(popularData);
     return (
         <Container>
             {popularData && (

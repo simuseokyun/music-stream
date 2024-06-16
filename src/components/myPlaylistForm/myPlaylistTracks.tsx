@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil';
 import { durationTransform } from '../../utils/util';
 import { IMyPlaylistTracks } from '../../types/myPlaylist';
 import { usePlayMusic } from '../../utils/util';
-import { Tr, Dot } from '../../styles/common.style';
+import { Tr, Td, Dot } from '../../styles/common.style';
 
 const TdWrap = styled.div`
     display: flex;
@@ -36,36 +36,7 @@ const Artist = styled.p`
         }
     }
 `;
-const Td = styled.td`
-    padding: 5px;
-    &:first-child {
-        width: 2%;
-    }
-    &:nth-child(2) {
-        width: 70%;
-        text-align: left;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        max-width: 0;
-    }
-    &:nth-child(3) {
-        width: 25%;
-        text-align: left;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        max-width: 0;
-        @media (max-width: 425px) {
-            display: none;
-        }
-    }
 
-    &:last-child {
-        text-align: right;
-        width: 10%;
-    }
-`;
 const DeleteBtn = styled.img`
     width: 25px;
     height: 25px;

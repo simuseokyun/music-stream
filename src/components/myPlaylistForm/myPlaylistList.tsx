@@ -8,7 +8,7 @@ const Container = styled.ul`
     width: 100%;
 `;
 
-export const PlaylistList = () => {
+export const MyPlaylistList = () => {
     const playlists = useRecoilValue(playlistList);
     return (
         <Container>
@@ -18,7 +18,7 @@ export const PlaylistList = () => {
                         <MyPlaylistItem
                             key={playlist.id}
                             id={playlist.id}
-                            cover={playlist.img ? playlist.img : '/images/basicPlaylist.png'}
+                            cover={playlist.cover ? playlist.cover : '/images/basicPlaylist.png'}
                             top={playlist.top && playlist.top}
                             name={playlist.title}
                         />

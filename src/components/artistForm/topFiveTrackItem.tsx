@@ -42,12 +42,21 @@ const Td = styled.td`
     }
 `;
 
-export const TopFiveTracks = ({ cover, title, artists, album_id, album_title, duration_ms, uri }: IArtistsTopTrack) => {
+export const TopFiveTracks = ({
+    id,
+    cover,
+    title,
+    artists,
+    album_id,
+    album_title,
+    duration_ms,
+    uri,
+}: IArtistsTopTrack) => {
     const [playlists, setPlaylist] = useRecoilState(playlistList);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const { open, toggleAddBtn, mouseLeave } = usePlaylist;
-    const useTrack = useAddTrack(title, duration_ms, cover, album_title, artists, album_id, uri);
+    const useTrack = useAddTrack(id, title, duration_ms, cover, album_title, artists, album_id, uri);
     const { addTrack } = useTrack;
 
     return (

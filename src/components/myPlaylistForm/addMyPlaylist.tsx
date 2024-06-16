@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { addPlaylistState, clickMenuAlbum, clickMenuPlaylist, playlistList } from '../../state/atoms';
+import { addPlaylistState, libraryAlbumState, libraryPliState, playlistList } from '../../state/atoms';
 import { CloseBtn } from '../../styles/common.style';
 import { Message } from '../../styles/common.style';
 import React, { useState, useRef } from 'react';
@@ -118,8 +118,8 @@ const Btn = styled.button`
 export const AddPlaylistForm = () => {
     const addPlaylist = useSetRecoilState(playlistList);
     const openPlaylist = useSetRecoilState(addPlaylistState);
-    const setPlaylistState = useSetRecoilState(clickMenuPlaylist);
-    const setAlbumtState = useSetRecoilState(clickMenuAlbum);
+    const setPliState = useSetRecoilState(libraryPliState);
+    const setAlbumState = useSetRecoilState(libraryAlbumState);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { register, handleSubmit, setValue } = useForm<{ title: string; file?: FileList }>();
@@ -150,14 +150,14 @@ export const AddPlaylistForm = () => {
             const newPlaylist = {
                 id: String(Date.now()),
                 title: title || `플레이리스트 #${prev.length + 1}`,
-                img: imagePreview ? imagePreview : '/images/basicPlaylist.png',
+                cover: imagePreview ? imagePreview : '/images/basicPlaylist.png',
                 tracks: [],
             };
 
             return [...prev, newPlaylist];
         });
-        setPlaylistState(true);
-        setAlbumtState(false);
+        setPliState(true);
+        setAlbumState(false);
         openPlaylist(false);
         setValue('title', '');
     };

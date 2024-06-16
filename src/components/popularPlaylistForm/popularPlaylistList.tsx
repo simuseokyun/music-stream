@@ -29,6 +29,7 @@ export const PopularPlaylistList = ({ data }: Data) => {
                 {data.map((item) => (
                     <PopularPlaylistTrack
                         key={item.track.id}
+                        id={item.track.id}
                         cover={item.track.album.images[0].url}
                         title={item.track.name}
                         artists={item.track.artists}

@@ -55,11 +55,11 @@ export const AlbumTrackList = ({ data }: IData) => {
                 {data?.tracks?.items.map((track) => (
                     <AlbumTracks
                         key={track.id}
+                        id={track.id}
                         album_title={data.name}
                         cover={data.images[0].url}
                         name={track.name}
                         artists={track.artists}
-                        track_number={track.track_number}
                         duration_ms={track.duration_ms}
                         album_id={data.id}
                         uri={track.uri}

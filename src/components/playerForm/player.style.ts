@@ -84,10 +84,9 @@ export const Artists = styled.p`
     margin-top: 5px;
 `;
 export const SongBtn = styled.span`
-    background-color: white;
-    color: black;
+    color: white;
     font-size: 30px;
-    border-radius: 30px;
+    cursor: pointer;
 `;
 export const marquee = keyframes`
   0% { transform: translateX(0); }

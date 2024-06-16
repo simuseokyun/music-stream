@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { Button } from '../components/buttonForm/button';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { addPlaylistState, clickMenuAlbum, clickMenuPlaylist, openSearch } from '../state/atoms';
-import { PlaylistList } from '../components/myPlaylistForm/myPlaylistList';
-import { AlbumList } from '../components/myAlbumForm/albumList';
-import { useNavigate } from 'react-router-dom';
+import { addPlaylistState, libraryAlbumState, libraryPliState, openSearch } from '../state/atoms';
+import { MyPlaylistList } from '../components/myPlaylistForm/myPlaylistList';
+import { MyAlbumList } from '../components/myAlbumForm/albumList';
+
 const Container = styled.div`
     background-color: #131212;
     border-radius: 8px;
@@ -49,18 +49,18 @@ const AddPlaylistBtn = styled.img`
 
 export const LibraryPage = () => {
     const setPlaylist = useSetRecoilState(addPlaylistState);
-    const [playlistState, setPlaylistState] = useRecoilState(clickMenuPlaylist);
-    const setAlbumState = useSetRecoilState(clickMenuAlbum);
+    const [pliState, setPlistate] = useRecoilState(libraryPliState);
+    const setAlbumState = useSetRecoilState(libraryAlbumState);
     const addPlaylist = () => {
         setPlaylist(true);
     };
     const onClickPlaylist = () => {
-        setPlaylistState(true);
+        setPlistate(true);
         setAlbumState(false);
     };
     const onClickSetAlbum = () => {
         setAlbumState(true);
-        setPlaylistState(false);
+        setPlistate(false);
     };
 
     return (
@@ -70,15 +70,15 @@ export const LibraryPage = () => {
                 <AddPlaylistBtn src="/images/addButton.png" onClick={addPlaylist} />
             </TitleWrap>
             <ButtonWrap>
-                <Button text="플레이리스트" bgColor={playlistState ? 'white' : '#232323'} onClick={onClickPlaylist} />
+                <Button text="플레이리스트" bgColor={pliState ? 'white' : '#232323'} onClick={onClickPlaylist} />
                 <Button
                     margin="0px 0px 0px 5px"
                     text="내가 찜한 앨범"
-                    bgColor={playlistState ? '#232323' : 'white'}
+                    bgColor={pliState ? '#232323' : 'white'}
                     onClick={onClickSetAlbum}
                 />
             </ButtonWrap>
-            {playlistState ? <PlaylistList /> : <AlbumList />}
+            {pliState ? <MyPlaylistList /> : <MyAlbumList />}
         </Container>
     );
 };

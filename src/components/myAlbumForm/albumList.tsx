@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
-import { saveAlbumList } from '../../state/atoms';
+import { myAlbumList } from '../../state/atoms';
 import { useNavigate } from 'react-router-dom';
 import { AlbumItem } from './albumItem';
 import { Message } from '../../styles/common.style';
@@ -9,18 +9,19 @@ const Container = styled.ul`
     width: 100%;
 `;
 
-export const AlbumList = () => {
+export const MyAlbumList = () => {
     const navigate = useNavigate();
-    const AlbumList = useRecoilValue(saveAlbumList);
+    const myAlbumlist = useRecoilValue(myAlbumList);
+
     return (
         <Container>
-            {AlbumList.length ? (
-                AlbumList.map((album) => (
+            {myAlbumlist.length ? (
+                myAlbumlist.map((album) => (
                     <AlbumItem
                         key={album.id}
                         name={album.name}
                         artist={album.artist}
-                        cover={album.cover!}
+                        cover={album.cover ? album.cover : '/images/basicPlaylist.png'}
                         onClick={() => navigate(`/home/album/${album.id}`)}
                     />
                 ))

@@ -1,36 +1,6 @@
 import styled from 'styled-components';
-import { Table, Thead, Tbody, Tr } from '../../styles/common.style';
+import { Table, Thead, Tbody, Tr, Th } from '../../styles/common.style';
 import { PlaylistTracks } from './myPlaylistTracks';
-
-const Th = styled.th`
-    padding: 5px;
-    &:first-child {
-        width: 2%;
-    }
-    &:nth-child(2) {
-        width: 70%;
-        text-align: left;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        max-width: 0;
-    }
-    &:nth-child(3) {
-        width: 25%;
-        text-align: left;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        max-width: 0;
-        @media (max-width: 768px) {
-            display: none;
-        }
-    }
-
-    &:last-child {
-        width: 10%;
-    }
-`;
 
 interface asd {
     tracks: {

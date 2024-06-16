@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { playlistFilter, playlistFixState, playlistList } from '../../state/atoms';
+import { selectPlaylist, playlistFixState, playlistList } from '../../state/atoms';
 import { useRef } from 'react';
 import { Message } from '../../styles/common.style';
 import { Button } from '../buttonForm/button';
@@ -116,11 +116,11 @@ const Btn = styled.button`
 `;
 
 export const FixPlaylistForm = () => {
-    const playlist = useRecoilValue(playlistFilter);
+    const playlist = useRecoilValue(selectPlaylist);
     const setPlaylists = useSetRecoilState(playlistList);
     const [value, setValue] = useState(playlist?.title || '');
     const setPlaylist = useSetRecoilState(playlistFixState);
-    const [imagePreview, setImagePreview] = useState<string | null>(playlist?.img || '');
+    const [imagePreview, setImagePreview] = useState<string | null>(playlist?.cover || '');
     const titleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {
             currentTarget: { value },
