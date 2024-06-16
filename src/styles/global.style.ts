@@ -30,7 +30,9 @@ time, mark, audio, video {
         display: none;
     }
 }
-
+img {
+    -webkit-tap-highlight-color: transparent; 
+}
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
 	display: block;
