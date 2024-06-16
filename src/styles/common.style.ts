@@ -77,7 +77,7 @@ export const Th = styled.th`
     }
 
     &:nth-child(2) {
-        width: 50%;
+        width: 60%;
         text-align: left;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -87,7 +87,7 @@ export const Th = styled.th`
         }
     }
     &:nth-child(3) {
-        width: 30%;
+        width: 25%;
         text-align: left;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -113,7 +113,7 @@ export const Td = styled.td`
     }
 
     &:nth-child(2) {
-        width: 50%;
+        width: 60%;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
@@ -122,7 +122,7 @@ export const Td = styled.td`
         }
     }
     &:nth-child(3) {
-        width: 30%;
+        width: 25%;
         text-align: left;
         text-overflow: ellipsis;
         white-space: nowrap;

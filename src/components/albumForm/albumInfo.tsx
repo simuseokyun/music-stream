@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 import { Button } from '../buttonForm/button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { clickMenuAlbum, clickMenuPlaylist } from '../../state/atoms';
-import { saveAlbumList } from '../../state/atoms';
-import { useNavigate } from 'react-router-dom';
+import { libraryAlbumState, libraryPliState, myAlbumList } from '../../state/atoms';
+import { ISelectAlbumInfo } from '../../types/albumInfo';
 
 const Container = styled.div`
     display: flex;
@@ -72,21 +71,11 @@ const CloseBtn = styled.button`
     border-radius: 4px;
     border: none;
 `;
-interface Test {
-    id: string;
-    name: string;
-    artist: { id: string; name: string };
-    cover: string;
-    type: string;
-    year: string;
-    trackLength: number;
-}
 
-export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: Test) => {
-    console.log(id, name, cover, type, year, trackLength, artist);
-    const [albums, setAlbum] = useRecoilState(saveAlbumList);
-    const clickPlaylistState = useSetRecoilState(clickMenuPlaylist);
-    const clickAlbumState = useSetRecoilState(clickMenuAlbum);
+export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: ISelectAlbumInfo) => {
+    const [albums, setAlbum] = useRecoilState(myAlbumList);
+    const setPliState = useSetRecoilState(libraryPliState);
+    const setAlbumState = useSetRecoilState(libraryAlbumState);
     const navigate = useNavigate();
     const onClose = () => {
         navigate(-1);
@@ -98,8 +87,8 @@ export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: 
         setAlbum((prev) => {
             return [...prev, { cover, name, artist: artist.name, id }];
         });
-        clickAlbumState(true);
-        clickPlaylistState(false);
+        setAlbumState(true);
+        setPliState(false);
     };
     const deleteAlbum = () => {
         setAlbum((prev) => {

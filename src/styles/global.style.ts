@@ -30,9 +30,7 @@ time, mark, audio, video {
         display: none;
     }
 }
-img {
-    -webkit-tap-highlight-color: transparent; 
-}
+
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
 	display: block;
@@ -54,6 +52,7 @@ q:before, q:after {
 	content: '';
 	content: none;
 }
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -65,6 +64,7 @@ table {
 }
 img{
     display:block;
+    -webkit-tap-highlight-color: transparent; 
 }
 a { 
     text-decoration:none;

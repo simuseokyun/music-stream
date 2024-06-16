@@ -13,22 +13,24 @@ export interface IPopularPlaylistInfo {
     id: string;
     images: { url: string }[];
     name: string;
-    tracks: {
-        total: string;
-        items: {
-            track: {
-                id: string;
-                name: string;
-                duration_ms: number;
-                artists: { name: string; id: string }[];
-                uri: string;
-                album: { id: string; name: string; images: { url: string }[] };
-            };
-        }[];
-    };
+    tracks: IPopularPlaylistInfoTracks;
+}
+interface IPopularPlaylistInfoTracks {
+    total: string;
+    items: {
+        track: {
+            id: string;
+            name: string;
+            duration_ms: number;
+            artists: { name: string; id: string }[];
+            uri: string;
+            album: { id: string; name: string; images: { url: string }[] };
+        };
+    }[];
 }
 
 export interface IPopularPlaylistInfoProp {
+    id: string;
     cover: string;
     title: string;
     duration: number;

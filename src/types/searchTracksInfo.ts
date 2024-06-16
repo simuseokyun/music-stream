@@ -6,17 +6,18 @@ export interface ISearchTracks {
 }
 interface ISearchTrack {
     id: string;
-    album: {
-        images: {
-            url: string;
-        }[];
-        id: string;
-        name: string;
-        artists: { name: string; id: string }[];
-    };
+    album: ISearchTrackAlbums;
     duration_ms: number;
     uri: string;
     name: string;
+}
+interface ISearchTrackAlbums {
+    images: {
+        url: string;
+    }[];
+    id: string;
+    name: string;
+    artists: { name: string; id: string }[];
 }
 export interface ISearchTrackProp {
     id: string;

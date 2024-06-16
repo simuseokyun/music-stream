@@ -21,6 +21,7 @@ export interface IArtistTopTracks {
     }[];
 }
 export interface IArtistsTopTrack {
+    id: string;
     cover: string;
     title: string;
     artists: { id: string; name: string }[];
