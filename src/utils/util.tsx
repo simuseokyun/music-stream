@@ -5,7 +5,6 @@ import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import { nowSongInfo, playlistList } from '../state/atoms';
 import { useState } from 'react';
 import { addPlaylistState } from '../state/atoms';
-import { access } from 'fs';
 
 export const setLocalStorage = (name: string, value: string) => {
     localStorage.setItem(name, value);
@@ -36,7 +35,9 @@ export const loginSpotify = () => {
 };
 export const useLogoutSpotify = () => {
     const setDevice = useSetRecoilState(deviceInfo);
-    const logoutSpotify = () => {
+    const { toggleSong } = useToggleSong();
+    const logoutSpotify = async () => {
+        toggleSong();
         Cookies.remove('accessToken');
         Cookies.remove('refreshToken');
         window.location.href = '/';
