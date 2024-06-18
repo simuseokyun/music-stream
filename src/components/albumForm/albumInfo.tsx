@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button } from '../buttonForm/button';
+import { Button } from '../common/buttonForm/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { libraryAlbumState, libraryPliState, myAlbumList } from '../../state/atoms';

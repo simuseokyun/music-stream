@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-import { useState } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { selectPlaylist, playlistFixState, playlistList } from '../../state/atoms';
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { selectPlaylist, playlistFixFormState, playlistList } from '../../state/atoms';
 import { Message } from '../../styles/common.style';
-import { Button } from '../buttonForm/button';
+import { Button } from '../common/buttonForm/button';
 
 const Container = styled.div`
     width: 100%;
@@ -13,7 +12,7 @@ const Container = styled.div`
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.7);
-    z-index: 1;
+    z-index: 11;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -33,7 +32,7 @@ const FormTop = styled.div`
     margin-bottom: 20px;
 `;
 
-const AddFormWrap = styled.div`
+const FixFormWrap = styled.div`
     display: flex;
     align-items: start;
     justify-content: space-between;
@@ -49,19 +48,14 @@ const FormRight = styled.div`
         margin-left: 0;
     }
 `;
-const FormTitle = styled.h1`
-    font-size: 18px;
-    @media (max-width: 768px) {
-        font-size: 16px;
-    }
-`;
-const ImgWrap = styled.div`
+const FormTitle = styled.h1``;
+const CoverWrap = styled.div`
     position: relative;
     width: 100px;
     height: 100px;
     left: calc(50% - 50px);
 `;
-const FormImg = styled.img`
+const Cover = styled.img`
     position: absolute;
     top: 0;
     left: 0;
@@ -69,7 +63,7 @@ const FormImg = styled.img`
     height: 100%;
     object-fit: cover;
 `;
-const ImgOverlay = styled.div`
+const CoverOverlay = styled.div`
     position: absolute;
     top: 0;
     left: 0;
@@ -106,56 +100,18 @@ const BtnWrap = styled.div`
     text-align: right;
     margin-top: 20px;
 `;
-const Btn = styled.button`
-    display: inline-block;
-    text-align: center;
-    background-color: #65d46e;
-    border: none;
-    border-radius: 20px;
-    padding: 4px 8px;
-`;
 
 export const FixPlaylistForm = () => {
     const playlist = useRecoilValue(selectPlaylist);
     const setPlaylists = useSetRecoilState(playlistList);
-    const [value, setValue] = useState(playlist?.title || '');
-    const setPlaylist = useSetRecoilState(playlistFixState);
-    const [imagePreview, setImagePreview] = useState<string | null>(playlist?.cover || '');
-    const titleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const {
-            currentTarget: { value },
-        } = event;
-        setValue(value);
-    };
-    const submitInfo = () => {
-        setPlaylists((prev) => {
-            const index = prev.findIndex((ele) => ele.id === playlist?.id);
-            const find = [...prev.slice(0, index), ...prev.slice(index + 1)].find((e) => {
-                return e.title === value;
-            });
-            if (value.length < 1) {
-                alert('한 글자 이상 입력하세요');
-                return prev;
-            }
-            if (value.length > 12) {
-                alert('12글자 이하로 입력하세요');
-                return prev;
-            }
-            if (find) {
-                alert('중복된 플레이리스트가 존재합니다');
-                return prev;
-            }
-
-            return [
-                ...prev.slice(0, index),
-                { ...prev[index], title: value, img: imagePreview! },
-                ...prev.slice(index + 1),
-            ];
-        });
-        setPlaylist(false);
-    };
-    const closeForm = () => {
-        setPlaylist(() => false);
+    const [title, setTitle] = useState(playlist?.title || '');
+    const fixFormState = useSetRecoilState(playlistFixFormState);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(playlist?.cover || null);
+    const handleClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
     };
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -169,29 +125,53 @@ export const FixPlaylistForm = () => {
             reader.readAsDataURL(file);
         }
     };
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const handleClick = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click();
-        }
+    const titleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const {
+            currentTarget: { value },
+        } = event;
+        setTitle(value);
     };
+    const submitInfo = () => {
+        setPlaylists((prev) => {
+            const index = prev.findIndex((list) => list.id === playlist?.id);
+            const find = [...prev.slice(0, index), ...prev.slice(index + 1)].find((e) => {
+                return e.title === title;
+            });
+            if (title.length < 1) {
+                alert('한 글자 이상 입력하세요');
+                return prev;
+            }
+            if (title.length > 12) {
+                alert('12글자 이하로 입력하세요');
+                return prev;
+            }
+            if (find) {
+                alert('중복된 플레이리스트가 존재합니다');
+                return prev;
+            }
+
+            return [...prev.slice(0, index), { ...prev[index], title, cover: imagePreview! }, ...prev.slice(index + 1)];
+        });
+        fixFormState(false);
+    };
+
     return (
         <Container>
             <FixForm>
                 <FormTop>
                     <FormTitle>플레이리스트 생성</FormTitle>
                 </FormTop>
-                <AddFormWrap>
+                <FixFormWrap>
                     <FormLeft>
-                        <ImgWrap>
-                            <FormImg
-                                src={imagePreview ? imagePreview : '/images/spotifyLogo.png'}
+                        <CoverWrap>
+                            <Cover
+                                src={imagePreview ? imagePreview : '/images/basicPlaylist.png'}
                                 alt="Preview"
-                            ></FormImg>
-                            <ImgOverlay onClick={handleClick}>
+                            ></Cover>
+                            <CoverOverlay onClick={handleClick}>
                                 <Message>사진 선택</Message>
-                            </ImgOverlay>
-                        </ImgWrap>
+                            </CoverOverlay>
+                        </CoverWrap>
                         <Input
                             type="file"
                             ref={fileInputRef}
@@ -202,9 +182,9 @@ export const FixPlaylistForm = () => {
                     </FormLeft>
                     <FormRight>
                         <Title>제목</Title>
-                        <Input type="text" value={value} onChange={titleChange}></Input>
+                        <Input type="text" value={title} onChange={titleChange}></Input>
                     </FormRight>
-                </AddFormWrap>
+                </FixFormWrap>
                 <BtnWrap>
                     <Button text="수정" bgColor="#65d46e" onClick={submitInfo} />
                     <Button text="취소" margin="0 0 0 5px" bgColor="white" onClick={submitInfo} />

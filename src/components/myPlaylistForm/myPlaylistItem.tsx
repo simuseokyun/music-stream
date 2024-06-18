@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { clickPlaylistState, titleChangeState } from '../../state/atoms';
+import { clickPlaylistState } from '../../state/atoms';
 import { IMyPlaylist } from '../../types/myPlaylist';
 
 const Item = styled.li`
@@ -43,12 +43,10 @@ const Pin = styled.img`
 
 export const MyPlaylistItem = ({ id, cover, name, top }: IMyPlaylist) => {
     const setPlaylist = useSetRecoilState(clickPlaylistState);
-    const setChangeForm = useSetRecoilState(titleChangeState);
     const navigate = useNavigate();
     const clickPlaylist = () => {
         navigate(`/home/playlist/${id}`);
         setPlaylist(id);
-        setChangeForm(false);
     };
     return (
         <Item onClick={clickPlaylist}>

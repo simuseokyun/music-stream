@@ -1,12 +1,10 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { openSearch } from '../../state/atoms';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import { loginSpotify, useLogoutSpotify } from '../../utils/util';
+import { searchFormState } from '../../state/atoms';
+import { loginSpotify, useLogoutSpotify, getLocalStorage } from '../../utils/util';
 
-const SideBarWrap = styled.div`
+const Container = styled.div`
     width: 100%;
     height: 500px;
     overflow: hidden;
@@ -16,7 +14,7 @@ const SideBarWrap = styled.div`
         display: none;
     }
 `;
-const SideBarTop = styled.ul`
+const List = styled.ul`
     background-color: #131212;
     border-radius: 8px;
     width: 100%;
@@ -31,7 +29,7 @@ const BackBtn = styled.img`
     padding: 4px;
     border-radius: 24px;
 `;
-const TopList = styled.li`
+const Item = styled.li`
     margin-top: 20px;
     font-size: 18px;
     cursor: pointer;
@@ -44,37 +42,35 @@ const TopList = styled.li`
 `;
 
 export const SideBar = () => {
-    const accessToken = Cookies.get('accessToken');
-    const searchState = useSetRecoilState(openSearch);
+    const accessToken = getLocalStorage('sdkAccessToken');
+    const searchState = useSetRecoilState(searchFormState);
     const navigate = useNavigate();
     const { logoutSpotify } = useLogoutSpotify();
 
     const setSearch = () => {
-        searchState((prev) => {
-            return !prev;
-        });
+        searchState((prev) => !prev);
     };
     const onBackBtn = () => {
         navigate(-1);
     };
 
     return (
-        <SideBarWrap>
-            <SideBarTop>
+        <Container>
+            <List>
                 <BackBtn src="/images/leftArrow.png" onClick={onBackBtn}></BackBtn>
-                <TopList>
+                <Item>
                     <Link to="/home">홈</Link>
-                </TopList>
-                <TopList onClick={setSearch}>검색하기</TopList>
-                <TopList>
+                </Item>
+                <Item onClick={setSearch}>검색하기</Item>
+                <Item>
                     <Link to="/home/library">내 라이브러리</Link>
-                </TopList>
+                </Item>
                 {accessToken ? (
-                    <TopList onClick={logoutSpotify}>로그아웃</TopList>
+                    <Item onClick={logoutSpotify}>로그아웃</Item>
                 ) : (
-                    <TopList onClick={loginSpotify}>로그인</TopList>
+                    <Item onClick={loginSpotify}>로그인</Item>
                 )}
-            </SideBarTop>
-        </SideBarWrap>
+            </List>
+        </Container>
     );
 };

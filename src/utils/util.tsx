@@ -1,10 +1,8 @@
 import Cookies from 'js-cookie';
 import { refreshToken } from '../api/api';
-import { deviceInfo } from '../state/atoms';
+import { deviceInfo, setMobile, addPlaylistState, nowSongInfo, playlistList } from '../state/atoms';
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import { nowSongInfo, playlistList } from '../state/atoms';
-import { useState } from 'react';
-import { addPlaylistState } from '../state/atoms';
+import { useState, useRef } from 'react';
 
 export const setLocalStorage = (name: string, value: string) => {
     localStorage.setItem(name, value);
@@ -36,9 +34,9 @@ export const loginSpotify = () => {
 export const useLogoutSpotify = () => {
     const setDevice = useSetRecoilState(deviceInfo);
     const { toggleSong } = useToggleSong();
-    const logoutSpotify = async () => {
+    const logoutSpotify = () => {
         toggleSong();
-        Cookies.remove('accessToken');
+        localStorage.removeItem('sdkAccessToken');
         Cookies.remove('refreshToken');
         window.location.href = '/';
         setDevice(null);
@@ -57,7 +55,7 @@ export const commaSeparate = (num: number) => {
 };
 
 export async function playSong(trackUri: string, deviceId?: string) {
-    const token = Cookies.get('accessToken');
+    const token = getLocalStorage('sdkAccessToken');
     const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
         method: 'PUT',
         headers: {
@@ -68,10 +66,11 @@ export async function playSong(trackUri: string, deviceId?: string) {
             uris: [trackUri],
         }),
     });
+
     if (response.status === 401) {
         try {
             const { access_token } = await refreshToken();
-            Cookies.set('accessToken', access_token);
+            setLocalStorage('sdkAccessToken', access_token);
             const retryResponse = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
                 method: 'PUT',
                 headers: {
@@ -94,10 +93,11 @@ export async function playSong(trackUri: string, deviceId?: string) {
 }
 // * 노래 재생 로직
 export const usePlayMusic = () => {
-    const accessToken = Cookies.get('accessToken');
+    const accessToken = getLocalStorage('sdkAccessToken');
     const deviceId = useRecoilValue(deviceInfo);
     const setNowSong = useSetRecoilState(nowSongInfo);
     const playMusic = async (trackUri: string, title: string, cover: string, artist: string) => {
+        console.log(accessToken, deviceId);
         try {
             if (!accessToken) {
                 alert('로그인이 필요한 서비스입니다');
@@ -140,6 +140,7 @@ export const useAddPlaylist = () => {
     return { open, toggleAddBtn, mouseLeave };
 };
 
+//
 export const useAddTrack = (
     id: string,
     name: string,
@@ -182,17 +183,21 @@ export const useAddTrack = (
 };
 
 export const useToggleSong = () => {
-    const token = Cookies.get('accessToken');
+    const token = getLocalStorage('sdkAccessToken');
+    const deviceId = useRecoilValue(deviceInfo);
     const [song, setSong] = useRecoilState(nowSongInfo);
     const toggleSong = async () => {
         const endpoint = song.is_playing ? 'pause' : 'play';
         try {
-            const response = await fetch(`https://api.spotify.com/v1/me/player/${endpoint}`, {
-                method: 'PUT',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await fetch(
+                `https://api.spotify.com/v1/me/player/${endpoint}?play?device_id=${deviceId}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             if (response.ok) {
                 setSong((prev) => {
                     return { ...prev, is_playing: !prev.is_playing };
@@ -205,4 +210,43 @@ export const useToggleSong = () => {
         }
     };
     return { toggleSong };
+};
+
+export const useHandleResize = () => {
+    const setMobileState = useSetRecoilState(setMobile);
+    const [isMobile, setIsMobile] = useState(false);
+    const handleResize = () => {
+        setIsMobile(window.innerWidth <= 768);
+        if (window.innerWidth <= 768) {
+            setMobileState((prev) => true);
+        } else {
+            setMobileState((prev) => false);
+        }
+    };
+    return { isMobile, handleResize };
+};
+
+export const extractAuthCodeFromUrl = (url: string) => {
+    const params = new URLSearchParams(url.split('?')[1]);
+    return params.get('code');
+};
+
+export const usePagenation = () => {
+    const isMobile = useRecoilValue(setMobile);
+    const [index, setIndex] = useState(0);
+    const onNextBtn = () => {
+        if (isMobile) {
+            setIndex((prev) => (prev === 6 ? 0 : prev + 1));
+        } else {
+            setIndex((prev) => (prev === 4 ? 0 : prev + 1));
+        }
+    };
+    const onPrevBtn = () => {
+        if (isMobile) {
+            setIndex((prev) => (prev === 0 ? 6 : prev - 1));
+        } else {
+            setIndex((prev) => (prev === 0 ? 4 : prev - 1));
+        }
+    };
+    return { isMobile, index, setIndex, onNextBtn, onPrevBtn };
 };

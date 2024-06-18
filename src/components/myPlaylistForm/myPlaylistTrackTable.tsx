@@ -1,22 +1,8 @@
-import styled from 'styled-components';
 import { Table, Thead, Tbody, Tr, Th } from '../../styles/common.style';
 import { PlaylistTracks } from './myPlaylistTracks';
+import { IMyPlaylistTracksProp } from '../../types/myPlaylist';
 
-interface asd {
-    tracks: {
-        id: string;
-        cover: string;
-        title: string;
-        album_title: string;
-        artists: { id: string; name: string }[];
-        uri: string;
-        duration_ms: number;
-        album_id: string;
-    }[];
-    playlist_id: string;
-}
-
-export const MyPlaylistTrackTable = ({ tracks, playlist_id }: asd) => {
+export const MyPlaylistTrackTable = ({ tracks, playlist_id }: IMyPlaylistTracksProp) => {
     return (
         <Table>
             <Thead>
@@ -28,7 +14,7 @@ export const MyPlaylistTrackTable = ({ tracks, playlist_id }: asd) => {
                 </Tr>
             </Thead>
             <Tbody>
-                {tracks.map((track) => (
+                {tracks?.map((track) => (
                     <PlaylistTracks
                         playlist_id={playlist_id}
                         key={track.id}

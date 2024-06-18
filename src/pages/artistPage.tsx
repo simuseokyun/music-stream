@@ -1,6 +1,6 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+
 import { ArtistCover } from '../components/artistForm/artistCover';
 import { TopFiveTracksTable } from '../components/artistForm/topFiveTrackList';
 import { AlbumList } from '../components/artistForm/artistAlbumList';

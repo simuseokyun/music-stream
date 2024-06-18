@@ -31,10 +31,13 @@ const PlaylistWrap = styled.div`
 `;
 
 export const PopularPlaylistPage = () => {
-    // window.scrollTo(0, 0); 페이지 이동 시 스크롤 초기화 코드
     const { playlistId } = useParams();
     const token = getLocalStorage('webAccessToken');
-    const { isLoading: popularLoading, data: popularData } = useQuery<IPopularPlaylistInfo>('popularId', async () => {
+    const {
+        isLoading: popularLoading,
+        data: popularData,
+        isError,
+    } = useQuery<IPopularPlaylistInfo>('popularId', async () => {
         if (token && playlistId) {
             return await getPopularPlaylist(token, playlistId);
         }
@@ -42,7 +45,9 @@ export const PopularPlaylistPage = () => {
     if (popularLoading) {
         return <Message>로딩 중</Message>;
     }
-    console.log(popularData);
+    if (isError) {
+        return <Message>에러 발생</Message>;
+    }
     return (
         <Container>
             {popularData && (

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
-import { playlistFixState, playlistList } from '../../state/atoms';
-import { Button } from '../buttonForm/button';
+import { playlistFixFormState, playlistList } from '../../state/atoms';
+import { Button } from '../common/buttonForm/button';
 const Container = styled.div`
     display: flex;
     align-items: end;
@@ -61,28 +61,28 @@ export const MyPlaylistInfo = ({
     top?: number;
     length: number;
 }) => {
-    const setFixForm = useSetRecoilState(playlistFixState);
-    const [playlists, setPlaylists] = useRecoilState(playlistList);
+    const setFixForm = useSetRecoilState(playlistFixFormState);
+    const setPlaylist = useSetRecoilState(playlistList);
     const navigate = useNavigate();
     const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
         const {
             currentTarget: { name },
         } = event;
-        setPlaylists((prev) => {
-            const filter = prev.filter((playlist) => {
+        setPlaylist((prev) => {
+            const newPlaylistList = prev.filter((playlist) => {
                 return playlist.title !== name;
             });
-            return filter;
+            return newPlaylistList;
         });
-        navigate('/home');
+        navigate('/home/library');
     };
     const topFixed = (event: React.MouseEvent<HTMLButtonElement>) => {
         const {
             currentTarget: { name },
         } = event;
-        setPlaylists((prev) => {
-            const fil = prev.filter((playlist) => playlist.hasOwnProperty('top'));
-            if (fil.length > 2) {
+        setPlaylist((prev) => {
+            const hasTop = prev.filter((playlist) => playlist.hasOwnProperty('top'));
+            if (hasTop.length > 2) {
                 alert('플레이리스트는 최대 3개까지 고정할 수 있습니다');
                 return prev;
             }
@@ -90,16 +90,15 @@ export const MyPlaylistInfo = ({
                 return playlist.title === name;
             });
             const value = { ...prev[index], top: Date.now() };
-
-            const newTracks = [value, ...prev.slice(0, index), ...prev.slice(index + 1)];
-            return newTracks;
+            const newPlaylistList = [value, ...prev.slice(0, index), ...prev.slice(index + 1)];
+            return newPlaylistList;
         });
     };
     const clearFixed = (event: React.MouseEvent<HTMLButtonElement>) => {
         const {
             currentTarget: { name },
         } = event;
-        setPlaylists((prev) => {
+        setPlaylist((prev) => {
             const index = prev.findIndex((playlist) => {
                 return playlist.title == name;
             });
@@ -108,14 +107,14 @@ export const MyPlaylistInfo = ({
                 return rest;
             });
             const setValue = [...prev.slice(0, index), ...value, ...prev.slice(index + 1)];
-            const topFilter = setValue.filter((playlist) => {
+            const topPlaylist = setValue.filter((playlist) => {
                 return playlist.hasOwnProperty('top');
             });
-            const botFilter = setValue.filter((playlist) => {
+            let botPlaylist = setValue.filter((playlist) => {
                 return !playlist.hasOwnProperty('top');
             });
 
-            const sort = [...botFilter].sort((a, b) => {
+            botPlaylist = [...botPlaylist].sort((a, b) => {
                 if (a.id > b.id) {
                     return 1;
                 } else {
@@ -123,7 +122,7 @@ export const MyPlaylistInfo = ({
                 }
             });
 
-            return [...topFilter, ...sort];
+            return [...topPlaylist, ...botPlaylist];
         });
     };
     return (
@@ -132,7 +131,7 @@ export const MyPlaylistInfo = ({
             <Info>
                 <Title>
                     {name}
-                    <Button text="수정" margin="0 0 0 5px" bgColor="white" onClick={() => setFixForm(() => true)} />
+                    <Button text="수정" margin="0 0 0 5px" bgColor="white" onClick={() => setFixForm(true)} />
                 </Title>
                 <Length>{length + '곡'}</Length>
                 {top ? (

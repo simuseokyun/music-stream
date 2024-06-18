@@ -31,15 +31,24 @@ const AlbumList = styled.ul<{ state: string }>`
 `;
 
 export const AllAlbumPage = () => {
-    const token = getLocalStorage('webAccessToken') || '';
+    const token = getLocalStorage('webAccessToken');
     const isMobile = useRecoilValue(setMobile);
     const { artistId } = useParams();
-    const { isLoading, data: allAlbumList } = useQuery('albumList', async () => {
-        const response = await getAllAlbums(token, artistId!);
-        return response;
+    const {
+        isLoading,
+        data: allAlbumList,
+        isError,
+    } = useQuery('albumList', async () => {
+        if (token && artistId) {
+            const response = await getAllAlbums(token, artistId!);
+            return response;
+        }
     });
     if (isLoading) {
         return <Message>로딩 중</Message>;
+    }
+    if (isError) {
+        return <Message>에러 발생</Message>;
     }
     return (
         <Container>

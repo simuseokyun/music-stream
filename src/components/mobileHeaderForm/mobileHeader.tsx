@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 import Cookies from 'js-cookie';
-import { loginSpotify, useLogoutSpotify } from '../../utils/util';
+import { getLocalStorage, loginSpotify, useLogoutSpotify } from '../../utils/util';
 import { useSetRecoilState } from 'recoil';
 import { deviceInfo } from '../../state/atoms';
-import { Button } from '../buttonForm/button';
-
+import { Button } from '../common/buttonForm/button';
 const Container = styled.div`
     width: 100%;
     padding: 10px;
@@ -19,7 +18,7 @@ const Logo = styled.img`
 `;
 
 export const MobileHeader = () => {
-    const accessToken = Cookies.get('accessToken');
+    const accessToken = getLocalStorage('sdkAccessToken');
     const { logoutSpotify } = useLogoutSpotify();
 
     return (

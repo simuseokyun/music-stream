@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { Button } from '../components/buttonForm/button';
+import { Button } from '../components/common/buttonForm/button';
+
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { addPlaylistState, libraryAlbumState, libraryPliState, openSearch } from '../state/atoms';
+import { addPlaylistState, libraryAlbumState, libraryPliState } from '../state/atoms';
 import { MyPlaylistList } from '../components/myPlaylistForm/myPlaylistList';
 import { MyAlbumList } from '../components/myAlbumForm/albumList';
 

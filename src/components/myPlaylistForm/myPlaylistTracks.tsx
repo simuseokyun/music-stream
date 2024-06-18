@@ -57,15 +57,15 @@ export const PlaylistTracks = ({
     playlist_id,
     uri,
 }: IMyPlaylistTracks) => {
-    const [playlist, setPlaylist] = useRecoilState(playlistList);
+    const [playlists, setPlaylist] = useRecoilState(playlistList);
     const playMusic = usePlayMusic();
     const deleteTrack = () => {
         setPlaylist((prev) => {
-            const index = playlist.findIndex((ele) => {
-                return ele.id === playlist_id;
+            const index = playlists.findIndex((list) => {
+                return list.id === playlist_id;
             });
-            const newTracks = [...prev[index].tracks].filter((ele) => {
-                return ele.title !== title;
+            const newTracks = [...prev[index].tracks].filter((track) => {
+                return track.title !== title;
             });
             return [...prev.slice(0, index), { ...prev[index], tracks: newTracks }, ...prev.slice(index + 1)];
         });

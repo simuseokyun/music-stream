@@ -1,14 +1,11 @@
 import { useParams } from 'react-router-dom';
-import { libraryAlbumState, libraryPliState, typeTransform } from '../state/atoms';
+import { typeTransform } from '../state/atoms';
 import { useQuery } from 'react-query';
 import { getAlbum } from '../api/api';
-import { useNavigate } from 'react-router-dom';
-
 import { getLocalStorage } from '../utils/util';
 import styled from 'styled-components';
 import { IAlbumInfo } from '../types/albumInfo';
-import { CloseBtn, Message } from '../styles/common.style';
-
+import { Message } from '../styles/common.style';
 import { AlbumInfo } from '../components/albumForm/albumInfo';
 import { AlbumTrackList } from '../components/albumForm/albumTrackList';
 
@@ -49,32 +46,39 @@ const Copyright = styled.p`
 export const AlbumPage = () => {
     const { albumId } = useParams();
     const token = getLocalStorage('webAccessToken');
-    const { isLoading, data } = useQuery<IAlbumInfo>([albumId], () => {
-        if (token) {
-            return getAlbum(token, albumId!);
+    const {
+        isLoading: albumLoading,
+        data: albumData,
+        isError,
+    } = useQuery<IAlbumInfo>([albumId], () => {
+        if (token && albumId) {
+            return getAlbum(token, albumId);
         }
         return Promise.resolve(null);
     });
 
-    if (isLoading) {
+    if (albumLoading) {
         return <Message>로딩 중</Message>;
+    }
+    if (isError) {
+        return <Message>에러 발생</Message>;
     }
     return (
         <Container>
-            {data && (
+            {albumData && (
                 <AlbumWrap>
                     <AlbumInfo
-                        id={data?.id}
-                        name={data?.name}
-                        artist={data?.artists[0]}
-                        cover={data?.images[0].url}
-                        type={data?.album_type! === 'single' ? typeTransform.single : typeTransform.album}
-                        year={data?.release_date.slice(0, 4)}
-                        trackLength={data?.total_tracks}
+                        id={albumData?.id}
+                        name={albumData?.name}
+                        artist={albumData?.artists[0]}
+                        cover={albumData?.images[0].url}
+                        type={albumData?.album_type === 'single' ? typeTransform.single : typeTransform.album}
+                        year={albumData?.release_date.slice(0, 4)}
+                        trackLength={albumData?.total_tracks}
                     />
                     <TrackListsWrap>
-                        <AlbumTrackList data={data} />
-                        <Copyright>{data?.copyrights[0].text}</Copyright>
+                        <AlbumTrackList data={albumData} />
+                        <Copyright>{albumData?.copyrights[0].text}</Copyright>
                     </TrackListsWrap>
                 </AlbumWrap>
             )}

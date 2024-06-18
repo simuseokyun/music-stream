@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useQuery } from 'react-query';
-import { getWebToken, getSdkToken, refreshToken } from '../api/api';
+import { getWebToken, getSdkToken } from '../api/api';
 import Cookies from 'js-cookie';
 import styled from 'styled-components';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { setLocalStorage } from '../utils/util';
-import { playlistFixState, addPlaylistState, setMobile } from '../state/atoms';
+import { useRecoilValue } from 'recoil';
+import { setLocalStorage, getLocalStorage, useHandleResize, extractAuthCodeFromUrl } from '../utils/util';
+import { playlistFixFormState, addPlaylistState } from '../state/atoms';
 import { Outlet } from 'react-router-dom';
 import { SideBar } from '../components/navForm/sideBar';
 import { SearchInput } from '../components/searchForm/searchInput';
@@ -34,35 +34,25 @@ const Content = styled.div`
 `;
 
 export const HomePage = () => {
-    const addState = useRecoilValue(addPlaylistState);
-    const fixState = useRecoilValue(playlistFixState);
-    const setM = useSetRecoilState(setMobile);
-    const [isMobile, setIsMobile] = useState(false);
-    const accessToken = Cookies.get('accessToken');
+    const addFormState = useRecoilValue(addPlaylistState);
+    const fixFormState = useRecoilValue(playlistFixFormState);
+    const accessToken = getLocalStorage('sdkAccessToken');
+    const { isMobile, handleResize } = useHandleResize();
 
     const { isLoading: tokenLoading, data: tokenData } = useQuery<ISpotifyWebToken>('getWebToken', getWebToken, {
         onSuccess: (data) => {
-            setLocalStorage('webAccessToken', data.access_token);
-            setLocalStorage('webExpiration', data.expires_in);
+            const { access_token, expires_in } = data;
+            setLocalStorage('webAccessToken', access_token);
+            setLocalStorage('webExpiration', expires_in);
         },
         staleTime: 59 * 60 * 1000, // 59분으로 설정 (유효기간이 1시간)
     });
-
     const home = window.location.href;
-    const extractAuthCodeFromUrl = (url: string) => {
-        const params = new URLSearchParams(url.split('?')[1]);
-        return params.get('code');
-    };
     const authCode = extractAuthCodeFromUrl(home) || '';
-
-    const {
-        isLoading: sdkLoading,
-        data: sdkData,
-        error,
-    } = useQuery<ISpotifySdkToken>(
+    const { isLoading, data, error } = useQuery<ISpotifySdkToken>(
         'getSdkToken',
         async () => {
-            const token = Cookies.get('accessToken');
+            const token = getLocalStorage('sdkAccessToken');
             if (!token) {
                 const newTokenData = await getSdkToken(authCode);
                 return newTokenData;
@@ -72,34 +62,26 @@ export const HomePage = () => {
         {
             enabled: !!authCode,
             onSuccess: (data) => {
-                Cookies.set('accessToken', data.access_token);
-                Cookies.set('refreshToken', data.refresh_token);
+                const { access_token, refresh_token } = data;
+                setLocalStorage('sdkAccessToken', access_token);
+                Cookies.set('refreshToken', refresh_token);
                 window.history.replaceState({}, document.title, window.location.pathname);
             },
             onError: async (error) => {
-                console.log(error);
-                if (error === 401) {
-                    try {
-                        const newAccessToken = await refreshToken();
-                        return await getSdkToken(authCode);
-                    } catch (refreshError) {
-                        console.error('Token refresh failed', refreshError);
-                    }
-                }
-                console.log(error);
+                console.log('리액트 쿼리 에러');
+                // if (error === 401) {
+                //     try {
+                //         const newAccessToken = await refreshToken();
+                //         return await getSdkToken(authCode);
+                //     } catch (refreshError) {
+                //         console.error('Token refresh failed', refreshError);
+                //     }
+                // }
             },
         }
     );
 
     useEffect(() => {
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
-            if (window.innerWidth <= 768) {
-                setM((prev) => true);
-            } else {
-                setM((prev) => false);
-            }
-        };
         handleResize();
         window.addEventListener('resize', handleResize);
         return () => {
@@ -109,8 +91,8 @@ export const HomePage = () => {
 
     return (
         <Container>
-            {addState && <AddPlaylistForm />}
-            {fixState && <FixPlaylistForm />}
+            {addFormState && <AddPlaylistForm />}
+            {fixFormState && <FixPlaylistForm />}
             <SearchInput />
             <Content>
                 {isMobile ? <MobileHeader /> : <SideBar />}

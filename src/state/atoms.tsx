@@ -39,7 +39,7 @@ export const selectPlaylist = selector({
 });
 
 export const libraryPliState = atom({
-    key: 'plibraryPliState',
+    key: 'libraryPliState',
     default: true,
 });
 export const libraryAlbumState = atom({
@@ -47,29 +47,24 @@ export const libraryAlbumState = atom({
     default: false,
 });
 
-export const openSearch = atom({
-    key: 'openSearch',
+export const searchFormState = atom({
+    key: 'searchFormState',
     default: false,
 });
 
-export const titleChangeState = atom({
-    key: 'titleChangeState',
-    default: false,
-});
-
-export const playlistFixState = atom({
+export const playlistFixFormState = atom({
     key: 'playlistFixState',
     default: false,
 });
 
 export const deviceInfo = atom<string | null>({
-    key: 'device_id',
+    key: 'deviceInfo',
     default: null,
 });
 
 export const nowSongInfo = atom<INowPlaying>({
     key: 'nowSongInfo',
-    default: { title: '', cover: '', artist: '', is_playing: false },
+    default: { title: '', cover: '/images/basicPlaylist.png', artist: '', is_playing: false },
 });
 
 export enum typeTransform {

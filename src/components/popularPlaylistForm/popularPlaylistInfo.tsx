@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { IPopularPlaylistListInfo } from '../../types/popularPlaylists';
 
 const Container = styled.div`
     display: flex;
@@ -51,14 +52,7 @@ const Follower = styled.p`
     color: rgba(160, 160, 160);
 `;
 
-interface IPopularPlaylistInfo {
-    cover: string;
-    name: string;
-    description: string;
-    followers: string;
-}
-
-export const PopularPlaylistInfo = ({ cover, name, description, followers }: IPopularPlaylistInfo) => {
+export const PopularPlaylistInfo = ({ cover, name, description, followers }: IPopularPlaylistListInfo) => {
     return (
         <Container>
             <Cover src={cover}></Cover>

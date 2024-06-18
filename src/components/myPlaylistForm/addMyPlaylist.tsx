@@ -13,17 +13,17 @@ const Container = styled.div`
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.7);
-    z-index: 1;
+    z-index: 11;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 `;
-const Form = styled.div`
+const AddForm = styled.form`
     background-color: #232322;
-    width: 80%;
     max-width: 500px;
     padding: 20px;
+    width: 80%;
     border-radius: 8px;
 `;
 const FormTop = styled.div`
@@ -32,7 +32,7 @@ const FormTop = styled.div`
     align-items: center;
     margin-bottom: 20px;
 `;
-const AddForm = styled.form``;
+
 const AddFormWrap = styled.div`
     display: flex;
     align-items: start;
@@ -49,19 +49,14 @@ const FormRight = styled.div`
         margin-left: 0;
     }
 `;
-const FormTitle = styled.h1`
-    font-size: 18px;
-    @media (max-width: 768px) {
-        font-size: 16px;
-    }
-`;
-const ImgWrap = styled.div`
+const FormTitle = styled.h1``;
+const CoverWrap = styled.div`
     position: relative;
     width: 100px;
     height: 100px;
     left: calc(50% - 50px);
 `;
-const FormImg = styled.img`
+const Cover = styled.img`
     position: absolute;
     top: 0;
     left: 0;
@@ -69,7 +64,7 @@ const FormImg = styled.img`
     height: 100%;
     object-fit: cover;
 `;
-const ImgOverlay = styled.div`
+const CoverOverlay = styled.div`
     position: absolute;
     top: 0;
     left: 0;
@@ -121,8 +116,8 @@ export const AddPlaylistForm = () => {
     const setPliState = useSetRecoilState(libraryPliState);
     const setAlbumState = useSetRecoilState(libraryAlbumState);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
     const { register, handleSubmit, setValue } = useForm<{ title: string; file?: FileList }>();
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const handleClick = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
@@ -168,23 +163,23 @@ export const AddPlaylistForm = () => {
 
     return (
         <Container>
-            <Form>
+            <AddForm onSubmit={handleSubmit(onValid)}>
                 <FormTop>
                     <FormTitle>플레이리스트 생성</FormTitle>
                     <CloseBtn src="/images/closeButton.png" onClick={onClose} />
                 </FormTop>
-                <AddForm onSubmit={handleSubmit(onValid)}>
+                <AddFormWrap>
                     <AddFormWrap>
                         <FormLeft>
-                            <ImgWrap>
-                                <FormImg
+                            <CoverWrap>
+                                <Cover
                                     src={imagePreview ? imagePreview : '/images/basicPlaylist.png'}
                                     alt="Preview"
-                                ></FormImg>
-                                <ImgOverlay onClick={handleClick}>
+                                ></Cover>
+                                <CoverOverlay onClick={handleClick}>
                                     <Message>사진 선택</Message>
-                                </ImgOverlay>
-                            </ImgWrap>
+                                </CoverOverlay>
+                            </CoverWrap>
                             <Input
                                 type="file"
                                 ref={fileInputRef}
@@ -208,8 +203,8 @@ export const AddPlaylistForm = () => {
                     <BtnWrap>
                         <Btn type="submit">생성하기</Btn>
                     </BtnWrap>
-                </AddForm>
-            </Form>
+                </AddFormWrap>
+            </AddForm>
         </Container>
     );
 };

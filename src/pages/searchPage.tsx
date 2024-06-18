@@ -4,7 +4,7 @@ import { searchTrack } from '../api/api';
 import { SearchTrackItem } from '../components/searchResultForm/searchResultItem';
 import { getLocalStorage } from '../utils/util';
 import { ISearchTracks } from '../types/searchTracksInfo';
-import { Message } from '../styles/common.style';
+import { Message, Th, Tr, Table, Thead, Tbody } from '../styles/common.style';
 import { useParams } from 'react-router-dom';
 
 const Container = styled.div`
@@ -25,57 +25,11 @@ const ResultMessage = styled.h1`
     font-size: 20px;
     margin: 20px 0;
 `;
-const Table = styled.table`
-    width: 100%;
-    vertical-align: middle;
-`;
-const Thead = styled.thead`
-    width: 100%;
-`;
-const Tbody = styled.tbody`
-    width: 100%;
-`;
-const Tr = styled.tr`
-    width: 100%;
-`;
-const Th = styled.th`
-    padding: 5px 0;
-    &:first-child {
-        width: 6%;
-        text-align: left;
-        @media (max-width: 768px) {
-            width: 100px;
-        }
-    }
-
-    &:nth-child(2) {
-        width: 50%;
-        text-align: left;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        @media (max-width: 768px) {
-            width: 80%;
-        }
-    }
-    &:nth-child(3) {
-        width: 30%;
-        text-align: left;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        @media (max-width: 768px) {
-            display: none;
-        }
-    }
-    &:nth-child(4) {
-        width: 10%;
-    }
-`;
 
 export const SearchPage = () => {
     const { title } = useParams();
     const token = getLocalStorage('webAccessToken');
+
     const { isLoading: trackLoading, data: trackData } = useQuery<ISearchTracks>(['searchResult', title], async () => {
         if (token && title) {
             const trackData = await searchTrack(token, title);

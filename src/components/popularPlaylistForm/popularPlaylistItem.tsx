@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { playlistList } from '../../state/atoms';
 import { IPopularPlaylistInfoProp } from '../../types/popularPlaylists';
 import { usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
-import { Category, CategoryList, PlayBtn, Tr, AddBtn, Td } from '../../styles/common.style';
+import { Category, CategoryList, PlayBtn, Tr, AddBtn, Td, Dot } from '../../styles/common.style';
 
 const TdWrap = styled.div`
     display: flex;
@@ -66,11 +66,6 @@ const ArtistNameWrap = styled.p`
     a {
         color: rgb(160, 160, 160);
     }
-`;
-
-const Dot = styled.span`
-    color: rgb(160, 160, 160);
-    margin: 0 2px;
 `;
 
 export const PopularPlaylistTrack = ({

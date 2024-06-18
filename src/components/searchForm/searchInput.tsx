@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { openSearch } from '../../state/atoms';
+import { searchFormState } from '../../state/atoms';
 import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div<{ open: boolean }>`
@@ -41,7 +41,7 @@ const Input = styled.input`
 
 export const SearchInput = () => {
     const navigate = useNavigate();
-    const openSearch_ = useRecoilValue(openSearch);
+    const searchState = useRecoilValue(searchFormState);
     const { register, setValue, handleSubmit } = useForm<{ title: string }>();
     const onValid = ({ title }: { title: string }) => {
         setValue('title', '');
@@ -49,7 +49,7 @@ export const SearchInput = () => {
     };
 
     return (
-        <Container open={openSearch_}>
+        <Container open={searchState}>
             <Form onSubmit={handleSubmit(onValid)}>
                 <Input
                     type="text"

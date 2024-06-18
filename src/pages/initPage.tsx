@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button } from '../components/buttonForm/button';
+import { Button } from '../components/common/buttonForm/button';
 
 const Container = styled.div`
     width: 100%;

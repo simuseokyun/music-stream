@@ -1,4 +1,4 @@
-import { IButton } from '../../types/button';
+import { IButton } from '../../../types/button';
 import styled from 'styled-components';
 
 const Container = styled.button<{ $margin: string | undefined }>`

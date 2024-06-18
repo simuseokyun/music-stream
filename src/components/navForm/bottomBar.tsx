@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
-import { openSearch } from '../../state/atoms';
+import { searchFormState } from '../../state/atoms';
 import { Link } from 'react-router-dom';
 const Container = styled.div`
     width: 100%;
@@ -27,7 +27,7 @@ const Item = styled.li`
 `;
 
 export const BottomBar = () => {
-    const searchState = useSetRecoilState(openSearch);
+    const searchState = useSetRecoilState(searchFormState);
     const setSearch = () => {
         searchState((prev) => !prev);
     };

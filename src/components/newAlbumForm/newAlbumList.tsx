@@ -2,10 +2,8 @@ import styled from 'styled-components';
 import { useQuery } from 'react-query';
 import { getNewAlbum } from '../../api/api';
 import { NewAlbumItem } from './newAlbumItem';
-import { setMobile, typeTransform } from '../../state/atoms';
-import { useRecoilValue } from 'recoil';
-import { useState } from 'react';
-import { getLocalStorage } from '../../utils/util';
+import { typeTransform } from '../../state/atoms';
+import { getLocalStorage, usePagenation } from '../../utils/util';
 import { INewAlbums } from '../../types/newAlbums';
 import { NextBtn, PrevBtn, Message } from '../../styles/common.style';
 import { NewAlbumFirst } from './newAlbumFirst';
@@ -22,7 +20,7 @@ const NewAlbumList = styled.ul<{ state: string }>`
     width: 100%;
     display: grid;
     grid-template-columns: ${({ state }) => `repeat(${state === 'true' ? 3 : 4}, 1fr)`};
-    /* gap: 5px; */
+
     width: 100%;
 `;
 const BtnWrap = styled.div`
@@ -52,23 +50,8 @@ const TopWrap = styled.div`
 `;
 
 export const NewAlbum = () => {
-    const isMobile = useRecoilValue(setMobile);
+    const { index, isMobile, onNextBtn, onPrevBtn } = usePagenation();
     const offset = isMobile ? 3 : 4;
-    const [index, setIndex] = useState(0);
-    const onNextBtn = () => {
-        if (isMobile) {
-            setIndex((prev) => (prev === 6 ? 0 : prev + 1));
-        } else {
-            setIndex((prev) => (prev === 4 ? 0 : prev + 1));
-        }
-    };
-    const onPrevBtn = () => {
-        if (isMobile) {
-            setIndex((prev) => (prev === 0 ? 6 : prev - 1));
-        } else {
-            setIndex((prev) => (prev === 0 ? 4 : prev - 1));
-        }
-    };
     const token = getLocalStorage('webAccessToken');
     const {
         isLoading: newAlbumLoading,
@@ -78,7 +61,7 @@ export const NewAlbum = () => {
         'newAlbum',
         async () => {
             if (token) {
-                return getNewAlbum(token);
+                return await getNewAlbum(token);
             }
         },
         {
@@ -90,6 +73,9 @@ export const NewAlbum = () => {
     );
     if (newAlbumLoading) {
         return <Message>로딩 중</Message>;
+    }
+    if (isError) {
+        return <Message>에러 발생</Message>;
     }
     return (
         <>
