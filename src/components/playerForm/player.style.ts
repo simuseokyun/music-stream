@@ -1,14 +1,15 @@
 import styled, { keyframes, css } from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div<{ song: string }>`
     width: 100%;
     position: fixed;
     left: 0;
-    bottom: 0;
+    bottom: ${({ song }) => (song ? 0 : '-100px')};
+    transition: all 0.5s;
     z-index: 10;
     background: rgba(0, 0, 0, 0.9);
     @media (max-width: 768px) {
-        bottom: 52px;
+        bottom: ${({ song }) => (song ? '52px' : '-100px')};
     }
 `;
 

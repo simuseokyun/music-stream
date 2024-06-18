@@ -46,3 +46,16 @@ export interface IPlaylist {
     }[];
     top?: number;
 }
+export interface IMyPlaylistTracksProp {
+    tracks: {
+        id: string;
+        cover: string;
+        title: string;
+        album_title: string;
+        artists: { id: string; name: string }[];
+        uri: string;
+        duration_ms: number;
+        album_id: string;
+    }[];
+    playlist_id: string;
+}
