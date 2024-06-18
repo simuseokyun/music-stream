@@ -39,3 +39,23 @@ export interface IPopularPlaylistInfoProp {
     album_title: string;
     uri: string;
 }
+
+export interface IPopularPlaylistListInfo {
+    cover: string;
+    name: string;
+    description: string;
+    followers: string;
+}
+
+export interface IPopularPlaylistTracks {
+    data: {
+        track: {
+            id: string;
+            name: string;
+            artists: { id: string; name: string }[];
+            album: { name: string; id: string; images: { url: string }[] };
+            duration_ms: number;
+            uri: string;
+        };
+    }[];
+}
