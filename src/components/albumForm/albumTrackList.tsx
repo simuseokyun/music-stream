@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { Tr, Thead, Tbody, Table } from '../../styles/common.style';
-import { AlbumInfo } from './albumInfo';
-import { IAlbumInfo } from '../../types/albumInfo';
 import { AlbumTracks } from './albumTrackItem';
+import { IAlbumData } from '../../types/albumInfo';
 
 const Th = styled.th`
     border-bottom: 1px solid #808080;
@@ -23,25 +22,7 @@ const Th = styled.th`
         text-align: right;
     }
 `;
-interface IData {
-    data: IData2;
-}
-interface IData2 {
-    id: string;
-    name: string;
-    images: { url: string }[];
-    tracks: {
-        items: {
-            id: string;
-            track_number: number;
-            duration_ms: number;
-            uri: string;
-            name: string;
-            artists: { id: string; name: string }[];
-        }[];
-    };
-}
-export const AlbumTrackList = ({ data }: IData) => {
+export const AlbumTrackList = ({ data }: IAlbumData) => {
     return (
         <Table>
             <Thead>
