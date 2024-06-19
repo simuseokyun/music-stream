@@ -3,8 +3,8 @@ import { IAllAlbum, IArtistAlbumInfo } from '../types/albumInfo';
 import { getLocalStorage } from '../utils/util';
 
 export const getWebToken = async () => {
-    const access_token = getLocalStorage('webAccessToken');
-    const expires_in = getLocalStorage('webExpiration');
+    let access_token = getLocalStorage('webAccessToken');
+    let expires_in = getLocalStorage('webExpiration');
     const now = new Date();
     const nowTimeNumber = now.getTime();
     const client_id = process.env.REACT_APP_CLIENT_ID || '';
@@ -43,7 +43,7 @@ export const getSdkToken = async (code: string) => {
         },
         body: new URLSearchParams({
             code: code,
-            redirect_uri: redirect_uri,
+            redirect_uri,
             grant_type: 'authorization_code',
             client_id,
             client_secret,
@@ -54,6 +54,8 @@ export const getSdkToken = async (code: string) => {
 };
 export const refreshToken = async () => {
     const token = Cookies.get('refreshToken') as string;
+    const client_id = process.env.REACT_APP_CLIENT_ID || '';
+    const client_secret = process.env.REACT_APP_SECRET_ID || '';
     const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
@@ -62,8 +64,8 @@ export const refreshToken = async () => {
         body: new URLSearchParams({
             grant_type: 'refresh_token',
             refresh_token: token,
-            client_id: process.env.REACT_APP_CLIENT_ID || '',
-            client_secret: process.env.REACT_APP_SECRET_ID || '',
+            client_id: client_id,
+            client_secret: client_secret,
         }),
     });
     const json = await response.json();
@@ -137,16 +139,15 @@ export const getAllAlbums = async (token: string, artistId: string) => {
 export const getFeaturePlaylist = async (token: string) => {
     return await fetchWithToken(`https://api.spotify.com/v1/browse/featured-playlists`, token);
 };
+export const getNewAlbum = async (token: string) => {
+    return await fetchWithToken(`https://api.spotify.com/v1/browse/new-releases`, token);
+};
 export const getPopularPlaylist = async (token: string, playlistId: string) => {
     return await fetchWithToken(`https://api.spotify.com/v1/playlists/${playlistId}`, token);
 };
 
 export const getAlbum = async (token: string, albumId: string) => {
     return await fetchWithToken(`https://api.spotify.com/v1/albums/${albumId}`, token);
-};
-
-export const getNewAlbum = async (token: string) => {
-    return await fetchWithToken(`https://api.spotify.com/v1/browse/new-releases`, token);
 };
 export const getArtistAlbum = async (token: string, artistId: string) => {
     return await fetchWithToken(`https://api.spotify.com/v1/artists/${artistId}/albums`, token);
