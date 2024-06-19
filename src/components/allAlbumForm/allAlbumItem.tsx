@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { IAllAlbumProp } from '../../types/albumInfo';
 
 const Item = styled.li`
     width: 100%;
@@ -37,23 +38,13 @@ const Type = styled.span`
     margin-left: 3px;
 `;
 
-interface IAllAlbum {
-    id: string;
-    cover: string;
-    name: string;
-    release: string;
-    type: string;
-}
-
-export const AllAlbumItem = ({ id, cover, name, release, type }: IAllAlbum) => {
+export const AllAlbumItem = ({ id, cover, name, release, type }: IAllAlbumProp) => {
     const navigate = useNavigate();
+    const onClickAlbum = () => {
+        navigate(`/home/album/${id}`);
+    };
     return (
-        <Item
-            key={id}
-            onClick={() => {
-                navigate(`/home/album/${id}`);
-            }}
-        >
+        <Item onClick={onClickAlbum}>
             <Cover src={cover} />
             <Title>{name}</Title>
             <RelaseWrap>
