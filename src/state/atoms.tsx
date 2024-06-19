@@ -66,7 +66,10 @@ export const nowSongInfo = atom<INowPlaying>({
     key: 'nowSongInfo',
     default: { title: '', cover: '/images/basicPlaylist.png', artist: '', is_playing: false },
 });
-
+export const checkFormState = atom({
+    key: 'checkFormState',
+    default: false,
+});
 export enum typeTransform {
     single = '싱글',
     album = '앨범',

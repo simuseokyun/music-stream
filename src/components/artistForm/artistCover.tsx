@@ -61,24 +61,27 @@ const Follower = styled.span`
 export const ArtistCover = () => {
     const token = getLocalStorage('webAccessToken') || '';
     const { artistId } = useParams();
-    console.log(artistId, token);
     const {
-        isLoading: artistLoading,
+        isLoading,
         data: artistInfo,
         isError,
-    } = useQuery<IArtistInfo>(['artist', artistId], () => getArtist(token, artistId!));
-    if (artistLoading) {
-        return <Message>Loading...</Message>;
+    } = useQuery<IArtistInfo>('artistInfo', async () => {
+        if (artistId) {
+            return await getArtist(token, artistId);
+        }
+    });
+    if (isLoading) {
+        return <Message>로딩 중</Message>;
     }
     if (isError || !artistInfo) {
-        return <Message>Error</Message>;
+        return <Message>에러 발생</Message>;
     }
     return (
         <TopWrap>
-            <Top img={artistInfo?.images[0].url!}></Top>
+            <Top img={artistInfo?.images[0].url}></Top>
             <TopOverlay>
                 <Name>{artistInfo?.name}</Name>
-                <Follower>팔로워 : {commaSeparate(artistInfo?.followers.total!)}명</Follower>
+                <Follower>팔로워 : {commaSeparate(artistInfo?.followers.total)}명</Follower>
             </TopOverlay>
         </TopWrap>
     );

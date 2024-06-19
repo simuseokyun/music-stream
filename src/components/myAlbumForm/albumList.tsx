@@ -12,7 +12,6 @@ const Container = styled.ul`
 export const MyAlbumList = () => {
     const navigate = useNavigate();
     const myAlbumlist = useRecoilValue(myAlbumList);
-
     return (
         <Container>
             {myAlbumlist.length ? (

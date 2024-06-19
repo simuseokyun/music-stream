@@ -28,9 +28,11 @@ const Th = styled.th`
 export const TopFiveTracksTable = () => {
     const token = getLocalStorage('webAccessToken') || '';
     const { artistId } = useParams();
-    const { isLoading: topTrackLoading, data: topTrackInfo } = useQuery<IArtistTopTracks>(['topTrack', artistId], () =>
-        getArtistTopTrack(token, artistId!)
-    );
+    const { isLoading, data: topTrackInfo } = useQuery<IArtistTopTracks>(['topTrack', artistId], async () => {
+        if (artistId) {
+            return await getArtistTopTrack(token, artistId);
+        }
+    });
     return (
         <Table>
             <Thead>

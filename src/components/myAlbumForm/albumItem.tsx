@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { IMyAlbumList } from '../../types/myAlbums';
 const Item = styled.li`
     display: flex;
     align-items: center;
@@ -34,13 +35,7 @@ const Artist = styled.p`
     color: rgb(160, 160, 160);
 `;
 
-interface Test {
-    cover: string;
-    name: string;
-    artist: string;
-    onClick: () => void;
-}
-export const AlbumItem = ({ name, artist, cover, onClick }: Test) => {
+export const AlbumItem = ({ name, artist, cover, onClick }: IMyAlbumList) => {
     return (
         <Item onClick={onClick}>
             <Cover src={cover} />

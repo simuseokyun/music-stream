@@ -83,7 +83,7 @@ export const SearchTrackItem = ({
     const playlists = useRecoilValue(playlistList);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
-    const { open, toggleAddBtn, mouseLeave } = usePlaylist;
+    const { openCategory, toggleAddBtn, mouseLeave } = usePlaylist;
     const useTrack = useAddTrack(id, title, duration_ms, cover, album_title, artists, album_id, uri);
     const { addTrack } = useTrack;
 
@@ -113,7 +113,7 @@ export const SearchTrackItem = ({
             </Td>
             <Td style={{ position: 'relative' }}>
                 <AddBtn src="/images/addButton.png" onClick={toggleAddBtn} />
-                {open && (
+                {openCategory && (
                     <Category>
                         {playlists.map((playlist) => {
                             return (

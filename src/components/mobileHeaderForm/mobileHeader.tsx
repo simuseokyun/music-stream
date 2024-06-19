@@ -1,8 +1,5 @@
 import styled from 'styled-components';
-import Cookies from 'js-cookie';
 import { getLocalStorage, loginSpotify, useLogoutSpotify } from '../../utils/util';
-import { useSetRecoilState } from 'recoil';
-import { deviceInfo } from '../../state/atoms';
 import { Button } from '../common/buttonForm/button';
 const Container = styled.div`
     width: 100%;

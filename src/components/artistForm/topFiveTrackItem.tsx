@@ -52,22 +52,19 @@ export const TopFiveTracks = ({
     duration_ms,
     uri,
 }: IArtistsTopTrack) => {
-    const [playlists, setPlaylist] = useRecoilState(playlistList);
+    const playlists = useRecoilValue(playlistList);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
-    const { open, toggleAddBtn, mouseLeave } = usePlaylist;
+    const { openCategory, toggleAddBtn, mouseLeave } = usePlaylist;
     const useTrack = useAddTrack(id, title, duration_ms, cover, album_title, artists, album_id, uri);
     const { addTrack } = useTrack;
-
+    const onClickSong = () => {
+        playMusic(uri, title, cover, artists[0].name);
+    };
     return (
         <Tr onMouseLeave={mouseLeave}>
             <Td>
-                <PlayBtn
-                    src="/images/playButton.png"
-                    onClick={() => {
-                        playMusic(uri, title, cover, artists[0].name);
-                    }}
-                />
+                <PlayBtn src="/images/playButton.png" onClick={onClickSong} />
             </Td>
             <Td>
                 <TdWrap>
@@ -82,8 +79,7 @@ export const TopFiveTracks = ({
             }`}</Td>
             <Td style={{ position: 'relative' }}>
                 <AddBtn src="/images/addButton.png" onClick={toggleAddBtn} />
-
-                {open ? (
+                {openCategory ? (
                     <Category>
                         {playlists.map((playlist) => {
                             return (

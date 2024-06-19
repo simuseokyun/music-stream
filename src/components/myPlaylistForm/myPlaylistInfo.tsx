@@ -1,8 +1,11 @@
 import styled from 'styled-components';
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { playlistFixFormState, playlistList } from '../../state/atoms';
 import { Button } from '../common/buttonForm/button';
+import { useState } from 'react';
+import { checkFormState } from '../../state/atoms';
+import { CheckForm } from '../common/checkForm/checkForm';
 const Container = styled.div`
     display: flex;
     align-items: end;
@@ -64,18 +67,14 @@ export const MyPlaylistInfo = ({
     const setFixForm = useSetRecoilState(playlistFixFormState);
     const setPlaylist = useSetRecoilState(playlistList);
     const navigate = useNavigate();
-    const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const {
-            currentTarget: { name },
-        } = event;
-        setPlaylist((prev) => {
-            const newPlaylistList = prev.filter((playlist) => {
-                return playlist.title !== name;
-            });
-            return newPlaylistList;
-        });
-        navigate('/home/library');
+    const [checkForm, setCheckForm] = useRecoilState(checkFormState);
+    const onFixed = () => {
+        setFixForm(true);
     };
+    const openCheckForm = () => {
+        setCheckForm(true);
+    };
+
     const topFixed = (event: React.MouseEvent<HTMLButtonElement>) => {
         const {
             currentTarget: { name },
@@ -125,13 +124,14 @@ export const MyPlaylistInfo = ({
             return [...topPlaylist, ...botPlaylist];
         });
     };
+
     return (
         <Container>
             <Cover src={cover}></Cover>
             <Info>
                 <Title>
                     {name}
-                    <Button text="수정" margin="0 0 0 5px" bgColor="white" onClick={() => setFixForm(true)} />
+                    <Button text="수정" margin="0 0 0 5px" bgColor="white" onClick={onFixed} />
                 </Title>
                 <Length>{length + '곡'}</Length>
                 {top ? (
@@ -143,10 +143,11 @@ export const MyPlaylistInfo = ({
                         고정
                     </Btn>
                 )}
-                <Btn name={name} onClick={onDelete} style={{ marginLeft: '5px' }}>
+                <Btn name={name} onClick={openCheckForm} style={{ marginLeft: '5px' }}>
                     삭제
                 </Btn>
             </Info>
+            {checkForm && <CheckForm name={name} />}
         </Container>
     );
 };

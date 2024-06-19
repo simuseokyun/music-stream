@@ -1,14 +1,12 @@
 import styled from 'styled-components';
+import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { getLocalStorage } from '../../utils/util';
 import { getArtistAlbum } from '../../api/api';
-import { setMobile } from '../../state/atoms';
-import { useQuery } from 'react-query';
+import { setMobile, typeTransform } from '../../state/atoms';
 import { IArtistAlbums } from '../../types/artistInfo';
 import { AlbumItem } from './artistAlbumItem';
-import { typeTransform } from '../../state/atoms';
 
 const Container = styled.ul<{ state: string }>`
     width: 100%;
@@ -20,13 +18,27 @@ const Container = styled.ul<{ state: string }>`
 
 export const AlbumList = () => {
     const { artistId } = useParams();
-    console.log(artistId);
-    const navigate = useNavigate();
     const token = getLocalStorage('webAccessToken') || '';
     const isMobile = useRecoilValue(setMobile);
-    const { isLoading: albumLoading, data: albumInfo } = useQuery<IArtistAlbums>(['album', artistId], async () =>
-        getArtistAlbum(token, artistId!)
+    const {
+        isLoading,
+        data: albumInfo,
+        isError,
+    } = useQuery<IArtistAlbums>(
+        'artistAlbum',
+        async () => {
+            if (artistId) {
+                return await getArtistAlbum(token, artistId);
+            }
+        },
+        {
+            enabled: !!artistId,
+            onError: (error) => {
+                console.error('API 요청 에러');
+            },
+        }
     );
+
     return (
         <Container state={isMobile.toString()}>
             {albumInfo &&

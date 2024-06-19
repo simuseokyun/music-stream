@@ -1,10 +1,9 @@
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { addPlaylistState, libraryAlbumState, libraryPliState, playlistList } from '../../state/atoms';
-import { CloseBtn } from '../../styles/common.style';
-import { Message } from '../../styles/common.style';
-import React, { useState, useRef } from 'react';
+import { CloseBtn, Message } from '../../styles/common.style';
 
 const Container = styled.div`
     width: 100%;
@@ -169,41 +168,39 @@ export const AddPlaylistForm = () => {
                     <CloseBtn src="/images/closeButton.png" onClick={onClose} />
                 </FormTop>
                 <AddFormWrap>
-                    <AddFormWrap>
-                        <FormLeft>
-                            <CoverWrap>
-                                <Cover
-                                    src={imagePreview ? imagePreview : '/images/basicPlaylist.png'}
-                                    alt="Preview"
-                                ></Cover>
-                                <CoverOverlay onClick={handleClick}>
-                                    <Message>사진 선택</Message>
-                                </CoverOverlay>
-                            </CoverWrap>
-                            <Input
-                                type="file"
-                                ref={fileInputRef}
-                                onChange={handleFileChange}
-                                accept="image/*"
-                                style={{ display: 'none' }}
-                            />
-                        </FormLeft>
-                        <FormRight>
-                            <Title>제목</Title>
-                            <Input
-                                {...register('title', {
-                                    required: false,
-                                    maxLength: { value: 12, message: '12글자 이하로 입력해주세요' },
-                                })}
-                                type="text"
-                                placeholder="플레이리스트 이름을 작성해주세요"
-                            />
-                        </FormRight>
-                    </AddFormWrap>
-                    <BtnWrap>
-                        <Btn type="submit">생성하기</Btn>
-                    </BtnWrap>
+                    <FormLeft>
+                        <CoverWrap>
+                            <Cover
+                                src={imagePreview ? imagePreview : '/images/basicPlaylist.png'}
+                                alt="Preview"
+                            ></Cover>
+                            <CoverOverlay onClick={handleClick}>
+                                <Message>사진 선택</Message>
+                            </CoverOverlay>
+                        </CoverWrap>
+                        <Input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                        />
+                    </FormLeft>
+                    <FormRight>
+                        <Title>제목</Title>
+                        <Input
+                            {...register('title', {
+                                required: false,
+                                maxLength: { value: 12, message: '12글자 이하로 입력해주세요' },
+                            })}
+                            type="text"
+                            placeholder="플레이리스트 이름을 작성해주세요"
+                        />
+                    </FormRight>
                 </AddFormWrap>
+                <BtnWrap>
+                    <Btn type="submit">생성하기</Btn>
+                </BtnWrap>
             </AddForm>
         </Container>
     );

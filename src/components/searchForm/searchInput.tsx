@@ -25,8 +25,8 @@ const Input = styled.input`
     outline: none;
     border-radius: 20px;
     color: white;
+    background-color: rgb(40, 40, 40) !important;
     border: 1px solid transparent;
-    background-color: white;
     @media (max-width: 725px) {
         width: 200px;
         padding: 5px;

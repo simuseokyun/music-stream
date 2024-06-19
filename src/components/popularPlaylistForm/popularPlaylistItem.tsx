@@ -82,7 +82,7 @@ export const PopularPlaylistTrack = ({
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const useTrack = useAddTrack(id, title, duration, cover, album_title, artists, album_id, uri);
-    const { open, toggleAddBtn, mouseLeave } = usePlaylist;
+    const { openCategory, toggleAddBtn, mouseLeave } = usePlaylist;
     const { addTrack } = useTrack;
     const playBtn = () => playMusic(uri, title, cover, artists[0].name);
 
@@ -113,7 +113,7 @@ export const PopularPlaylistTrack = ({
             <Td>
                 <AddBtn src="/images/addButton.png" onClick={toggleAddBtn} style={{ position: 'relative' }} />
 
-                {open ? (
+                {openCategory ? (
                     <Category>
                         {playlists.map((playlist) => {
                             return (

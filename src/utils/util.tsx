@@ -124,20 +124,20 @@ export const usePlayMusic = () => {
 export const useAddPlaylist = () => {
     const playlists = useRecoilValue(playlistList);
     const addPlaylistFormState = useSetRecoilState(addPlaylistState);
-    const [open, setOpen] = useState(false);
+    const [openCategory, setOpenCategory] = useState(false);
     const toggleAddBtn = () => {
         if (!playlists.length) {
             alert('먼저 플레이리스트를 생성해주세요');
             addPlaylistFormState(true);
             return;
         }
-        setOpen(() => true);
+        setOpenCategory(() => true);
     };
 
     const mouseLeave = () => {
-        setOpen(() => false);
+        setOpenCategory(() => false);
     };
-    return { open, toggleAddBtn, mouseLeave };
+    return { openCategory, toggleAddBtn, mouseLeave };
 };
 
 //

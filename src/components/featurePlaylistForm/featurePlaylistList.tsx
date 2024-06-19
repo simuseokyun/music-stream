@@ -1,11 +1,8 @@
 import { useQuery } from 'react-query';
 import { getFeaturePlaylist } from '../../api/api';
-import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { useState } from 'react';
 import { FeaturePlaylistItem } from './featurePlaylistItem';
-import { getLocalStorage } from '../../utils/util';
-import { setMobile } from '../../state/atoms';
+import { getLocalStorage, usePagenation } from '../../utils/util';
 import { IPopularPlaylists } from '../../types/popularPlaylists';
 import { PrevBtn, NextBtn, Message } from '../../styles/common.style';
 
@@ -45,12 +42,11 @@ const TopWrap = styled.div`
 `;
 
 export const FeaturePlaylist = () => {
-    const isMobile = useRecoilValue(setMobile);
-    const offset = isMobile ? 3 : 4;
-    const [index, setIndex] = useState(0);
     const token = getLocalStorage('webAccessToken');
+    const { isMobile, index, onNextBtn, onPrevBtn } = usePagenation();
+    const offset = isMobile ? 3 : 4;
     const {
-        isLoading: playlistLoading,
+        isLoading,
         data: featurePlaylist,
         isError,
     } = useQuery<IPopularPlaylists>('newPlaylist', () => {
@@ -59,21 +55,10 @@ export const FeaturePlaylist = () => {
         }
         return Promise.resolve(null);
     });
-    const onNextBtn = () => {
-        if (isMobile) {
-            setIndex((prev) => (prev === 6 ? 0 : prev + 1));
-        } else {
-            setIndex((prev) => (prev === 4 ? 0 : prev + 1));
-        }
-    };
-    const onPrevBtn = () => {
-        if (isMobile) {
-            setIndex((prev) => (prev === 0 ? 6 : prev - 1));
-        } else {
-            setIndex((prev) => (prev === 0 ? 4 : prev - 1));
-        }
-    };
 
+    if (isError) {
+        return <Message>에러 발생</Message>;
+    }
     return (
         <>
             {featurePlaylist && (

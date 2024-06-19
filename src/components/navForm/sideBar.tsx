@@ -9,7 +9,8 @@ const Container = styled.div`
     height: 500px;
     overflow: hidden;
     position: sticky;
-    top: 0px;
+
+    top: 20px;
     @media (max-width: 768px) {
         display: none;
     }

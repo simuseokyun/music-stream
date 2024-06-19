@@ -1,8 +1,8 @@
 import { IButton } from '../../../types/button';
 import styled from 'styled-components';
 
-const Container = styled.button<{ $margin: string | undefined }>`
-    margin: ${(props) => (props.$margin ? props.$margin : '0')};
+const Container = styled.button<{ margin: string | undefined }>`
+    margin: ${(props) => (props.margin ? props.margin : '0')};
     padding: 4px 8px;
     border: none;
     border-radius: 15px;
@@ -13,7 +13,7 @@ const Container = styled.button<{ $margin: string | undefined }>`
 
 export const Button = ({ text, bgColor, onClick, margin }: IButton) => {
     return (
-        <Container $margin={margin} style={{ backgroundColor: bgColor }} onClick={onClick}>
+        <Container margin={margin} style={{ backgroundColor: bgColor }} onClick={onClick}>
             {text}
         </Container>
     );

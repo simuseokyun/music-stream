@@ -36,8 +36,9 @@ const AlbumImg = styled.img`
 
 export const AlbumItem = ({ id, name, cover, type, year }: IArtistAlbum) => {
     const navigate = useNavigate();
+    const onClickAlbum = () => navigate(`/home/album/${id}`);
     return (
-        <Container onClick={() => navigate(`/home/album/${id}`)}>
+        <Container onClick={onClickAlbum}>
             <AlbumImg src={cover} />
             <AlbumTitle>{name}</AlbumTitle>
             <AlbumReleaseWrap>

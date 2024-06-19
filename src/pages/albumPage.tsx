@@ -50,7 +50,7 @@ export const AlbumPage = () => {
         isLoading: albumLoading,
         data: albumData,
         isError,
-    } = useQuery<IAlbumInfo>([albumId], () => {
+    } = useQuery<IAlbumInfo>('albumInfo', () => {
         if (token && albumId) {
             return getAlbum(token, albumId);
         }

@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import { setLocalStorage, getLocalStorage, useHandleResize, extractAuthCodeFromUrl } from '../utils/util';
-import { playlistFixFormState, addPlaylistState } from '../state/atoms';
+import { playlistFixFormState, addPlaylistState, checkFormState } from '../state/atoms';
 import { Outlet } from 'react-router-dom';
 import { SideBar } from '../components/navForm/sideBar';
 import { SearchInput } from '../components/searchForm/searchInput';
@@ -15,12 +15,14 @@ import { FixPlaylistForm } from '../components/myPlaylistForm/fixMyplaylist';
 import { BottomBar } from '../components/navForm/bottomBar';
 import { Player } from '../components/playerForm/player';
 import { ISpotifySdkToken, ISpotifyWebToken } from '../types/auth';
+import { CheckForm } from '../components/common/checkForm/checkForm';
 
 const Container = styled.div`
     max-width: 1180px;
     margin: auto;
     width: 100%;
 `;
+
 const Content = styled.div`
     width: 100%;
     display: grid;
@@ -36,6 +38,7 @@ const Content = styled.div`
 export const HomePage = () => {
     const addFormState = useRecoilValue(addPlaylistState);
     const fixFormState = useRecoilValue(playlistFixFormState);
+
     const accessToken = getLocalStorage('sdkAccessToken');
     const { isMobile, handleResize } = useHandleResize();
 
@@ -69,14 +72,6 @@ export const HomePage = () => {
             },
             onError: async (error) => {
                 console.log('리액트 쿼리 에러');
-                // if (error === 401) {
-                //     try {
-                //         const newAccessToken = await refreshToken();
-                //         return await getSdkToken(authCode);
-                //     } catch (refreshError) {
-                //         console.error('Token refresh failed', refreshError);
-                //     }
-                // }
             },
         }
     );

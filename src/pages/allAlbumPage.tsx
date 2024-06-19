@@ -40,7 +40,7 @@ export const AllAlbumPage = () => {
         isError,
     } = useQuery('albumList', async () => {
         if (token && artistId) {
-            const response = await getAllAlbums(token, artistId!);
+            const response = await getAllAlbums(token, artistId);
             return response;
         }
     });
