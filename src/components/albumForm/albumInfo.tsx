@@ -73,29 +73,29 @@ const CloseBtn = styled.button`
 `;
 
 export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: ISelectAlbumInfo) => {
-    const [albums, setAlbum] = useRecoilState(myAlbumList);
+    const [myAlbums, setMyAlbums] = useRecoilState(myAlbumList);
     const setPliState = useSetRecoilState(libraryPliState);
     const setAlbumState = useSetRecoilState(libraryAlbumState);
     const navigate = useNavigate();
+    const saveAlbumState = [...myAlbums].find((album) => {
+        return album.name === name;
+    });
     const onClose = () => {
         navigate(-1);
     };
-    const saveAlbumState = [...albums].find((album) => {
-        return album.name === name;
-    });
     const saveAlbum = () => {
-        setAlbum((prev) => {
+        setMyAlbums((prev) => {
             return [...prev, { cover, name, artist: artist.name, id }];
         });
         setAlbumState(true);
         setPliState(false);
     };
     const deleteAlbum = () => {
-        setAlbum((prev) => {
-            const newArr = prev.filter((saveAlbum) => {
+        setMyAlbums((prev) => {
+            const newAlbums = prev.filter((saveAlbum) => {
                 return saveAlbum.name !== name;
             });
-            return newArr;
+            return newAlbums;
         });
     };
 

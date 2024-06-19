@@ -2,10 +2,8 @@ import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { playlistList } from '../../state/atoms';
-import { durationTransform, usePlayMusic } from '../../utils/util';
-import { ITrackInfo } from '../../types/albumInfo';
-import { useAddPlaylist, useAddTrack } from '../../utils/util';
-import { Category, CategoryList, Dot } from '../../styles/common.style';
+import { usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
+import { Category, CategoryList, Dot, AddBtn } from '../../styles/common.style';
 import { IAddTrack } from '../../types/myPlaylist';
 
 const Tr = styled.tr`
@@ -21,19 +19,6 @@ const Tr = styled.tr`
 const TrackArtist = styled.span``;
 const ArtistName = styled.p`
     margin-bottom: 5px;
-`;
-const rotateIn = keyframes`
-    from {
-        transform: rotate(0deg) 
-    }
-    to {
-        transform: rotate(180deg) 
-    }
-`;
-const AddBtn = styled.span`
-    &:hover {
-        animation: ${rotateIn} 1s forwards;
-    }
 `;
 
 const Td = styled.td`
@@ -64,11 +49,11 @@ export const AlbumTracks = ({ id, name, duration_ms, cover, album_title, artists
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const useTrack = useAddTrack(id, name, duration_ms, cover, album_title, artists, album_id, uri);
-    const { open, toggleAddBtn, mouseLeave } = usePlaylist;
+    const { openCategory, toggleAddBtn, mouseLeave } = usePlaylist;
     const { addTrack } = useTrack;
 
     return (
-        <Tr key={name} onMouseLeave={mouseLeave}>
+        <Tr onMouseLeave={mouseLeave}>
             <Td>
                 <PlayBtn src="/images/playButton.png" onClick={() => playMusic(uri, name, cover, artists[0].name)} />
             </Td>
@@ -83,10 +68,8 @@ export const AlbumTracks = ({ id, name, duration_ms, cover, album_title, artists
             </Td>
 
             <Td>
-                <AddBtn onClick={toggleAddBtn} style={{ position: 'relative' }} className="material-symbols-outlined">
-                    add_circle
-                </AddBtn>
-                {open ? (
+                <AddBtn src="/images/addButton.png" onClick={toggleAddBtn} style={{ position: 'relative' }} />
+                {openCategory ? (
                     <Category>
                         {playlists.map((playlist) => {
                             return (
