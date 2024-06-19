@@ -4,3 +4,10 @@ export interface IMyAlbum {
     cover: string;
     artist: string;
 }
+
+export interface IMyAlbumList {
+    cover: string;
+    name: string;
+    artist: string;
+    onClick: () => void;
+}

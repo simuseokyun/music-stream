@@ -41,12 +41,37 @@ export interface IArtistAlbumInfo {
     items: { id: string; name: string; album_type: string; images: { url: string }[]; release_date: string }[];
     next: string;
 }
+export interface IAlbumData {
+    data: IAlbumDataProp;
+}
+export interface IAlbumDataProp {
+    id: string;
+    name: string;
+    images: { url: string }[];
+    tracks: {
+        items: {
+            id: string;
+            track_number: number;
+            duration_ms: number;
+            uri: string;
+            name: string;
+            artists: { id: string; name: string }[];
+        }[];
+    };
+}
 export interface IAllAlbum {
     id: string;
     name: string;
     album_type: string;
     images: { url: string }[];
     release_date: string;
+}
+export interface IAllAlbumProp {
+    id: string;
+    cover: string;
+    name: string;
+    release: string;
+    type: string;
 }
 export interface ISelectAlbumInfo {
     id: string;
