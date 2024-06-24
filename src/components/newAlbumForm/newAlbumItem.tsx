@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { INewAlbumItemProp } from '../../types/newAlbums';
+import { useState } from 'react';
 
 const Container = styled.li`
     width: 100%;
@@ -40,15 +41,22 @@ const Artist = styled.p`
         font-size: 12px;
     }
 `;
+const LoadingSpinner = styled.img`
+    width: 100%;
+    border-radius: 8px;
+`;
 
 export const NewAlbumItem = ({ id, name, artist, cover }: INewAlbumItemProp) => {
+    const [imageLoaded, setImageLoaded] = useState(false);
     const navigate = useNavigate();
+    const onLoadImage = () => setImageLoaded(true);
     const onClickAlbum = () => {
         navigate(`/home/album/${id}`);
     };
     return (
         <Container onClick={onClickAlbum}>
-            <Cover src={cover} />
+            {!imageLoaded && <LoadingSpinner src="/images/basicPlaylist.png" />}
+            <Cover src={cover} alt="albumCover" onLoad={onLoadImage} />
             <Title>{name}</Title>
             <Artist>{artist}</Artist>
         </Container>

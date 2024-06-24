@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { IPopularPlaylist } from '../../types/popularPlaylists';
+import { useState } from 'react';
 
 const Container = styled.li`
     width: 100%;
@@ -29,12 +30,19 @@ const Title = styled.h1`
     overflow: hidden;
     text-overflow: ellipsis;
 `;
+const LoadingSpinner = styled.img`
+    width: 100%;
+    border-radius: 8px;
+`;
 
 export const FeaturePlaylistItem = ({ id, name, img }: IPopularPlaylist) => {
+    const [imageLoaded, setImageLoaded] = useState(false);
+    const onLoadImage = () => setImageLoaded(true);
     return (
         <Container>
             <Link to={`/home/popularPlaylist/${id}`}>
-                <Cover src={img} />
+                {!imageLoaded && <LoadingSpinner src="/images/basicPlaylist.png" />}
+                <Cover src={img} alt="albumCover" onLoad={onLoadImage} />
                 <Title>{name}</Title>
             </Link>
         </Container>

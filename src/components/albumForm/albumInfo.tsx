@@ -11,11 +11,9 @@ const Container = styled.div`
     background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, #392f31);
     align-items: end;
     padding: 20px;
-
     @media (max-width: 768px) {
         background: black;
     }
-
     @media (max-width: 425px) {
         display: block;
     }

@@ -39,7 +39,7 @@ const AlbumWrap = styled.div`
     }
 `;
 const TrackListsWrap = styled.div`
-    padding: 20px;
+    padding: 0 20px 20px 20px;
 `;
 
 const Copyright = styled.p`
