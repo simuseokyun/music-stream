@@ -75,8 +75,18 @@ export const Player = () => {
                 console.error('Playback Error:', message);
             });
             player.connect();
-            console.log('player 실행');
-            console.log(player);
+            player.getCurrentState().then((state) => {
+                if (!state) {
+                    console.error('User is not playing music through the Web Playback SDK');
+                    return;
+                }
+
+                var current_track = state.track_window.current_track;
+                var next_track = state.track_window.next_tracks[0];
+
+                console.log('Currently Playing', current_track);
+                console.log('Playing Next', next_track);
+            });
         };
 
         if (sdkToken) {
@@ -106,7 +116,7 @@ export const Player = () => {
     // * 노래 제목 길면 애니메이션 작동
     useEffect(() => {
         if (textRef.current && divRef.current) {
-            setShouldAnimate(textRef.current.clientWidth > divRef.current.clientWidth - 10);
+            setShouldAnimate(textRef.current.clientWidth > divRef.current.clientWidth - 50);
         }
     }, [song.title]);
 
