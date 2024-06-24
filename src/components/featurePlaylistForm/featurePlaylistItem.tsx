@@ -20,9 +20,10 @@ const Container = styled.li`
         padding: 5px;
     }
 `;
-const Cover = styled.img`
+const Cover = styled.img<{ imageLoaded: boolean }>`
     width: 100%;
     border-radius: 8px;
+    display: ${(props) => (props.imageLoaded ? 'block' : 'none')};
 `;
 const Title = styled.h1`
     margin-top: 10px;
@@ -42,7 +43,7 @@ export const FeaturePlaylistItem = ({ id, name, img }: IPopularPlaylist) => {
         <Container>
             <Link to={`/home/popularPlaylist/${id}`}>
                 {!imageLoaded && <LoadingSpinner src="/images/basicPlaylist.png" />}
-                <Cover src={img} alt="albumCover" onLoad={onLoadImage} />
+                <Cover src={img} alt="albumCover" onLoad={onLoadImage} imageLoaded={imageLoaded} />
                 <Title>{name}</Title>
             </Link>
         </Container>
