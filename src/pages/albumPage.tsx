@@ -27,13 +27,13 @@ const Container = styled.div`
 const AlbumWrap = styled.div`
     width: 90%;
     max-width: 860px;
-    height: 700px;
+    height: 80vh;
     position: relative;
     border-radius: 8px;
     overflow-y: scroll;
 `;
 const TrackListsWrap = styled.div`
-    padding: 20px;
+    padding: 20px 20px 50px 20px;
     background: linear-gradient(90deg, black 0%, #392f31);
 `;
 
