@@ -20,11 +20,11 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* padding: 50px 0; */
     box-sizing: border-box;
     z-index: 3;
 `;
 const AlbumWrap = styled.div`
+    background: linear-gradient(90deg, black 0%, #392f31);
     width: 90%;
     max-width: 860px;
     height: 80vh;
@@ -35,11 +35,11 @@ const AlbumWrap = styled.div`
     @media (max-width: 768px) {
         width: 100%;
         height: 100vh;
+        background: black;
     }
 `;
 const TrackListsWrap = styled.div`
     padding: 20px;
-    background: linear-gradient(90deg, black 0%, #392f31);
 `;
 
 const Copyright = styled.p`
