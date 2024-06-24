@@ -20,7 +20,7 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 50px 0;
+    /* padding: 50px 0; */
     box-sizing: border-box;
     z-index: 3;
 `;
@@ -30,10 +30,15 @@ const AlbumWrap = styled.div`
     height: 80vh;
     position: relative;
     border-radius: 8px;
+    padding-bottom: 100px;
     overflow-y: scroll;
+    @media (max-width: 768px) {
+        width: 100%;
+        height: 100vh;
+    }
 `;
 const TrackListsWrap = styled.div`
-    padding: 20px 20px 50px 20px;
+    padding: 20px;
     background: linear-gradient(90deg, black 0%, #392f31);
 `;
 
