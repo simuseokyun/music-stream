@@ -15,7 +15,6 @@ import { FixPlaylistForm } from '../components/myPlaylistForm/fixMyplaylist';
 import { BottomBar } from '../components/navForm/bottomBar';
 import { Player } from '../components/playerForm/player';
 import { ISpotifySdkToken, ISpotifyWebToken } from '../types/auth';
-import { CheckForm } from '../components/common/checkForm/checkForm';
 
 const Container = styled.div`
     max-width: 1180px;

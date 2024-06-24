@@ -54,7 +54,7 @@ export const commaSeparate = (num: number) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
-export async function playSong(trackUri: string, deviceId?: string) {
+export async function playSong(trackUri: string, deviceId: string) {
     const token = getLocalStorage('sdkAccessToken');
     const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
         method: 'PUT',
@@ -66,7 +66,6 @@ export async function playSong(trackUri: string, deviceId?: string) {
             uris: [trackUri],
         }),
     });
-
     if (response.status === 401) {
         try {
             const { access_token } = await refreshToken();
@@ -109,7 +108,7 @@ export const usePlayMusic = () => {
                     return { title, cover, artist, is_playing: true };
                 });
             } else {
-                console.log('이유가 뭘까 ?');
+                alert('세션이 만료되었습니다');
             }
         } catch (error) {
             console.error('노래를 재생하는 중 에러 발생:');
