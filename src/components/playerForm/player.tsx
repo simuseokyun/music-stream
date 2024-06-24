@@ -106,7 +106,7 @@ export const Player = () => {
     // * 노래 제목 길면 애니메이션 작동
     useEffect(() => {
         if (textRef.current && divRef.current) {
-            setShouldAnimate(textRef.current.clientWidth > divRef.current.clientWidth);
+            setShouldAnimate(textRef.current.clientWidth > divRef.current.clientWidth - 10);
         }
     }, [song.title]);
 
