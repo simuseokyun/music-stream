@@ -2,6 +2,7 @@ import { atom, selector } from 'recoil';
 import { IPlaylist } from '../types/myPlaylist';
 import { IMyAlbum } from '../types/myAlbums';
 import { INowPlaying } from '../types/nowPlaying';
+import { IPlayerTracks } from '../types/player';
 
 export const setMobile = atom({
     key: 'isMobile',
@@ -69,6 +70,16 @@ export const nowSongInfo = atom<INowPlaying>({
 export const checkFormState = atom({
     key: 'checkFormState',
     default: false,
+});
+
+export const playerTracks = atom<IPlayerTracks[]>({
+    key: 'playerTracks',
+    default: [],
+});
+
+export const playerPrevAndNext = atom<IPlayerTracks[]>({
+    key: 'playerPrevAndNext',
+    default: [],
 });
 export enum typeTransform {
     single = '싱글',
