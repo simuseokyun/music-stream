@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { playlistList } from '../../state/atoms';
 import { usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
 import { Category, CategoryList, Dot, AddBtn } from '../../styles/common.style';
@@ -52,10 +52,14 @@ export const AlbumTracks = ({ id, name, duration_ms, cover, album_title, artists
     const { openCategory, toggleAddBtn, mouseLeave } = usePlaylist;
     const { addTrack } = useTrack;
 
+    const clickSong = () => {
+        playMusic(uri, name, cover, artists[0].name);
+    };
+
     return (
         <Tr onMouseLeave={mouseLeave}>
             <Td>
-                <PlayBtn src="/images/playButton.png" onClick={() => playMusic(uri, name, cover, artists[0].name)} />
+                <PlayBtn src="/images/playButton.png" onClick={clickSong} />
             </Td>
             <Td>
                 <ArtistName>{name}</ArtistName>

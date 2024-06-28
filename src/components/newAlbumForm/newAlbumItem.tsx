@@ -15,10 +15,13 @@ const Container = styled.li`
         padding: 5px;
     }
 `;
-const Cover = styled.img<{ imageLoaded: boolean }>`
+interface CoverProps {
+    loaded: string;
+}
+const Cover = styled.img<CoverProps>`
     width: 100%;
     border-radius: 8px;
-    display: ${(props) => (props.imageLoaded ? 'block' : 'none')};
+    display: ${(props) => (props.loaded == 'true' ? 'block' : 'none')};
 `;
 const Title = styled.h1`
     width: 100%;
@@ -57,7 +60,7 @@ export const NewAlbumItem = ({ id, name, artist, cover }: INewAlbumItemProp) => 
     return (
         <Container onClick={onClickAlbum}>
             {!imageLoaded && <LoadingSpinner src="/images/basicPlaylist.png" />}
-            <Cover src={cover} alt="albumCover" onLoad={onLoadImage} imageLoaded={imageLoaded} />
+            <Cover src={cover} alt="albumCover" onLoad={onLoadImage} loaded={imageLoaded.toString()} />
             <Title>{name}</Title>
             <Artist>{artist}</Artist>
         </Container>
