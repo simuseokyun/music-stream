@@ -43,10 +43,34 @@ export const PlayerRight = styled.div`
 
 export const PlayerCenter = styled.div`
     flex: 1;
-    text-align: center;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
     @media (max-width: 768px) {
-        text-align: right;
+        justify-content: right;
     }
+`;
+export const Artists = styled.p`
+    font-size: 12px;
+    color: rgb(160, 160, 160);
+    margin-top: 5px;
+`;
+export const StopBtn = styled.img`
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+`;
+export const PlayBtn = styled(StopBtn)``;
+export const PrevBtn = styled.img`
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+`;
+export const NextBtn = styled(PrevBtn)`
+    margin-left: 10px;
 `;
 export const Cover = styled.img`
     width: 50px;
@@ -79,16 +103,6 @@ export const Title = styled.p.withConfig({
     }
 `;
 
-export const Artists = styled.p`
-    font-size: 12px;
-    color: rgb(160, 160, 160);
-    margin-top: 5px;
-`;
-export const SongBtn = styled.span`
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
-`;
 export const marquee = keyframes`
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
