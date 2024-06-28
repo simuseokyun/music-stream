@@ -11,15 +11,13 @@ import { theme } from './theme';
 const client = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-    <React.StrictMode>
-        <RecoilRoot>
-            <QueryClientProvider client={client}>
-                <CookiesProvider>
-                    <ThemeProvider theme={theme}>
-                        <RouterProvider router={router}></RouterProvider>
-                    </ThemeProvider>
-                </CookiesProvider>
-            </QueryClientProvider>
-        </RecoilRoot>
-    </React.StrictMode>
+    <RecoilRoot>
+        <QueryClientProvider client={client}>
+            <CookiesProvider>
+                <ThemeProvider theme={theme}>
+                    <RouterProvider router={router}></RouterProvider>
+                </ThemeProvider>
+            </CookiesProvider>
+        </QueryClientProvider>
+    </RecoilRoot>
 );

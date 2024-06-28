@@ -1,4 +1,4 @@
-import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { deviceInfo, nowSongInfo, playerPrevAndNext } from '../../state/atoms';
 import { useEffect, useRef, useState } from 'react';
 import { useToggleSong, getLocalStorage, setLocalStorage, usePlayMusic } from '../../utils/util';
@@ -6,8 +6,7 @@ import * as S from './player.style';
 import { refreshToken } from '../../api/api';
 
 export const Player = () => {
-    let player;
-    const [device, setDevice] = useRecoilState(deviceInfo);
+    const setDevice = useSetRecoilState(deviceInfo);
     const song = useRecoilValue(nowSongInfo);
     const [shouldAnimate, setShouldAnimate] = useState(false);
     const textRef = useRef<HTMLParagraphElement>(null);

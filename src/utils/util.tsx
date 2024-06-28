@@ -101,7 +101,7 @@ export async function playSong(trackUri: string, deviceId: string) {
 // * 노래 재생 로직
 export const usePlayMusic = () => {
     const accessToken = getLocalStorage('sdkAccessToken');
-    const deviceId = useRecoilValue(deviceInfo);
+    const [deviceId, setDevice] = useRecoilState(deviceInfo);
     const setNowSong = useSetRecoilState(nowSongInfo);
     const allTrackValue = useRecoilValue(playerTracks);
     const setPlayerTracks = useSetRecoilState(playerPrevAndNext);
@@ -120,7 +120,57 @@ export const usePlayMusic = () => {
                     return { title, cover, artist, is_playing: true };
                 });
             } else {
-                alert('세션이 만료되었습니다');
+                const newToken = await refreshToken(); // 새로운 토큰을 가져옵니다.
+                if (newToken) {
+                    setLocalStorage('sdkAccessToken', newToken);
+                    const createPlayer = () => {
+                        const player = new window.Spotify.Player({
+                            name: '테스트 플레이어',
+                            getOAuthToken: (cb) => {
+                                cb(newToken);
+                            },
+                            volume: 0.5,
+                        });
+                        player.addListener('ready', ({ device_id }) => {
+                            console.log('플레이어 준비됨, device_id:', device_id);
+                            setDevice(device_id);
+                        });
+                        player.addListener('not_ready', ({ device_id }) => {
+                            console.log('플레이어 준비 안됨, device_id:', device_id);
+                        });
+
+                        player.addListener('initialization_error', ({ message }) => {
+                            console.error('Initialization Error:', message);
+                        });
+
+                        player.addListener('authentication_error', ({ message }) => {
+                            console.error('Authentication Error:', message);
+                        });
+
+                        player.addListener('account_error', ({ message }) => {
+                            console.error('Account Error:', message);
+                        });
+
+                        player.addListener('playback_error', ({ message }) => {
+                            console.error('Playback Error:', message);
+                        });
+                        player.connect();
+                    };
+                    createPlayer(); // 새로운 디바이스 ID를 가져옵니다.
+                    if (deviceId) {
+                        await playSong(trackUri, deviceId);
+                        setNowSong((prev) => ({
+                            title,
+                            cover,
+                            artist,
+                            is_playing: true,
+                        }));
+                    } else {
+                        alert('세션이 만료되었습니다');
+                    }
+                } else {
+                    alert('세션이 만료되었습니다');
+                }
             }
         } catch (error) {
             console.error('노래를 재생하는 중 에러 발생:');
@@ -260,4 +310,40 @@ export const usePagenation = () => {
         }
     };
     return { isMobile, index, setIndex, onNextBtn, onPrevBtn };
+};
+
+export const useCreatePlayer = () => {
+    const sdkToken = getLocalStorage('sdkAccessToken');
+    const setDevice = useSetRecoilState(deviceInfo);
+    const player = new window.Spotify.Player({
+        name: '테스트 플레이어',
+        getOAuthToken: (cb) => {
+            cb(sdkToken!);
+        },
+        volume: 0.5,
+    });
+    player.addListener('ready', ({ device_id }) => {
+        console.log('플레이어 준비됨, device_id:', device_id);
+        setDevice(device_id);
+    });
+    player.addListener('not_ready', ({ device_id }) => {
+        console.log('플레이어 준비 안됨, device_id:', device_id);
+    });
+
+    player.addListener('initialization_error', ({ message }) => {
+        console.error('Initialization Error:', message);
+    });
+
+    player.addListener('authentication_error', ({ message }) => {
+        console.error('Authentication Error:', message);
+    });
+
+    player.addListener('account_error', ({ message }) => {
+        console.error('Account Error:', message);
+    });
+
+    player.addListener('playback_error', ({ message }) => {
+        console.error('Playback Error:', message);
+    });
+    player.connect();
 };

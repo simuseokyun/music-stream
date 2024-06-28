@@ -13,7 +13,7 @@ import { AddPlaylistForm } from '../components/myPlaylistForm/addMyPlaylist';
 import { MobileHeader } from '../components/mobileHeaderForm/mobileHeader';
 import { FixPlaylistForm } from '../components/myPlaylistForm/fixMyplaylist';
 import { BottomBar } from '../components/navForm/bottomBar';
-import { Player } from '../components/playerForm/player';
+import { Player } from '../components/playerForm/player잠깐주석';
 import { ISpotifySdkToken, ISpotifyWebToken } from '../types/auth';
 
 const Container = styled.div`
