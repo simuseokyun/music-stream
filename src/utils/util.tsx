@@ -1,6 +1,14 @@
 import Cookies from 'js-cookie';
 import { refreshToken } from '../api/api';
-import { deviceInfo, setMobile, addPlaylistState, nowSongInfo, playlistList } from '../state/atoms';
+import {
+    deviceInfo,
+    setMobile,
+    addPlaylistState,
+    nowSongInfo,
+    playlistList,
+    playerPrevAndNext,
+    playerTracks,
+} from '../state/atoms';
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import { useState, useRef } from 'react';
 
@@ -95,8 +103,12 @@ export const usePlayMusic = () => {
     const accessToken = getLocalStorage('sdkAccessToken');
     const deviceId = useRecoilValue(deviceInfo);
     const setNowSong = useSetRecoilState(nowSongInfo);
+    const allTrackValue = useRecoilValue(playerTracks);
+    const setPlayerTracks = useSetRecoilState(playerPrevAndNext);
     const playMusic = async (trackUri: string, title: string, cover: string, artist: string) => {
-        console.log(accessToken, deviceId);
+        const targetIndex = allTrackValue.findIndex((track) => track.uri === trackUri);
+        const [previousTrack, nextTrack] = [allTrackValue[targetIndex - 1], allTrackValue[targetIndex + 1]];
+        setPlayerTracks([{ ...previousTrack }, { ...nextTrack }]);
         try {
             if (!accessToken) {
                 alert('로그인이 필요한 서비스입니다');
