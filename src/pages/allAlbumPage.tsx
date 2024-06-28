@@ -38,7 +38,7 @@ export const AllAlbumPage = () => {
         isLoading,
         data: allAlbumList,
         isError,
-    } = useQuery('albumList', async () => {
+    } = useQuery(['allAlbum', artistId], async () => {
         if (token && artistId) {
             const response = await getAllAlbums(token, artistId);
             return response;

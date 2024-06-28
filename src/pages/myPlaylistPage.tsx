@@ -39,7 +39,6 @@ const PlaylistBot = styled.div`
 
 export const MyPlaylistPage = () => {
     const playlist = useRecoilValue(selectPlaylist);
-
     const setPlayerTracks = useSetRecoilState(playerTracks);
     useEffect(() => {
         if (playlist) {

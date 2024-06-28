@@ -65,7 +65,7 @@ export const ArtistCover = () => {
         isLoading,
         data: artistInfo,
         isError,
-    } = useQuery<IArtistInfo>('artistInfo', async () => {
+    } = useQuery<IArtistInfo>(['artistInfo', artistId], async () => {
         if (artistId) {
             return await getArtist(token, artistId);
         }

@@ -58,7 +58,7 @@ export const AlbumPage = () => {
         data: albumData,
         isError,
     } = useQuery<IAlbumInfo>(
-        'albumInfo',
+        ['albumInfo', albumId],
         () => {
             if (token && albumId) {
                 return getAlbum(token, albumId);
@@ -71,8 +71,8 @@ export const AlbumPage = () => {
                     const trackSummaries = data.tracks.items.map((track) => ({
                         uri: track.uri,
                         title: track.name,
-                        name: track.artists[0].name || '',
-                        cover: data.images[0].url || '',
+                        name: track.artists[0].name,
+                        cover: data.images[0].url,
                     }));
                     setPlayerTracks(trackSummaries);
                 }
@@ -89,7 +89,7 @@ export const AlbumPage = () => {
     return (
         <Container>
             {albumData && (
-                <AlbumWrap>
+                <AlbumWrap key={albumData?.id}>
                     <AlbumInfo
                         id={albumData?.id}
                         name={albumData?.name}

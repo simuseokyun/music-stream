@@ -9,6 +9,8 @@ import { PopularPlaylistList } from '../components/popularPlaylistForm/popularPl
 import { Message } from '../styles/common.style';
 import { useSetRecoilState } from 'recoil';
 import { playerTracks } from '../state/atoms';
+import { useQueryClient } from 'react-query';
+import { useEffect } from 'react';
 
 const Container = styled.div`
     width: 100%;
@@ -41,7 +43,7 @@ export const PopularPlaylistPage = () => {
         data: popularData,
         isError,
     } = useQuery<IPopularPlaylistInfo>(
-        'popularId',
+        ['popularPlaylistInfo', playlistId],
         async () => {
             if (token && playlistId) {
                 return await getPopularPlaylist(token, playlistId);
@@ -61,6 +63,7 @@ export const PopularPlaylistPage = () => {
             },
         }
     );
+
     if (popularLoading) {
         return <Message>로딩 중</Message>;
     }
@@ -70,7 +73,7 @@ export const PopularPlaylistPage = () => {
     return (
         <Container>
             {popularData && (
-                <PlaylistWrap>
+                <PlaylistWrap key={popularData.id}>
                     <PopularPlaylistInfo
                         cover={popularData.images[0].url}
                         name={popularData.name}
