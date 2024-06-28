@@ -37,7 +37,6 @@ const Content = styled.div`
 export const HomePage = () => {
     const addFormState = useRecoilValue(addPlaylistState);
     const fixFormState = useRecoilValue(playlistFixFormState);
-
     const accessToken = getLocalStorage('sdkAccessToken');
     const { isMobile, handleResize } = useHandleResize();
 

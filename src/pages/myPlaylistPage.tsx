@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { selectPlaylist } from '../state/atoms';
-import { useRecoilValue } from 'recoil';
+import { selectPlaylist, playerTracks } from '../state/atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useEffect } from 'react';
 import { MyPlaylistInfo } from '../components/myPlaylistForm/myPlaylistInfo';
 import { Message } from '../styles/common.style';
 import { MyPlaylistTrackTable } from '../components/myPlaylistForm/myPlaylistTrackTable';
@@ -38,6 +39,19 @@ const PlaylistBot = styled.div`
 
 export const MyPlaylistPage = () => {
     const playlist = useRecoilValue(selectPlaylist);
+    const setPlayerTracks = useSetRecoilState(playerTracks);
+    useEffect(() => {
+        if (playlist) {
+            const trackSummaries = playlist.tracks.map((track) => ({
+                uri: track.uri,
+                title: track.title,
+                name: track.artists[0].name,
+                cover: track.cover,
+            }));
+            setPlayerTracks(trackSummaries);
+        }
+    }, [playlist]);
+
     return (
         <Container>
             {playlist ? (

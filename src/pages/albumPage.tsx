@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { typeTransform } from '../state/atoms';
+import { playerTracks, typeTransform } from '../state/atoms';
 import { useQuery } from 'react-query';
 import { getAlbum } from '../api/api';
 import { getLocalStorage } from '../utils/util';
@@ -8,6 +8,7 @@ import { IAlbumInfo } from '../types/albumInfo';
 import { Message } from '../styles/common.style';
 import { AlbumInfo } from '../components/albumForm/albumInfo';
 import { AlbumTrackList } from '../components/albumForm/albumTrackList';
+import { useSetRecoilState } from 'recoil';
 
 const Container = styled.div`
     background-color: rgba(0, 0, 0, 0.7);
@@ -51,16 +52,33 @@ const Copyright = styled.p`
 export const AlbumPage = () => {
     const { albumId } = useParams();
     const token = getLocalStorage('webAccessToken');
+    const setPlayerTracks = useSetRecoilState(playerTracks);
     const {
         isLoading: albumLoading,
         data: albumData,
         isError,
-    } = useQuery<IAlbumInfo>('albumInfo', () => {
-        if (token && albumId) {
-            return getAlbum(token, albumId);
+    } = useQuery<IAlbumInfo>(
+        'albumInfo',
+        () => {
+            if (token && albumId) {
+                return getAlbum(token, albumId);
+            }
+            return Promise.resolve(null);
+        },
+        {
+            onSuccess: (data) => {
+                if (data && data.tracks && data.tracks.items) {
+                    const trackSummaries = data.tracks.items.map((track) => ({
+                        uri: track.uri,
+                        title: track.name,
+                        name: track.artists[0].name || '',
+                        cover: data.images[0].url || '',
+                    }));
+                    setPlayerTracks(trackSummaries);
+                }
+            },
         }
-        return Promise.resolve(null);
-    });
+    );
 
     if (albumLoading) {
         return <Message>로딩 중</Message>;

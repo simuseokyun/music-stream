@@ -3,9 +3,11 @@ import styled from 'styled-components';
 import { searchTrack } from '../api/api';
 import { SearchTrackItem } from '../components/searchResultForm/searchResultItem';
 import { getLocalStorage } from '../utils/util';
+import { useSetRecoilState } from 'recoil';
 import { ISearchTracks } from '../types/searchTracksInfo';
 import { Message, Th, Tr, Table, Thead, Tbody } from '../styles/common.style';
 import { useParams } from 'react-router-dom';
+import { nowSongInfo, playerTracks } from '../state/atoms';
 
 const Container = styled.div`
     padding: 20px;
@@ -29,13 +31,29 @@ const ResultMessage = styled.h1`
 export const SearchPage = () => {
     const { title } = useParams();
     const token = getLocalStorage('webAccessToken');
-
-    const { isLoading: trackLoading, data: trackData } = useQuery<ISearchTracks>(['searchResult', title], async () => {
-        if (token && title) {
-            const trackData = await searchTrack(token, title);
-            return trackData;
+    const setPlayerTracks = useSetRecoilState(playerTracks);
+    const { isLoading: trackLoading, data: trackData } = useQuery<ISearchTracks>(
+        ['searchResult', title],
+        async () => {
+            if (token && title) {
+                const searchTracks = await searchTrack(token, title);
+                return searchTracks;
+            }
+        },
+        {
+            onSuccess: (data) => {
+                if (data && data.tracks && data.tracks.items) {
+                    const trackSummaries = data.tracks.items.map((track) => ({
+                        uri: track.uri,
+                        title: track.name,
+                        name: track.album.artists[0].name || '',
+                        cover: track.album.images[0]?.url || '',
+                    }));
+                    setPlayerTracks(trackSummaries);
+                }
+            },
         }
-    });
+    );
     if (trackLoading) {
         return <Message>로딩 중</Message>;
     }

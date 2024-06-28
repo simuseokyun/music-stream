@@ -7,6 +7,8 @@ import { IPopularPlaylistInfo } from '../types/popularPlaylists';
 import { PopularPlaylistInfo } from '../components/popularPlaylistForm/popularPlaylistInfo';
 import { PopularPlaylistList } from '../components/popularPlaylistForm/popularPlaylistList';
 import { Message } from '../styles/common.style';
+import { useSetRecoilState } from 'recoil';
+import { playerTracks } from '../state/atoms';
 
 const Container = styled.div`
     width: 100%;
@@ -33,15 +35,32 @@ const PlaylistWrap = styled.div`
 export const PopularPlaylistPage = () => {
     const { playlistId } = useParams();
     const token = getLocalStorage('webAccessToken');
+    const setPlayerTracks = useSetRecoilState(playerTracks);
     const {
         isLoading: popularLoading,
         data: popularData,
         isError,
-    } = useQuery<IPopularPlaylistInfo>('popularId', async () => {
-        if (token && playlistId) {
-            return await getPopularPlaylist(token, playlistId);
+    } = useQuery<IPopularPlaylistInfo>(
+        'popularId',
+        async () => {
+            if (token && playlistId) {
+                return await getPopularPlaylist(token, playlistId);
+            }
+        },
+        {
+            onSuccess: (data) => {
+                if (data && data.tracks && data.tracks.items) {
+                    const trackSummaries = data.tracks.items.map((track) => ({
+                        uri: track.track.uri,
+                        title: track.track.name,
+                        name: track.track.artists[0].name || '',
+                        cover: track.track.album.images[0].url || '',
+                    }));
+                    setPlayerTracks(trackSummaries);
+                }
+            },
         }
-    });
+    );
     if (popularLoading) {
         return <Message>로딩 중</Message>;
     }
