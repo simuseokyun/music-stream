@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { playlistList } from '../../state/atoms';
+
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { playlistList, playerPrevAndNext } from '../../state/atoms';
 import { IPopularPlaylistInfoProp } from '../../types/popularPlaylists';
 import { usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
 import { Category, CategoryList, PlayBtn, Tr, AddBtn, Td, Dot } from '../../styles/common.style';
@@ -10,42 +11,6 @@ const TdWrap = styled.div`
     display: flex;
     align-items: center;
 `;
-
-//     cursor: pointer;
-//     padding: 5px 0;
-//     max-width: 0;
-//     overflow: hidden;
-//     &:first-child {
-//         width: 6%;
-//         text-align: left;
-//         @media (max-width: 425px) {
-//             width: 100px;
-//         }
-//     }
-
-//     &:nth-child(2) {
-//         width: 50%;
-//         text-overflow: ellipsis;
-//         white-space: nowrap;
-//         overflow: hidden;
-//         @media (max-width: 768px) {
-//             width: 80%;
-//         }
-//     }
-//     &:nth-child(3) {
-//         width: 30%;
-//         text-align: left;
-//         text-overflow: ellipsis;
-//         white-space: nowrap;
-//         overflow: hidden;
-//         @media (max-width: 768px) {
-//             display: none;
-//         }
-//     }
-//     &:nth-child(4) {
-//         width: 5%;
-//     }
-// `;
 const Cover = styled.img`
     width: 45px;
     height: 45px;
@@ -81,6 +46,7 @@ export const PopularPlaylistTrack = ({
     const playlists = useRecoilValue(playlistList);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
+    const setPlayerTracks = useSetRecoilState(playerPrevAndNext);
     const useTrack = useAddTrack(id, title, duration, cover, album_title, artists, album_id, uri);
     const { openCategory, toggleAddBtn, mouseLeave } = usePlaylist;
     const { addTrack } = useTrack;
@@ -112,7 +78,6 @@ export const PopularPlaylistTrack = ({
             </Td>
             <Td>
                 <AddBtn src="/images/addButton.png" onClick={toggleAddBtn} style={{ position: 'relative' }} />
-
                 {openCategory ? (
                     <Category>
                         {playlists.map((playlist) => {
