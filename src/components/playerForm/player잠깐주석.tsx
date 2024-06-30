@@ -5,7 +5,7 @@ import { useToggleSong, getLocalStorage, setLocalStorage, usePlayMusic } from '.
 import * as S from './player.style';
 import { refreshToken } from '../../api/api';
 
-export const Player = () => {
+export const Player2 = () => {
     const setDevice = useSetRecoilState(deviceInfo);
     const song = useRecoilValue(nowSongInfo);
     const [shouldAnimate, setShouldAnimate] = useState(false);
