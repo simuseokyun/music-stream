@@ -7,7 +7,7 @@ import { refreshToken } from '../../api/api';
 import { timeStamp } from 'console';
 
 export const Player = () => {
-    const [device, setDevice] = useRecoilState(deviceInfo);
+    const setDevice = useSetRecoilState(deviceInfo);
     const [song, setSong] = useRecoilState(nowSongInfo);
     const [shouldAnimate, setShouldAnimate] = useState(false);
     const textRef = useRef<HTMLParagraphElement>(null);
