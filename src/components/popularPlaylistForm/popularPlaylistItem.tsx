@@ -46,7 +46,6 @@ export const PopularPlaylistTrack = ({
     const playlists = useRecoilValue(playlistList);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
-    const setPlayerTracks = useSetRecoilState(playerPrevAndNext);
     const useTrack = useAddTrack(id, title, duration, cover, album_title, artists, album_id, uri);
     const { openCategory, toggleAddBtn, mouseLeave } = usePlaylist;
     const { addTrack } = useTrack;

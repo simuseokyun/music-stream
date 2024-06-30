@@ -13,8 +13,9 @@ import { AddPlaylistForm } from '../components/myPlaylistForm/addMyPlaylist';
 import { MobileHeader } from '../components/mobileHeaderForm/mobileHeader';
 import { FixPlaylistForm } from '../components/myPlaylistForm/fixMyplaylist';
 import { BottomBar } from '../components/navForm/bottomBar';
-import { Player } from '../components/playerForm/player잠깐주석';
+import { Player } from '../components/playerForm/player';
 import { ISpotifySdkToken, ISpotifyWebToken } from '../types/auth';
+import { access } from 'fs';
 
 const Container = styled.div`
     max-width: 1180px;
@@ -51,7 +52,7 @@ export const HomePage = () => {
     const home = window.location.href;
     const authCode = extractAuthCodeFromUrl(home) || '';
     const { isLoading, data, error } = useQuery<ISpotifySdkToken>(
-        'getSdkToken',
+        ['getSdkToken', accessToken],
         async () => {
             const token = getLocalStorage('sdkAccessToken');
             if (!token) {

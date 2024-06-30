@@ -7,11 +7,8 @@ import { IPopularPlaylistInfo } from '../types/popularPlaylists';
 import { PopularPlaylistInfo } from '../components/popularPlaylistForm/popularPlaylistInfo';
 import { PopularPlaylistList } from '../components/popularPlaylistForm/popularPlaylistList';
 import { Message } from '../styles/common.style';
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { playerTracks } from '../state/atoms';
-import { useQueryClient } from 'react-query';
-import { useEffect } from 'react';
-
 const Container = styled.div`
     width: 100%;
     padding: 20px;
@@ -38,6 +35,7 @@ export const PopularPlaylistPage = () => {
     const { playlistId } = useParams();
     const token = getLocalStorage('webAccessToken');
     const setPlayerTracks = useSetRecoilState(playerTracks);
+
     const {
         isLoading: popularLoading,
         data: popularData,
@@ -63,7 +61,7 @@ export const PopularPlaylistPage = () => {
             },
         }
     );
-
+    // console.log(popularData);
     if (popularLoading) {
         return <Message>로딩 중</Message>;
     }

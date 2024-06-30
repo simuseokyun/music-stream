@@ -6,7 +6,8 @@ import { useParams } from 'react-router-dom';
 import { getArtistTopTrack } from '../../api/api';
 import { getLocalStorage } from '../../utils/util';
 import { TopFiveTracks } from './topFiveTrackItem';
-
+import { useSetRecoilState } from 'recoil';
+import { playerTracks } from '../../state/atoms';
 const Th = styled.th`
     padding: 5px;
     &:first-child {
@@ -28,11 +29,28 @@ const Th = styled.th`
 export const TopFiveTracksTable = () => {
     const token = getLocalStorage('webAccessToken') || '';
     const { artistId } = useParams();
-    const { isLoading, data: topTrackInfo } = useQuery<IArtistTopTracks>(['topTrack', artistId], async () => {
-        if (artistId) {
-            return await getArtistTopTrack(token, artistId);
+    const setPlayerTracks = useSetRecoilState(playerTracks);
+    const { isLoading, data: topTrackInfo } = useQuery<IArtistTopTracks>(
+        ['topTrack', artistId],
+        async () => {
+            if (artistId) {
+                return await getArtistTopTrack(token, artistId);
+            }
+        },
+        {
+            onSuccess: (data) => {
+                if (data && data.tracks && data.tracks) {
+                    const trackSummaries = data.tracks.map((track) => ({
+                        uri: track.uri,
+                        title: track.name,
+                        name: track.artists[0].name || '',
+                        cover: track.album.images[0]?.url || '',
+                    }));
+                    setPlayerTracks(trackSummaries);
+                }
+            },
         }
-    });
+    );
     return (
         <Table>
             <Thead>

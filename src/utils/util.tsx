@@ -105,10 +105,12 @@ export const usePlayMusic = () => {
     const setNowSong = useSetRecoilState(nowSongInfo);
     const allTrackValue = useRecoilValue(playerTracks);
     const setPlayerTracks = useSetRecoilState(playerPrevAndNext);
+
     const playMusic = async (trackUri: string, title: string, cover: string, artist: string) => {
         const targetIndex = allTrackValue.findIndex((track) => track.uri === trackUri);
         const [previousTrack, nextTrack] = [allTrackValue[targetIndex - 1], allTrackValue[targetIndex + 1]];
         setPlayerTracks([{ ...previousTrack }, { ...nextTrack }]);
+
         try {
             if (!accessToken) {
                 alert('로그인이 필요한 서비스입니다');
@@ -166,10 +168,10 @@ export const usePlayMusic = () => {
                             is_playing: true,
                         }));
                     } else {
-                        alert('세션이 만료되었습니다');
+                        alert('세션이 만료');
                     }
                 } else {
-                    alert('세션이 만료되었습니다');
+                    alert('세션이 만료2');
                 }
             }
         } catch (error) {

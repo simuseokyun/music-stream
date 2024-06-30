@@ -4,11 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useToggleSong, getLocalStorage, setLocalStorage, usePlayMusic } from '../../utils/util';
 import * as S from './player.style';
 import { refreshToken } from '../../api/api';
+import { timeStamp } from 'console';
 
 export const Player = () => {
-    let player;
     const [device, setDevice] = useRecoilState(deviceInfo);
-    const song = useRecoilValue(nowSongInfo);
+    const [song, setSong] = useRecoilState(nowSongInfo);
     const [shouldAnimate, setShouldAnimate] = useState(false);
     const textRef = useRef<HTMLParagraphElement>(null);
     const divRef = useRef<HTMLDivElement>(null);
@@ -33,11 +33,66 @@ export const Player = () => {
         }
     };
 
-    const checkTokenValidity = async (token: string) => {
+    const createPlayer = () => {
+        const player = new window.Spotify.Player({
+            name: '집에서 하는 플레이어',
+            getOAuthToken: (cb) => {
+                cb(sdkToken!);
+            },
+            volume: 0.5,
+        });
+        player.addListener('ready', ({ device_id }) => {
+            console.log('플레이어 준비됨, device_id:', device_id);
+            setDevice(device_id);
+        });
+        player.addListener('not_ready', ({ device_id }) => {
+            console.log('플레이어 준비 안됨, device_id:', device_id);
+        });
+
+        player.addListener('player_state_changed', (state) => {
+            if (state && state.paused && !state.loading) {
+                setSong((prev) => {
+                    return { ...prev, is_playing: false };
+                });
+            }
+        });
+
+        player.addListener('initialization_error', ({ message }) => {
+            console.error('Initialization Error:', message);
+        });
+
+        player.addListener('authentication_error', ({ message }) => {
+            console.error('Authentication Error:', message);
+        });
+
+        player.addListener('account_error', ({ message }) => {
+            console.error('Account Error:', message);
+        });
+
+        player.addListener('playback_error', ({ message }) => {
+            console.error('Playback Error:', message);
+        });
+        player.connect();
+    };
+    const loadSpotifySDK = () => {
+        let script = document.querySelector('script[src="https://sdk.scdn.co/spotify-player.js"]') as HTMLScriptElement;
+        if (!script) {
+            script = document.createElement('script');
+            script.src = 'https://sdk.scdn.co/spotify-player.js';
+            script.async = true;
+            document.body.appendChild(script);
+        } else {
+            if (window.Spotify && window.Spotify.Player) {
+                createPlayer();
+            }
+        }
+        window.onSpotifyWebPlaybackSDKReady = createPlayer;
+    };
+    const checkTokenValidity = async () => {
         try {
             const response = await fetch('https://api.spotify.com/v1/me', {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${sdkToken}`,
                 },
             });
             if (response.ok) {
@@ -56,55 +111,10 @@ export const Player = () => {
     };
     // 웹 플레이어 생성 로직
     useEffect(() => {
-        const createPlayer = () => {
-            const player = new window.Spotify.Player({
-                name: '테스트 플레이어',
-                getOAuthToken: (cb) => {
-                    cb(sdkToken!);
-                },
-                volume: 0.5,
-            });
-            player.addListener('ready', ({ device_id }) => {
-                console.log('플레이어 준비됨, device_id:', device_id);
-                setDevice(device_id);
-            });
-            player.addListener('not_ready', ({ device_id }) => {
-                console.log('플레이어 준비 안됨, device_id:', device_id);
-            });
-
-            player.addListener('initialization_error', ({ message }) => {
-                console.error('Initialization Error:', message);
-            });
-
-            player.addListener('authentication_error', ({ message }) => {
-                console.error('Authentication Error:', message);
-            });
-
-            player.addListener('account_error', ({ message }) => {
-                console.error('Account Error:', message);
-            });
-
-            player.addListener('playback_error', ({ message }) => {
-                console.error('Playback Error:', message);
-            });
-            player.connect();
-        };
+        console.log('플레이어 랜더링 했습니다');
         if (sdkToken) {
-            checkTokenValidity(sdkToken);
-            let script = document.querySelector(
-                'script[src="https://sdk.scdn.co/spotify-player.js"]'
-            ) as HTMLScriptElement;
-            if (!script) {
-                script = document.createElement('script');
-                script.src = 'https://sdk.scdn.co/spotify-player.js';
-                script.async = true;
-                document.body.appendChild(script);
-            } else {
-                if (window.Spotify && window.Spotify.Player) {
-                    createPlayer();
-                }
-            }
-            window.onSpotifyWebPlaybackSDKReady = createPlayer;
+            checkTokenValidity();
+            loadSpotifySDK();
         } else {
             const script = document.querySelector('script[src="https://sdk.scdn.co/spotify-player.js"]');
             if (script) {
@@ -112,8 +122,15 @@ export const Player = () => {
                 setDevice(null);
             }
         }
-        return () => console.log('플레이어 제거');
+        return () => {
+            const script = document.querySelector('script[src="https://sdk.scdn.co/spotify-player.js"]');
+            if (script) {
+                document.body.removeChild(script);
+                setDevice(null);
+            }
+        };
     }, [sdkToken]);
+
     // * 노래 제목 길면 애니메이션 작동
     useEffect(() => {
         if (textRef.current && divRef.current) {
