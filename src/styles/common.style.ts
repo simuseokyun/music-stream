@@ -53,7 +53,7 @@ export const Category = styled.ul`
     border-radius: 8px;
     z-index: 1;
 `;
-export const CategoryList = styled.li`
+export const CategoryItem = styled.li`
     text-align: left;
     color: white;
     padding: 5px;
