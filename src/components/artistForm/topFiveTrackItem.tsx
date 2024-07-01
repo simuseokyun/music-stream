@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { setMobile, playlistList } from '../../state/atoms';
-import { durationTransform } from '../../utils/util';
+import { useRecoilValue } from 'recoil';
+import { playlistList } from '../../state/atoms';
+import { durationTransform, usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
 import { IArtistsTopTrack } from '../../types/artistInfo';
-import { usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
-import { Category, CategoryList, PlayBtn, Tr, AddBtn } from '../../styles/common.style';
+import { PlayBtn, Tr, AddBtn } from '../../styles/common.style';
+import { PlaylistSelector } from '../categoryForm/category';
 
 const TdWrap = styled.div`
     display: flex;
@@ -55,7 +55,7 @@ export const TopFiveTracks = ({
     const playlists = useRecoilValue(playlistList);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
-    const { openCategory, toggleAddBtn, mouseLeave } = usePlaylist;
+    const { openCategory, addSong, mouseLeave } = usePlaylist;
     const useTrack = useAddTrack(id, title, duration_ms, cover, album_title, artists, album_id, uri);
     const { addTrack } = useTrack;
     const onClickSong = () => {
@@ -78,18 +78,8 @@ export const TopFiveTracks = ({
                     : durationTransform(duration_ms).seconds
             }`}</Td>
             <Td style={{ position: 'relative' }}>
-                <AddBtn src="/images/addButton.png" onClick={toggleAddBtn} />
-                {openCategory ? (
-                    <Category>
-                        {playlists.map((playlist) => {
-                            return (
-                                <CategoryList key={playlist.id} id={playlist.title} onClick={addTrack}>
-                                    {playlist.title}
-                                </CategoryList>
-                            );
-                        })}
-                    </Category>
-                ) : null}
+                <AddBtn src="/images/addButton.png" onClick={addSong} />
+                {openCategory && <PlaylistSelector addTrack={addTrack} />}
             </Td>
         </Tr>
     );

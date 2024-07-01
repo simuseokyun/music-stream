@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { playlistList } from '../../state/atoms';
 import { useRecoilState } from 'recoil';
-import { durationTransform } from '../../utils/util';
 import { IMyPlaylistTracks } from '../../types/myPlaylist';
 import { usePlayMusic } from '../../utils/util';
 import { Tr, Td, Dot } from '../../styles/common.style';

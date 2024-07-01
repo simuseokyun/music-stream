@@ -7,7 +7,7 @@ import { useSetRecoilState } from 'recoil';
 import { ISearchTracks } from '../types/searchTracksInfo';
 import { Message, Th, Tr, Table, Thead, Tbody } from '../styles/common.style';
 import { useParams } from 'react-router-dom';
-import { nowSongInfo, playerTracks } from '../state/atoms';
+import { playerTracks } from '../state/atoms';
 
 const Container = styled.div`
     padding: 20px;

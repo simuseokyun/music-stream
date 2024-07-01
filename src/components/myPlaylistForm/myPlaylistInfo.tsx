@@ -3,7 +3,6 @@ import { useSetRecoilState, useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { playlistFixFormState, playlistList } from '../../state/atoms';
 import { Button } from '../common/buttonForm/button';
-import { useState } from 'react';
 import { checkFormState } from '../../state/atoms';
 import { CheckForm } from '../common/checkForm/checkForm';
 const Container = styled.div`

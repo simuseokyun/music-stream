@@ -4,8 +4,8 @@ import { useRecoilValue } from 'recoil';
 import { playlistList } from '../../state/atoms';
 import { useAddPlaylist, useAddTrack, usePlayMusic } from '../../utils/util';
 import { ISearchTrackProp } from '../../types/searchTracksInfo';
-import { Category, CategoryList, Tr, Td, PlayBtn, AddBtn, Dot } from '../../styles/common.style';
-
+import { Tr, Td, PlayBtn, AddBtn, Dot } from '../../styles/common.style';
+import { PlaylistSelector } from '../categoryForm/category';
 const TdWrap = styled.div`
     display: flex;
     align-items: center;
@@ -48,7 +48,7 @@ export const SearchTrackItem = ({
     const playlists = useRecoilValue(playlistList);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
-    const { openCategory, toggleAddBtn, mouseLeave } = usePlaylist;
+    const { openCategory, addSong, mouseLeave } = usePlaylist;
     const useTrack = useAddTrack(id, title, duration_ms, cover, album_title, artists, album_id, uri);
     const { addTrack } = useTrack;
 
@@ -77,18 +77,8 @@ export const SearchTrackItem = ({
                 <Link to={`/home/album/${album_id}`}>{album_title}</Link>
             </Td>
             <Td style={{ position: 'relative' }}>
-                <AddBtn src="/images/addButton.png" onClick={toggleAddBtn} />
-                {openCategory && (
-                    <Category>
-                        {playlists.map((playlist) => {
-                            return (
-                                <CategoryList key={playlist.id} id={playlist.title} onClick={addTrack}>
-                                    {playlist.title}
-                                </CategoryList>
-                            );
-                        })}
-                    </Category>
-                )}
+                <AddBtn src="/images/addButton.png" onClick={addSong} />
+                {openCategory && <PlaylistSelector addTrack={addTrack} />}
             </Td>
         </Tr>
     );

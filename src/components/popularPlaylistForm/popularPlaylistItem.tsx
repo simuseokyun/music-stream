@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { playlistList, playerPrevAndNext } from '../../state/atoms';
+import { useRecoilValue } from 'recoil';
+import { playlistList } from '../../state/atoms';
 import { IPopularPlaylistInfoProp } from '../../types/popularPlaylists';
 import { usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
-import { Category, CategoryList, PlayBtn, Tr, AddBtn, Td, Dot } from '../../styles/common.style';
+import { PlayBtn, Tr, AddBtn, Td, Dot } from '../../styles/common.style';
+import { PlaylistSelector } from '../categoryForm/category';
 
 const TdWrap = styled.div`
     display: flex;
@@ -43,11 +43,10 @@ export const PopularPlaylistTrack = ({
     album_title,
     uri,
 }: IPopularPlaylistInfoProp) => {
-    const playlists = useRecoilValue(playlistList);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const useTrack = useAddTrack(id, title, duration, cover, album_title, artists, album_id, uri);
-    const { openCategory, toggleAddBtn, mouseLeave } = usePlaylist;
+    const { openCategory, addSong, mouseLeave } = usePlaylist;
     const { addTrack } = useTrack;
     const playBtn = () => playMusic(uri, title, cover, artists[0].name);
 
@@ -76,18 +75,8 @@ export const PopularPlaylistTrack = ({
                 <Link to={`/home/album/${album_id}`}>{album_title}</Link>
             </Td>
             <Td>
-                <AddBtn src="/images/addButton.png" onClick={toggleAddBtn} style={{ position: 'relative' }} />
-                {openCategory ? (
-                    <Category>
-                        {playlists.map((playlist) => {
-                            return (
-                                <CategoryList key={playlist.id} id={playlist.title} onClick={addTrack}>
-                                    {playlist.title}
-                                </CategoryList>
-                            );
-                        })}
-                    </Category>
-                ) : null}
+                <AddBtn src="/images/addButton.png" onClick={addSong} style={{ position: 'relative' }} />
+                {openCategory && <PlaylistSelector addTrack={addTrack} />}
             </Td>
         </Tr>
     );

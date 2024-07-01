@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useToggleSong, getLocalStorage, setLocalStorage, usePlayMusic } from '../../utils/util';
 import * as S from './player.style';
 import { refreshToken } from '../../api/api';
-import { timeStamp } from 'console';
 
 export const Player = () => {
     const setDevice = useSetRecoilState(deviceInfo);

@@ -15,7 +15,6 @@ import { FixPlaylistForm } from '../components/myPlaylistForm/fixMyplaylist';
 import { BottomBar } from '../components/navForm/bottomBar';
 import { Player } from '../components/playerForm/player';
 import { ISpotifySdkToken, ISpotifyWebToken } from '../types/auth';
-import { access } from 'fs';
 
 const Container = styled.div`
     max-width: 1180px;
@@ -68,9 +67,6 @@ export const HomePage = () => {
                 setLocalStorage('sdkAccessToken', access_token);
                 Cookies.set('refreshToken', refresh_token);
                 window.history.replaceState({}, document.title, window.location.pathname);
-            },
-            onError: async (error) => {
-                console.log('리액트 쿼리 에러');
             },
         }
     );

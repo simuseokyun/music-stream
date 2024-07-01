@@ -7,7 +7,7 @@ import { IPopularPlaylistInfo } from '../types/popularPlaylists';
 import { PopularPlaylistInfo } from '../components/popularPlaylistForm/popularPlaylistInfo';
 import { PopularPlaylistList } from '../components/popularPlaylistForm/popularPlaylistList';
 import { Message } from '../styles/common.style';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { playerTracks } from '../state/atoms';
 const Container = styled.div`
     width: 100%;

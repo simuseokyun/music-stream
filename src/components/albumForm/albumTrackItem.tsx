@@ -1,10 +1,11 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { playlistList } from '../../state/atoms';
 import { usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
-import { Category, CategoryList, Dot, AddBtn } from '../../styles/common.style';
+import { Dot, AddBtn } from '../../styles/common.style';
 import { IAddTrack } from '../../types/myPlaylist';
+import { PlaylistSelector } from '../categoryForm/category';
 
 const Tr = styled.tr`
     border-radius: 5px;
@@ -49,7 +50,7 @@ export const AlbumTracks = ({ id, name, duration_ms, cover, album_title, artists
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const useTrack = useAddTrack(id, name, duration_ms, cover, album_title, artists, album_id, uri);
-    const { openCategory, toggleAddBtn, mouseLeave } = usePlaylist;
+    const { openCategory, addSong, mouseLeave } = usePlaylist;
     const { addTrack } = useTrack;
 
     const clickSong = () => {
@@ -72,18 +73,8 @@ export const AlbumTracks = ({ id, name, duration_ms, cover, album_title, artists
             </Td>
 
             <Td>
-                <AddBtn src="/images/addButton.png" onClick={toggleAddBtn} style={{ position: 'relative' }} />
-                {openCategory ? (
-                    <Category>
-                        {playlists.map((playlist) => {
-                            return (
-                                <CategoryList key={playlist.id} id={playlist.title} onClick={addTrack}>
-                                    {playlist.title}
-                                </CategoryList>
-                            );
-                        })}
-                    </Category>
-                ) : null}
+                <AddBtn src="/images/addButton.png" onClick={addSong} style={{ position: 'relative' }} />
+                {openCategory && <PlaylistSelector addTrack={addTrack} />}
             </Td>
         </Tr>
     );
