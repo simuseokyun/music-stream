@@ -50,6 +50,7 @@
         ]
     },
     "devDependencies": {
+        "@tanstack/react-query-devtools": "^5.49.2",
         "@types/js-cookie": "^3.0.6",
         "@types/spotify-web-playback-sdk": "^0.1.19"
     }
