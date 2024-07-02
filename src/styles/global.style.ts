@@ -72,6 +72,8 @@ a {
 }
 *{
     box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; 
+
 }
 input[type="file" i] span{
  display:none

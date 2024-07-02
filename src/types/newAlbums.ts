@@ -19,3 +19,7 @@ export interface INewAlbumItemProp {
     artist: string;
     cover: string;
 }
+
+export interface INewAlbumCoverProps {
+    $loaded: string;
+}

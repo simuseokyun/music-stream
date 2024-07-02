@@ -5,7 +5,7 @@ export interface IPopularPlaylist {
     id: string;
     description: string;
     name: string;
-    img: string;
+    cover: string;
 }
 export interface IPopularPlaylistInfo {
     description: string;
@@ -58,4 +58,7 @@ export interface IPopularPlaylistTracks {
             uri: string;
         };
     }[];
+}
+export interface IPopularListCoverProps {
+    $loaded: string;
 }
