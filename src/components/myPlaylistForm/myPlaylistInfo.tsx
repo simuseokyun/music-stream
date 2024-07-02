@@ -65,7 +65,6 @@ export const MyPlaylistInfo = ({
 }) => {
     const setFixForm = useSetRecoilState(playlistFixFormState);
     const setPlaylist = useSetRecoilState(playlistList);
-    const navigate = useNavigate();
     const [checkForm, setCheckForm] = useRecoilState(checkFormState);
     const onFixed = () => {
         setFixForm(true);
@@ -119,7 +118,6 @@ export const MyPlaylistInfo = ({
                     return -1;
                 }
             });
-
             return [...topPlaylist, ...botPlaylist];
         });
     };

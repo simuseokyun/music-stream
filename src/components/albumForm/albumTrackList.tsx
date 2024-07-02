@@ -33,17 +33,17 @@ export const AlbumTrackList = ({ data }: IAlbumData) => {
                 </Tr>
             </Thead>
             <Tbody>
-                {data?.tracks?.items.map((track, i) => (
+                {data?.tracks?.items.map(({ id, name, artists, duration_ms, uri }) => (
                     <AlbumTracks
-                        key={track.id}
-                        id={track.id}
+                        key={id}
+                        id={id}
                         album_title={data.name}
                         cover={data.images[0].url}
-                        name={track.name}
-                        artists={track.artists}
-                        duration_ms={track.duration_ms}
+                        name={name}
+                        artists={artists}
+                        duration_ms={duration_ms}
                         album_id={data.id}
-                        uri={track.uri}
+                        uri={uri}
                     />
                 ))}
             </Tbody>

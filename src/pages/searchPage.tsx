@@ -32,12 +32,18 @@ export const SearchPage = () => {
     const { title } = useParams();
     const token = getLocalStorage('webAccessToken');
     const setPlayerTracks = useSetRecoilState(playerTracks);
-    const { isLoading: trackLoading, data: trackData } = useQuery<ISearchTracks>(
+    const {
+        isLoading: trackLoading,
+        data: trackData,
+        isError,
+    } = useQuery<ISearchTracks>(
         ['searchResult', title],
         async () => {
             if (token && title) {
                 const searchTracks = await searchTrack(token, title);
                 return searchTracks;
+            } else {
+                return Promise.resolve(null);
             }
         },
         {
@@ -46,8 +52,8 @@ export const SearchPage = () => {
                     const trackSummaries = data.tracks.items.map((track) => ({
                         uri: track.uri,
                         title: track.name,
-                        name: track.album.artists[0].name || '',
-                        cover: track.album.images[0]?.url || '',
+                        name: track.album.artists[0].name,
+                        cover: track.album.images[0]?.url,
                     }));
                     setPlayerTracks(trackSummaries);
                 }
@@ -56,6 +62,9 @@ export const SearchPage = () => {
     );
     if (trackLoading) {
         return <Message>로딩 중</Message>;
+    }
+    if (isError) {
+        return <Message>에러 발생</Message>;
     }
     return (
         <Container>

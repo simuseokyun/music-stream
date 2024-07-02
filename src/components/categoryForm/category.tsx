@@ -1,9 +1,9 @@
 import { Category, CategoryItem } from '../../styles/common.style';
 import { useRecoilValue } from 'recoil';
-import { playlistList } from '../../state/atoms';
+import { playlistSelector } from '../../state/atoms';
 
 export const PlaylistSelector = ({ addTrack }: { addTrack: (event: React.MouseEvent<HTMLLIElement>) => void }) => {
-    const playlists = useRecoilValue(playlistList);
+    const playlists = useRecoilValue(playlistSelector);
     return (
         <Category>
             {playlists?.map((playlist) => {

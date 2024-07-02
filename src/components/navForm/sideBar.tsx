@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { searchFormState } from '../../state/atoms';
 import { loginSpotify, useLogoutSpotify, getLocalStorage } from '../../utils/util';
+import { useCallback } from 'react';
 
 const Container = styled.div`
     width: 100%;

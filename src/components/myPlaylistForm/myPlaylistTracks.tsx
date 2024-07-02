@@ -69,11 +69,12 @@ export const PlaylistTracks = ({
             return [...prev.slice(0, index), { ...prev[index], tracks: newTracks }, ...prev.slice(index + 1)];
         });
     };
+    const playBtn = () => playMusic(uri, title, cover, artists[0].name);
 
     return (
         <Tr>
             <Td>
-                <PlayBtn src="/images/playButton.png" onClick={() => playMusic(uri, title, cover, artists[0].name)} />
+                <PlayBtn src="/images/playButton.png" onClick={playBtn} />
             </Td>
             <Td>
                 <TdWrap>

@@ -61,14 +61,14 @@ export const NewAlbum = () => {
         'newAlbum',
         async () => {
             if (token) {
-                return await getNewAlbum(token);
+                const newAlbumData = await getNewAlbum(token);
+                return newAlbumData;
+            } else {
+                Promise.resolve(null);
             }
         },
         {
             enabled: !!token,
-            onError: (error) => {
-                console.error('API 요청 에러:', error);
-            },
         }
     );
     if (newAlbumLoading) {
@@ -103,13 +103,13 @@ export const NewAlbum = () => {
                             {newAlbumData?.albums?.items
                                 .slice(1)
                                 .slice(offset * index, offset * (index + 1))
-                                .map((item) => (
+                                .map(({ id, name, artists, images }) => (
                                     <NewAlbumItem
-                                        key={item.id}
-                                        id={item.id}
-                                        name={item.name}
-                                        artist={item.artists[0].name}
-                                        cover={item.images[0].url}
+                                        key={id}
+                                        id={id}
+                                        name={name}
+                                        artist={artists[0].name}
+                                        cover={images[0].url}
                                     ></NewAlbumItem>
                                 ))}
                         </NewAlbumList>

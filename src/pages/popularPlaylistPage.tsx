@@ -35,7 +35,6 @@ export const PopularPlaylistPage = () => {
     const { playlistId } = useParams();
     const token = getLocalStorage('webAccessToken');
     const setPlayerTracks = useSetRecoilState(playerTracks);
-
     const {
         isLoading: popularLoading,
         data: popularData,
@@ -44,24 +43,27 @@ export const PopularPlaylistPage = () => {
         ['popularPlaylistInfo', playlistId],
         async () => {
             if (token && playlistId) {
-                return await getPopularPlaylist(token, playlistId);
+                const popularPlaylist = await getPopularPlaylist(token, playlistId);
+                return popularPlaylist;
+            } else {
+                return Promise.resolve(null);
             }
         },
         {
             onSuccess: (data) => {
                 if (data && data.tracks && data.tracks.items) {
-                    const trackSummaries = data.tracks.items.map((track) => ({
-                        uri: track.track.uri,
-                        title: track.track.name,
-                        name: track.track.artists[0].name || '',
-                        cover: track.track.album.images[0].url || '',
+                    const trackSummaries = data.tracks.items.map(({ track }) => ({
+                        uri: track.uri,
+                        title: track.name,
+                        name: track.artists[0].name,
+                        cover: track.album.images[0].url,
                     }));
                     setPlayerTracks(trackSummaries);
                 }
             },
         }
     );
-    // console.log(popularData);
+
     if (popularLoading) {
         return <Message>로딩 중</Message>;
     }
@@ -71,7 +73,7 @@ export const PopularPlaylistPage = () => {
     return (
         <Container>
             {popularData && (
-                <PlaylistWrap key={popularData.id}>
+                <PlaylistWrap>
                     <PopularPlaylistInfo
                         cover={popularData.images[0].url}
                         name={popularData.name}

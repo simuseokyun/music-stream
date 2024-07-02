@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { INewAlbumItemProp } from '../../types/newAlbums';
 import { useState } from 'react';
+import { INewAlbumCoverProps } from '../../types/newAlbums';
 
 const Container = styled.li`
     width: 100%;
@@ -15,13 +16,11 @@ const Container = styled.li`
         padding: 5px;
     }
 `;
-interface CoverProps {
-    loaded: string;
-}
-const Cover = styled.img<CoverProps>`
+
+const Cover = styled.img<INewAlbumCoverProps>`
     width: 100%;
     border-radius: 8px;
-    display: ${(props) => (props.loaded == 'true' ? 'block' : 'none')};
+    display: ${({ $loaded }) => ($loaded == 'true' ? 'block' : 'none')};
 `;
 const Title = styled.h1`
     width: 100%;
@@ -60,7 +59,7 @@ export const NewAlbumItem = ({ id, name, artist, cover }: INewAlbumItemProp) => 
     return (
         <Container onClick={onClickAlbum}>
             {!imageLoaded && <LoadingSpinner src="/images/basicPlaylist.png" />}
-            <Cover src={cover} alt="albumCover" onLoad={onLoadImage} loaded={imageLoaded.toString()} />
+            <Cover src={cover} alt="albumCover" onLoad={onLoadImage} $loaded={imageLoaded.toString()} />
             <Title>{name}</Title>
             <Artist>{artist}</Artist>
         </Container>

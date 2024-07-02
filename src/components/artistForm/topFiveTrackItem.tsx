@@ -52,19 +52,18 @@ export const TopFiveTracks = ({
     duration_ms,
     uri,
 }: IArtistsTopTrack) => {
-    const playlists = useRecoilValue(playlistList);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const { openCategory, addSong, mouseLeave } = usePlaylist;
     const useTrack = useAddTrack(id, title, duration_ms, cover, album_title, artists, album_id, uri);
     const { addTrack } = useTrack;
-    const onClickSong = () => {
+    const playBtn = () => {
         playMusic(uri, title, cover, artists[0].name);
     };
     return (
         <Tr onMouseLeave={mouseLeave}>
             <Td>
-                <PlayBtn src="/images/playButton.png" onClick={onClickSong} />
+                <PlayBtn src="/images/playButton.png" onClick={playBtn} />
             </Td>
             <Td>
                 <TdWrap>

@@ -4,6 +4,7 @@ import { useSetRecoilState } from 'recoil';
 import { checkFormState, playlistList } from '../../../state/atoms';
 import { Button } from '../buttonForm/button';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 const Container = styled.div`
     width: 100%;
@@ -18,12 +19,15 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
 `;
-const Form = styled.div`
+const Form = styled.div<{ visible: string }>`
     background-color: #232322;
     max-width: 500px;
     padding: 20px;
     width: 80%;
     border-radius: 8px;
+    opacity: ${(props) => (props.visible === 'true' ? 1 : 0)};
+    transform: translateY(${(props) => (props.visible === 'true' ? '0' : '-100px')});
+    transition: all 0.5s;
 `;
 const FormTop = styled.div`
     display: flex;
@@ -40,6 +44,7 @@ const BtnWrap = styled.div`
     margin-top: 20px;
 `;
 export const CheckForm = ({ name }: { name: string }) => {
+    const [isVisible, setIsVisible] = useState(false);
     const setCheckForm = useSetRecoilState(checkFormState);
     const setPlaylist = useSetRecoilState(playlistList);
     const navigate = useNavigate();
@@ -59,10 +64,13 @@ export const CheckForm = ({ name }: { name: string }) => {
     const onCancel = () => {
         setCheckForm(false);
     };
+    useEffect(() => {
+        setIsVisible(true);
+    }, []);
 
     return (
         <Container>
-            <Form>
+            <Form visible={isVisible.toString()}>
                 <FormTop>
                     <FormTitle>플레이리스트 삭제</FormTitle>
                     <CloseBtn src="/images/closeButton.png" onClick={onClose} />

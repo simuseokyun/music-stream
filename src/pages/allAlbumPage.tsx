@@ -40,8 +40,10 @@ export const AllAlbumPage = () => {
         isError,
     } = useQuery(['allAlbum', artistId], async () => {
         if (token && artistId) {
-            const response = await getAllAlbums(token, artistId);
-            return response;
+            const allAlbumData = await getAllAlbums(token, artistId);
+            return allAlbumData;
+        } else {
+            return Promise.resolve(null);
         }
     });
     if (isLoading) {

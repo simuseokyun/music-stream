@@ -53,14 +53,14 @@ export const AlbumTracks = ({ id, name, duration_ms, cover, album_title, artists
     const { openCategory, addSong, mouseLeave } = usePlaylist;
     const { addTrack } = useTrack;
 
-    const clickSong = () => {
+    const playBtn = () => {
         playMusic(uri, name, cover, artists[0].name);
     };
 
     return (
         <Tr onMouseLeave={mouseLeave}>
             <Td>
-                <PlayBtn src="/images/playButton.png" onClick={clickSong} />
+                <PlayBtn src="/images/playButton.png" onClick={playBtn} />
             </Td>
             <Td>
                 <ArtistName>{name}</ArtistName>

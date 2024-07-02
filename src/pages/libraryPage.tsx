@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 import { Button } from '../components/common/buttonForm/button';
+
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { addPlaylistState, libraryAlbumState, libraryPliState } from '../state/atoms';
 import { MyPlaylistList } from '../components/myPlaylistForm/myPlaylistList';
 import { MyAlbumList } from '../components/myAlbumForm/albumList';
+import { useCallback } from 'react';
 
 const Container = styled.div`
     background-color: #131212;
@@ -51,17 +53,17 @@ export const LibraryPage = () => {
     const setPlaylist = useSetRecoilState(addPlaylistState);
     const [pliState, setPlistate] = useRecoilState(libraryPliState);
     const setAlbumState = useSetRecoilState(libraryAlbumState);
-    const addPlaylist = () => {
+    const addPlaylist = useCallback(() => {
         setPlaylist(true);
-    };
-    const onClickPlaylist = () => {
+    }, []);
+    const onClickPlaylist = useCallback(() => {
         setPlistate(true);
         setAlbumState(false);
-    };
-    const onClickSetAlbum = () => {
+    }, []);
+    const onClickSetAlbum = useCallback(() => {
         setAlbumState(true);
         setPlistate(false);
-    };
+    }, []);
 
     return (
         <Container>
@@ -78,6 +80,7 @@ export const LibraryPage = () => {
                     onClick={onClickSetAlbum}
                 />
             </ButtonWrap>
+
             {pliState ? <MyPlaylistList /> : <MyAlbumList />}
         </Container>
     );

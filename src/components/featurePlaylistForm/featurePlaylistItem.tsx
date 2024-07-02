@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { IPopularPlaylist } from '../../types/popularPlaylists';
 import { useState } from 'react';
+import { IPopularListCoverProps } from '../../types/popularPlaylists';
 
 const Container = styled.li`
     width: 100%;
@@ -20,13 +21,11 @@ const Container = styled.li`
         padding: 5px;
     }
 `;
-interface CoverProps {
-    loaded: string;
-}
-const Cover = styled.img<CoverProps>`
+
+const Cover = styled.img<IPopularListCoverProps>`
     width: 100%;
     border-radius: 8px;
-    display: ${({ loaded }) => (loaded == 'true' ? 'block' : 'none')};
+    display: ${({ $loaded }) => ($loaded == 'true' ? 'block' : 'none')};
 `;
 const Title = styled.h1`
     margin-top: 10px;
@@ -39,14 +38,15 @@ const LoadingSpinner = styled.img`
     border-radius: 8px;
 `;
 
-export const FeaturePlaylistItem = ({ id, name, img }: IPopularPlaylist) => {
+export const FeaturePlaylistItem = ({ id, name, cover }: IPopularPlaylist) => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const onLoadImage = () => setImageLoaded(true);
+
     return (
         <Container>
             <Link to={`/home/popularPlaylist/${id}`}>
                 {!imageLoaded && <LoadingSpinner src="/images/basicPlaylist.png" />}
-                <Cover src={img} alt="albumCover" onLoad={onLoadImage} loaded={imageLoaded.toString()} />
+                <Cover src={cover} alt="albumCover" onLoad={onLoadImage} $loaded={imageLoaded.toString()} />
                 <Title>{name}</Title>
             </Link>
         </Container>

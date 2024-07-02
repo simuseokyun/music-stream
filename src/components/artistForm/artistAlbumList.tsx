@@ -28,14 +28,14 @@ export const AlbumList = () => {
         'artistAlbum',
         async () => {
             if (artistId) {
-                return await getArtistAlbum(token, artistId);
+                const artistAlbumData = await getArtistAlbum(token, artistId);
+                return artistAlbumData;
+            } else {
+                return Promise.resolve(null);
             }
         },
         {
             enabled: !!artistId,
-            onError: (error) => {
-                console.error('API 요청 에러');
-            },
         }
     );
 
@@ -44,14 +44,14 @@ export const AlbumList = () => {
             {albumInfo &&
                 albumInfo.items
                     .slice(0, isMobile ? 3 : 4)
-                    .map((album) => (
+                    .map(({ id, name, images, album_type, release_date }) => (
                         <AlbumItem
-                            key={album.id}
-                            id={album.id}
-                            name={album.name}
-                            cover={album.images[0].url}
-                            type={album.album_type === 'album' ? typeTransform.album : typeTransform.single}
-                            year={album.release_date.slice(0, 4)}
+                            key={id}
+                            id={id}
+                            name={name}
+                            cover={images[0].url}
+                            type={album_type === 'album' ? typeTransform.album : typeTransform.single}
+                            year={release_date.slice(0, 4)}
                         />
                     ))}
         </Container>

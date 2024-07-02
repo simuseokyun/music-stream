@@ -3,6 +3,7 @@ import { useRecoilValue } from 'recoil';
 import { playlistList } from '../../state/atoms';
 import { Message } from '../../styles/common.style';
 import { MyPlaylistItem } from './myPlaylistItem';
+import { useEffect } from 'react';
 
 const Container = styled.ul`
     width: 100%;
@@ -10,6 +11,7 @@ const Container = styled.ul`
 
 export const MyPlaylistList = () => {
     const playlists = useRecoilValue(playlistList);
+
     return (
         <Container>
             {playlists.length ? (

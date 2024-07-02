@@ -74,13 +74,13 @@ export const FeaturePlaylist = () => {
                         <FeaturePlaylistList state={isMobile.toString()}>
                             {featurePlaylist?.playlists?.items
                                 .slice(offset * index, offset * (index + 1))
-                                .map((item) => (
+                                .map(({ id, name, description, images }) => (
                                     <FeaturePlaylistItem
-                                        key={item.id}
-                                        id={item.id}
-                                        name={item.name}
-                                        description={item.description}
-                                        img={item.images[0].url}
+                                        key={id}
+                                        id={id}
+                                        name={name}
+                                        description={description}
+                                        cover={images[0].url}
                                     ></FeaturePlaylistItem>
                                 ))}
                         </FeaturePlaylistList>

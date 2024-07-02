@@ -6,6 +6,7 @@ import { useAddPlaylist, useAddTrack, usePlayMusic } from '../../utils/util';
 import { ISearchTrackProp } from '../../types/searchTracksInfo';
 import { Tr, Td, PlayBtn, AddBtn, Dot } from '../../styles/common.style';
 import { PlaylistSelector } from '../categoryForm/category';
+import { useEffect } from 'react';
 const TdWrap = styled.div`
     display: flex;
     align-items: center;
@@ -45,17 +46,16 @@ export const SearchTrackItem = ({
     duration_ms,
     uri,
 }: ISearchTrackProp) => {
-    const playlists = useRecoilValue(playlistList);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const { openCategory, addSong, mouseLeave } = usePlaylist;
     const useTrack = useAddTrack(id, title, duration_ms, cover, album_title, artists, album_id, uri);
     const { addTrack } = useTrack;
-
+    const playBtn = () => playMusic(uri, title, cover, artists[0].name);
     return (
         <Tr onMouseLeave={mouseLeave}>
             <Td>
-                <PlayBtn src="/images/playButton.png" onClick={() => playMusic(uri, title, cover, artists[0].name)} />
+                <PlayBtn src="/images/playButton.png" onClick={playBtn} />
             </Td>
             <Td>
                 <TdWrap>

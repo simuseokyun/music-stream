@@ -31,10 +31,13 @@ export const TopFiveTracksTable = () => {
     const { artistId } = useParams();
     const setPlayerTracks = useSetRecoilState(playerTracks);
     const { isLoading, data: topTrackInfo } = useQuery<IArtistTopTracks>(
-        ['topTrack', artistId],
+        'topFiveTrack',
         async () => {
             if (artistId) {
-                return await getArtistTopTrack(token, artistId);
+                const topFiveTracks = await getArtistTopTrack(token, artistId);
+                return topFiveTracks;
+            } else {
+                return Promise.resolve(null);
             }
         },
         {
@@ -43,8 +46,8 @@ export const TopFiveTracksTable = () => {
                     const trackSummaries = data.tracks.map((track) => ({
                         uri: track.uri,
                         title: track.name,
-                        name: track.artists[0].name || '',
-                        cover: track.album.images[0]?.url || '',
+                        name: track.artists[0].name,
+                        cover: track.album.images[0]?.url,
                     }));
                     setPlayerTracks(trackSummaries);
                 }

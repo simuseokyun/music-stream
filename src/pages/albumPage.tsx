@@ -53,6 +53,7 @@ export const AlbumPage = () => {
     const { albumId } = useParams();
     const token = getLocalStorage('webAccessToken');
     const setPlayerTracks = useSetRecoilState(playerTracks);
+
     const {
         isLoading: albumLoading,
         data: albumData,
@@ -61,7 +62,8 @@ export const AlbumPage = () => {
         ['albumInfo', albumId],
         () => {
             if (token && albumId) {
-                return getAlbum(token, albumId);
+                const albumData = getAlbum(token, albumId);
+                return albumData;
             }
             return Promise.resolve(null);
         },

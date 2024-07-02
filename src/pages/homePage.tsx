@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import { setLocalStorage, getLocalStorage, useHandleResize, extractAuthCodeFromUrl } from '../utils/util';
-import { playlistFixFormState, addPlaylistState, checkFormState } from '../state/atoms';
+import { playlistFixFormState, addPlaylistState } from '../state/atoms';
 import { Outlet } from 'react-router-dom';
 import { SideBar } from '../components/navForm/sideBar';
 import { SearchInput } from '../components/searchForm/searchInput';
@@ -39,7 +39,6 @@ export const HomePage = () => {
     const fixFormState = useRecoilValue(playlistFixFormState);
     const accessToken = getLocalStorage('sdkAccessToken');
     const { isMobile, handleResize } = useHandleResize();
-
     const { isLoading: tokenLoading, data: tokenData } = useQuery<ISpotifyWebToken>('getWebToken', getWebToken, {
         onSuccess: (data) => {
             const { access_token, expires_in } = data;
@@ -51,7 +50,7 @@ export const HomePage = () => {
     const home = window.location.href;
     const authCode = extractAuthCodeFromUrl(home) || '';
     const { isLoading, data, error } = useQuery<ISpotifySdkToken>(
-        ['getSdkToken', accessToken],
+        'getSdkToken',
         async () => {
             const token = getLocalStorage('sdkAccessToken');
             if (!token) {
