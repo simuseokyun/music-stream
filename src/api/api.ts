@@ -3,13 +3,14 @@ import { IAllAlbum, IArtistAlbumInfo } from '../types/albumInfo';
 import { getLocalStorage } from '../utils/util';
 
 export const getWebToken = async () => {
+    const client_id = process.env.REACT_APP_CLIENT_ID || '';
+    const client_secret = process.env.REACT_APP_SECRET_ID || '';
     let access_token = getLocalStorage('webAccessToken');
     let expires_in = getLocalStorage('webExpiration');
     const now = new Date();
     const nowTimeNumber = now.getTime();
-    const client_id = process.env.REACT_APP_CLIENT_ID || '';
-    const client_secret = process.env.REACT_APP_SECRET_ID || '';
-    if (access_token && expires_in && parseInt(expires_in, 10) > nowTimeNumber) {
+    if (access_token && expires_in && parseInt(expires_in, 10) - 10 > nowTimeNumber) {
+        console.log('재활용');
         return { access_token, expires_in };
     }
     const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -26,9 +27,12 @@ export const getWebToken = async () => {
     if (!response.ok) {
         console.log('네트워크 오류');
     }
+    console.log('웹 토큰 새로 발급');
     const json = await response.json();
     const newWebToken = json.access_token;
-    const newExpiration = (now.getTime() + 59 * 60 * 1000).toString();
+    const nowTime = new Date();
+    const expirationTime = nowTime.getTime() + json.expires_in * 1000;
+    const newExpiration = expirationTime.toString();
     return { access_token: newWebToken, expires_in: newExpiration };
 };
 
