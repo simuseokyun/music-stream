@@ -3,4 +3,5 @@ export interface IPlayerTracks {
     title: string;
     name: string;
     cover: string;
+    playTime: number;
 }

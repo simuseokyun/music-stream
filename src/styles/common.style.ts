@@ -8,6 +8,7 @@ export const Tbody = styled.tbody``;
 export const Tr = styled.tr``;
 export const Message = styled.p`
     text-align: center;
+    font-size: 16px;
 `;
 export const PrevBtn = styled.img`
     display: inline-block;

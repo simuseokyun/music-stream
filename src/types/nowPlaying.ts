@@ -3,4 +3,5 @@ export interface INowPlaying {
     cover: string;
     artist: string;
     is_playing: boolean;
+    playTime: number | null;
 }
