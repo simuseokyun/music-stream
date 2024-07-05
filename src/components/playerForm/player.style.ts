@@ -43,14 +43,43 @@ export const PlayerRight = styled.div`
 
 export const PlayerCenter = styled.div`
     flex: 1;
-
+`;
+export const SetPlayer = styled.div`
     display: flex;
-
     justify-content: center;
     align-items: center;
     @media (max-width: 768px) {
         justify-content: right;
     }
+`;
+export const PlayerTimer = styled.div`
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+export const StartTime = styled.span`
+    margin-right: 5px;
+`;
+export const EndTime = styled.span`
+    margin-left: 5px;
+`;
+export const Playbar = styled.span`
+    position: relative;
+    width: 100%;
+    height: 5px;
+    border-radius: 5px;
+    background-color: #e2e2e2;
+`;
+export const PlaybarOverlay = styled.span<{ width: number }>`
+    position: absolute;
+    background-color: rgb(101, 212, 110);
+    border-radius: 5px;
+
+    top: 0;
+    left: 0;
+    width: ${(props) => props.width + '%'};
+    height: 100%;
 `;
 export const Artists = styled.p`
     font-size: 12px;
