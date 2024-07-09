@@ -3,7 +3,7 @@ import { Table, Thead, Tbody, Tr } from '../../styles/common.style';
 import { useQuery } from 'react-query';
 import { IArtistTopTracks } from '../../types/artistInfo';
 import { useParams } from 'react-router-dom';
-import { getArtistTopTrack } from '../../api/api';
+import { getArtistTopTrack } from '../../api/api잠시주석';
 import { getLocalStorage } from '../../utils/util';
 import { TopFiveTracks } from './topFiveTrackItem';
 import { useSetRecoilState } from 'recoil';
@@ -48,6 +48,7 @@ export const TopFiveTracksTable = () => {
                         title: track.name,
                         name: track.artists[0].name,
                         cover: track.album.images[0]?.url,
+                        playTime: track.duration_ms,
                     }));
                     setPlayerTracks(trackSummaries);
                 }

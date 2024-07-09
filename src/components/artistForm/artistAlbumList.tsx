@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { getLocalStorage } from '../../utils/util';
-import { getArtistAlbum } from '../../api/api';
+import { getArtistAlbum } from '../../api/api잠시주석';
 import { setMobile, typeTransform } from '../../state/atoms';
 import { IArtistAlbums } from '../../types/artistInfo';
 import { AlbumItem } from './artistAlbumItem';

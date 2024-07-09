@@ -54,7 +54,7 @@ export const AlbumTracks = ({ id, name, duration_ms, cover, album_title, artists
     const { addTrack } = useTrack;
 
     const playBtn = () => {
-        playMusic(uri, name, cover, artists[0].name);
+        playMusic(uri, name, cover, artists[0].name, duration_ms);
     };
 
     return (

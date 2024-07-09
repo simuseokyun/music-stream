@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { commaSeparate, getLocalStorage } from '../../utils/util';
-import { getArtist } from '../../api/api';
+import { getArtist } from '../../api/api잠시주석';
 import { useQuery } from 'react-query';
 import { IArtistInfo } from '../../types/artistInfo';
 import { useParams } from 'react-router-dom';

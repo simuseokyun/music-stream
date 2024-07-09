@@ -58,7 +58,7 @@ export const TopFiveTracks = ({
     const useTrack = useAddTrack(id, title, duration_ms, cover, album_title, artists, album_id, uri);
     const { addTrack } = useTrack;
     const playBtn = () => {
-        playMusic(uri, title, cover, artists[0].name);
+        playMusic(uri, title, cover, artists[0].name, duration_ms);
     };
     return (
         <Tr onMouseLeave={mouseLeave}>
