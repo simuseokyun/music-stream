@@ -75,6 +75,7 @@ export const AlbumPage = () => {
                         title: track.name,
                         name: track.artists[0].name,
                         cover: data.images[0].url,
+                        playTime: track.duration_ms,
                     }));
                     setPlayerTracks(trackSummaries);
                 }

@@ -80,7 +80,6 @@ export const LibraryPage = () => {
                     onClick={onClickSetAlbum}
                 />
             </ButtonWrap>
-
             {pliState ? <MyPlaylistList /> : <MyAlbumList />}
         </Container>
     );

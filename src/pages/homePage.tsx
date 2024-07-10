@@ -15,6 +15,7 @@ import { FixPlaylistForm } from '../components/myPlaylistForm/fixMyplaylist';
 import { BottomBar } from '../components/navForm/bottomBar';
 import { Player } from '../components/playerForm/player';
 import { ISpotifySdkToken, ISpotifyWebToken } from '../types/auth';
+import { CreatePlayer } from '../components/createPlayer/createrPlayer';
 
 const Container = styled.div`
     max-width: 1180px;
@@ -37,19 +38,23 @@ const Content = styled.div`
 export const HomePage = () => {
     const addFormState = useRecoilValue(addPlaylistState);
     const fixFormState = useRecoilValue(playlistFixFormState);
-    const accessToken = getLocalStorage('sdkAccessToken');
     const { isMobile, handleResize } = useHandleResize();
-    const { isLoading: tokenLoading, data: tokenData } = useQuery<ISpotifyWebToken>('getWebToken', getWebToken, {
+    const sdkToken = getLocalStorage('sdkAccessToken');
+    const { isLoading: tokenLoading, data: webTokenData } = useQuery<ISpotifyWebToken>('getWebToken', getWebToken, {
+        retry: 2,
         onSuccess: (data) => {
             const { access_token, expires_in } = data;
             setLocalStorage('webAccessToken', access_token);
             setLocalStorage('webExpiration', expires_in);
         },
-        staleTime: 59 * 60 * 1000, // 59분으로 설정 (유효기간이 1시간)
     });
     const home = window.location.href;
     const authCode = extractAuthCodeFromUrl(home) || '';
-    const { isLoading, data, error } = useQuery<ISpotifySdkToken>(
+    const {
+        isLoading,
+        data: sdkTokenData,
+        error,
+    } = useQuery<ISpotifySdkToken>(
         'getSdkToken',
         async () => {
             const token = getLocalStorage('sdkAccessToken');
@@ -60,6 +65,7 @@ export const HomePage = () => {
             return { accessToken: token };
         },
         {
+            retry: 2,
             enabled: !!authCode,
             onSuccess: (data) => {
                 const { access_token, refresh_token } = data;
@@ -85,9 +91,10 @@ export const HomePage = () => {
             <SearchInput />
             <Content>
                 {isMobile ? <MobileHeader /> : <SideBar />}
-                {tokenData && <Outlet />}
+                {webTokenData && <Outlet />}
             </Content>
-            {accessToken && <Player />}
+            {sdkToken && <CreatePlayer />}
+            {sdkToken && <Player />}
             {isMobile && <BottomBar />}
         </Container>
     );

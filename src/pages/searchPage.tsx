@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { searchTrack } from '../api/api';
+import { searchTrack } from '../api/api잠시주석';
 import { SearchTrackItem } from '../components/searchResultForm/searchResultItem';
 import { getLocalStorage } from '../utils/util';
 import { useSetRecoilState } from 'recoil';
@@ -54,6 +54,7 @@ export const SearchPage = () => {
                         title: track.name,
                         name: track.album.artists[0].name,
                         cover: track.album.images[0]?.url,
+                        playTime: track.duration_ms,
                     }));
                     setPlayerTracks(trackSummaries);
                 }

@@ -68,14 +68,14 @@ export const NewAlbum = () => {
             }
         },
         {
-            enabled: !!token,
+            retry: 2,
         }
     );
     if (newAlbumLoading) {
         return <Message>로딩 중</Message>;
     }
     if (isError) {
-        return <Message>에러 발생</Message>;
+        return <Message>네트워크 오류</Message>;
     }
     return (
         <>

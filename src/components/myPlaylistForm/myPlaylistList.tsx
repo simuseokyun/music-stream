@@ -3,7 +3,6 @@ import { useRecoilValue } from 'recoil';
 import { playlistList } from '../../state/atoms';
 import { Message } from '../../styles/common.style';
 import { MyPlaylistItem } from './myPlaylistItem';
-import { useEffect } from 'react';
 
 const Container = styled.ul`
     width: 100%;

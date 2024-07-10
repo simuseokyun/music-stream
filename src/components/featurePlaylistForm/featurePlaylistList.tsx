@@ -49,16 +49,19 @@ export const FeaturePlaylist = () => {
         isLoading,
         data: featurePlaylist,
         isError,
-    } = useQuery<IPopularPlaylists>('newPlaylist', () => {
-        if (token) {
-            return getFeaturePlaylist(token);
+    } = useQuery<IPopularPlaylists>(
+        'newPlaylist',
+        () => {
+            if (token) {
+                return getFeaturePlaylist(token);
+            }
+            return Promise.resolve(null);
+        },
+        {
+            retry: 2,
         }
-        return Promise.resolve(null);
-    });
+    );
 
-    if (isError) {
-        return <Message>에러 발생</Message>;
-    }
     return (
         <>
             {featurePlaylist && (

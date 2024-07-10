@@ -51,7 +51,7 @@ export const SearchTrackItem = ({
     const { openCategory, addSong, mouseLeave } = usePlaylist;
     const useTrack = useAddTrack(id, title, duration_ms, cover, album_title, artists, album_id, uri);
     const { addTrack } = useTrack;
-    const playBtn = () => playMusic(uri, title, cover, artists[0].name);
+    const playBtn = () => playMusic(uri, title, cover, artists[0].name, duration_ms);
     return (
         <Tr onMouseLeave={mouseLeave}>
             <Td>

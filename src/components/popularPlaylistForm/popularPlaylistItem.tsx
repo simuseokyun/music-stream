@@ -48,7 +48,7 @@ export const PopularPlaylistTrack = ({
     const useTrack = useAddTrack(id, title, duration, cover, album_title, artists, album_id, uri);
     const { openCategory, addSong, mouseLeave } = usePlaylist;
     const { addTrack } = useTrack;
-    const playBtn = () => playMusic(uri, title, cover, artists[0].name);
+    const playBtn = () => playMusic(uri, title, cover, artists[0].name, duration);
 
     return (
         <Tr onMouseLeave={mouseLeave}>

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useQuery } from 'react-query';
-import { getPopularPlaylist } from '../api/api';
+import { getPopularPlaylist } from '../api/api잠시주석';
 import { commaSeparate, getLocalStorage } from '../utils/util';
 import { useParams } from 'react-router-dom';
 import { IPopularPlaylistInfo } from '../types/popularPlaylists';
@@ -57,6 +57,7 @@ export const PopularPlaylistPage = () => {
                         title: track.name,
                         name: track.artists[0].name,
                         cover: track.album.images[0].url,
+                        playTime: track.duration_ms,
                     }));
                     setPlayerTracks(trackSummaries);
                 }

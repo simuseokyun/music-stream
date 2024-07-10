@@ -55,6 +55,7 @@ export const PlaylistTracks = ({
     album_title,
     playlist_id,
     uri,
+    duration,
 }: IMyPlaylistTracks) => {
     const [playlists, setPlaylist] = useRecoilState(playlistList);
     const playMusic = usePlayMusic();
@@ -69,7 +70,7 @@ export const PlaylistTracks = ({
             return [...prev.slice(0, index), { ...prev[index], tracks: newTracks }, ...prev.slice(index + 1)];
         });
     };
-    const playBtn = () => playMusic(uri, title, cover, artists[0].name);
+    const playBtn = () => playMusic(uri, title, cover, artists[0].name, duration);
 
     return (
         <Tr>

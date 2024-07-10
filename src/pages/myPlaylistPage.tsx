@@ -31,6 +31,7 @@ const PlaylistWrap = styled.div`
 const PlaylistBot = styled.div`
     height: 500px;
     width: 100%;
+
     overflow-y: scroll;
     @media (max-width: 768px) {
         height: 300px;
@@ -49,6 +50,7 @@ export const MyPlaylistPage = () => {
                 title: track.title,
                 name: track.artists[0].name,
                 cover: track.cover,
+                playTime: track.duration_ms,
             }));
             setPlayerTracks(trackSummaries);
         }
