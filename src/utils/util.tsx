@@ -1,7 +1,7 @@
 // 공통 함수들
 
 import Cookies from 'js-cookie';
-import { refreshToken } from '../api/api';
+import { refreshToken } from '../api/api잠시주석';
 import {
     deviceInfo,
     setMobile,
@@ -190,7 +190,7 @@ export const usePlayMusic = () => {
     const allTrackValue = useRecoilValue(playerTracks);
     const setPlayerTracks = useSetRecoilState(playerPrevAndNext);
     const createPlayer = useCreatePlayer();
-    const playMusic = async (trackUri: string, title: string, cover: string, artist: string) => {
+    const playMusic = async (trackUri: string, title: string, cover: string, artist: string, playTime: number) => {
         const targetIndex = allTrackValue.findIndex((track) => track.uri === trackUri);
         const [previousTrack, nextTrack] = [allTrackValue[targetIndex - 1], allTrackValue[targetIndex + 1]];
         setPlayerTracks([{ ...previousTrack }, { ...nextTrack }]);
@@ -200,11 +200,12 @@ export const usePlayMusic = () => {
                 return;
             }
             if (!deviceId) {
-                alert('웹 플레이어를 생성해야 합니다');
+                alert('잠시만 기다려주세요');
                 const newToken = await refreshToken();
                 if (newToken) {
                     setLocalStorage('sdkAccessToken', newToken);
                     createPlayer();
+
                     if (deviceId) {
                         await playSong(trackUri, deviceId);
                         setNowSong(() => ({
@@ -212,6 +213,7 @@ export const usePlayMusic = () => {
                             cover,
                             artist,
                             is_playing: true,
+                            playTime,
                         }));
                     } else {
                         alert('디바이스가 생성이 왜 안됨');
@@ -223,7 +225,7 @@ export const usePlayMusic = () => {
             if (deviceId && accessToken) {
                 await playSong(trackUri, deviceId);
                 setNowSong((prev) => {
-                    return { title, cover, artist, is_playing: true };
+                    return { title, cover, artist, is_playing: true, playTime };
                 });
             } else {
                 throw new Error('error');
@@ -231,7 +233,13 @@ export const usePlayMusic = () => {
         } catch (error) {
             console.error('catch문 입장');
             setNowSong(() => {
-                return { title: '실행 오류', cover: '/images/basicPlaylist.png', artist: '', is_playing: false };
+                return {
+                    title: '실행 오류',
+                    cover: '/images/basicPlaylist.png',
+                    playTime: null,
+                    artist: '',
+                    is_playing: false,
+                };
             });
         }
     };
@@ -300,7 +308,7 @@ export const useAddTrack = (
 
 export const useToggleSong = () => {
     const token = getLocalStorage('sdkAccessToken');
-    const deviceId = useRecoilValue(deviceInfo);
+    const [deviceId, setDevice] = useRecoilState(deviceInfo);
     const [song, setSong] = useRecoilState(nowSongInfo);
     const toggleSong = async () => {
         const endpoint = song.is_playing ? 'pause' : 'play';
@@ -318,8 +326,92 @@ export const useToggleSong = () => {
                 setSong((prev) => {
                     return { ...prev, is_playing: !prev.is_playing };
                 });
-            } else {
-                console.error(response.status);
+            }
+            if (response.status == 401) {
+                const { access_token } = await refreshToken();
+                setLocalStorage('sdkAccessToken', access_token);
+
+                const response = await fetch(
+                    `https://api.spotify.com/v1/me/player/${endpoint}?play?device_id=${deviceId}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            Authorization: `Bearer ${access_token}`,
+                        },
+                    }
+                );
+                if (response.ok) {
+                    setSong((prev) => {
+                        return { ...prev, is_playing: !prev.is_playing };
+                    });
+                }
+            }
+            if (response.status == 404) {
+                const createPlayer = () => {
+                    return new Promise((resolve, reject) => {
+                        const player = new window.Spotify.Player({
+                            name: 'util에서 생성된 플레이어',
+                            getOAuthToken: (cb) => {
+                                cb(token!);
+                            },
+                            volume: 0.5,
+                        });
+
+                        player.addListener('ready', ({ device_id }) => {
+                            console.log('플레이어 준비됨, device_id:', device_id);
+                            setDevice(device_id);
+                            resolve(device_id);
+                        });
+
+                        player.addListener('not_ready', ({ device_id }) => {
+                            console.log('플레이어 준비 안됨, device_id:', device_id);
+                        });
+
+                        player.addListener('initialization_error', ({ message }) => {
+                            console.error('Initialization Error:', message);
+                            reject(message);
+                        });
+
+                        player.addListener('authentication_error', ({ message }) => {
+                            console.error('Authentication Error:', message);
+                            reject(message);
+                        });
+
+                        player.addListener('account_error', ({ message }) => {
+                            console.error('Account Error:', message);
+                            reject(message);
+                        });
+
+                        player.addListener('playback_error', ({ message }) => {
+                            console.error('Playback Error:', message);
+                            reject(message);
+                        });
+
+                        player.connect();
+                    });
+                };
+
+                try {
+                    const device_id = await createPlayer();
+                    console.log(device_id);
+                    const playerResponse = await fetch(
+                        `https://api.spotify.com/v1/me/player/${endpoint}?device_id=${device_id}`,
+                        {
+                            method: 'PUT',
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    );
+                    console.log(playerResponse);
+                    if (playerResponse.ok) {
+                        setSong((prev) => {
+                            return { ...prev, is_playing: !prev.is_playing };
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error creating player or setting song:', error);
+                }
             }
         } catch (error) {
             console.error(error);
@@ -372,7 +464,7 @@ export const useCreatePlayer = () => {
     const setDevice = useSetRecoilState(deviceInfo);
     const createPlayer = () => {
         const player = new window.Spotify.Player({
-            name: 'sd 플레이어',
+            name: 'util에서 생성된 플레이어',
             getOAuthToken: (cb) => {
                 cb(sdkToken!);
             },
