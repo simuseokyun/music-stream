@@ -15,7 +15,7 @@ root.render(
         <QueryClientProvider client={client}>
             <CookiesProvider>
                 <ThemeProvider theme={theme}>
-                    <RouterProvider router={router}></RouterProvider>
+                    <RouterProvider router={router} />
                 </ThemeProvider>
             </CookiesProvider>
         </QueryClientProvider>
