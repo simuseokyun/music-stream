@@ -18,6 +18,15 @@ export const playlistList = atom<IPlaylist[]>({
     key: 'playlistList',
     default: [],
 });
+
+export const playlistSelector = selector({
+    // 내 플레이리스트 목록에 변화가 없으면 캐싱된 값을 넘기기 위해 생성
+    key: 'playlistsSelector',
+    get: ({ get }) => {
+        const playlists = get(playlistList);
+        return playlists;
+    },
+});
 export const myAlbumList = atom<IMyAlbum[]>({
     key: 'myAlbumList',
     default: [],
@@ -65,7 +74,7 @@ export const deviceInfo = atom<string | null>({
 
 export const nowSongInfo = atom<INowPlaying>({
     key: 'nowSongInfo',
-    default: { title: '', cover: '/images/basicPlaylist.png', artist: '', is_playing: false },
+    default: { title: '', cover: '/images/basicPlaylist.png', artist: '', playTime: null, is_playing: false },
 });
 export const checkFormState = atom({
     key: 'checkFormState',
