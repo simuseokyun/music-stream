@@ -103,7 +103,7 @@ export const Th = styled.th`
 `;
 export const Td = styled.td`
     cursor: pointer;
-    padding: 5px 0;
+    padding: 8px 0;
     max-width: 0;
     &:first-child {
         width: 6%;
@@ -135,5 +135,30 @@ export const Td = styled.td`
     &:nth-child(4) {
         width: 5%;
         text-align: right;
+    }
+`;
+export const Cover = styled.img`
+    width: 50px;
+    height: 50px;
+`;
+export const TitleWrap = styled.div`
+    width: 100%;
+    text-align: left;
+    margin-left: 10px;
+`;
+export const Title = styled.p`
+    font-size: 16px;
+    margin-bottom: 8px;
+    @media (max-width: 425px) {
+        font-size: 14px;
+    }
+`;
+export const TrackArtist = styled.span`
+    a {
+        font-size: 14px;
+        color: rgb(160, 160, 160);
+        @media (max-width: 425px) {
+            font-size: 12px;
+        }
     }
 `;
