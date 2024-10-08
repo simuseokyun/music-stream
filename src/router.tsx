@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { HomePage } from './pages/homePage';
 import { AlbumPage } from './pages/albumPage';
 import { ArtistPage } from './pages/artistPage';
-import { SearchPage } from './pages/searchPage';
+import { SearchResultPage } from './pages/searchResultPage';
 import { MyPlaylistPage } from './pages/myPlaylistPage';
 import { MainPage } from './pages/mainPage';
 import { AllAlbumPage } from './pages/allAlbumPage';
@@ -11,6 +11,7 @@ import { PopularPlaylistPage } from './pages/popularPlaylistPage';
 import { LibraryPage } from './pages/libraryPage';
 import { InitPage } from './pages/initPage';
 import { NotFound } from './pages/notFound';
+import { SearchPage } from './pages/mobileSearchPage';
 
 export const router = createBrowserRouter([
     {
@@ -31,7 +32,7 @@ export const router = createBrowserRouter([
                     },
                     {
                         path: 'search/:title',
-                        element: <SearchPage />,
+                        element: <SearchResultPage />,
                     },
                     {
                         path: 'artist/:artistId',
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
                         element: <LibraryPage />,
                     },
                 ],
+            },
+            {
+                path: 'search',
+                element: <SearchPage />,
             },
         ],
         errorElement: <NotFound />,
