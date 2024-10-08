@@ -1,14 +1,47 @@
-import styled from 'styled-components';
-
+import styled, { keyframes } from 'styled-components';
+import { IPopularListCoverProps } from '../types/popularPlaylists';
 export const Table = styled.table`
     width: 100%;
 `;
 export const Thead = styled.thead``;
 export const Tbody = styled.tbody``;
-export const Tr = styled.tr``;
+
+export const Tr = styled.tr`
+    a {
+        color: #a0a0a0;
+        &:hover {
+            color: white;
+        }
+        @media (max-width: 768px) {
+            &:hover {
+                color: #a0a0a0;
+            }
+        }
+    }
+`;
+
 export const Message = styled.p`
     text-align: center;
     font-size: 16px;
+`;
+export const LoadingWrap = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+export const Loading = styled.img`
+    width: 30px;
+    height: 30px;
+
+    animation: ${rotate} 1s linear infinite;
 `;
 export const PrevBtn = styled.img`
     display: inline-block;
@@ -16,7 +49,11 @@ export const PrevBtn = styled.img`
     width: 25px;
     height: 25px;
     padding: 4px;
-    border-radius: 24px;
+    border-radius: 25px;
+    transition: all 0.2s;
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.7);
+    }
     @media (max-width: 768px) {
         width: 20px;
         height: 20px;
@@ -26,38 +63,82 @@ export const NextBtn = styled(PrevBtn)`
     margin-left: 10px;
 `;
 export const PlayBtn = styled.img`
+    display: inline-block;
     width: 25px;
     height: 25px;
+    border-radius: 25px;
+    transition: all 0.2s;
+    &:hover {
+        background-color: white;
+    }
+    @media (max-width: 768px) {
+        &:hover {
+            background-color: initial; /* 원래 상태로 복구 */
+        }
+    }
 `;
 export const AddBtn = styled.img`
+    display: inline-block;
     width: 20px;
     height: 20px;
     background-color: white;
     padding: 4px;
     border-radius: 20px;
-    display: inline-block;
+    &:hover {
+        transform: scale(1.1);
+    }
+    @media (max-width: 768px) {
+        &:hover {
+            transform: none;
+        }
+    }
 `;
 export const CloseBtn = styled.img`
-    width: 30px;
-    height: 30px;
-    padding: 4px;
+    width: 25px;
+    height: 25px;
+    border-radius: 25px;
+    padding: 2px;
     border-radius: 20px;
     display: inline-block;
     cursor: pointer;
+    transition: all 0.2s;
+    &:hover {
+        background-color: white;
+    }
+    @media (max-width: 768px) {
+        &:hover {
+            background-color: initial;
+        }
+    }
 `;
 export const Category = styled.ul`
     position: absolute;
-    right: 0;
+    right: 0px;
     width: 200px;
+    height: 300px;
     padding: 10px;
-    background-color: #282828;
+    background-color: #333333;
     border-radius: 8px;
-    z-index: 1;
+    text-align: left;
+    overflow-y: scroll;
+    z-index: 10;
+    @media (max-width: 425px) {
+        width: 100dvw;
+        height: 100dvh;
+        top: 0;
+    }
 `;
 export const CategoryItem = styled.li`
+    display: flex;
+    align-items: center;
     text-align: left;
     color: white;
-    padding: 5px;
+    padding: 2px;
+    transition: all 0.2s;
+    border-radius: 5px;
+    /* text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap; */
     &:hover {
         background-color: #3e3d3d;
     }
@@ -101,6 +182,25 @@ export const Th = styled.th`
         width: 10%;
     }
 `;
+export const SubTh = styled.th`
+    border-bottom: 1px solid #808080;
+    padding: 10px 5px;
+    &:first-child {
+        width: 30px;
+    }
+    &:nth-child(2) {
+        width: 80%;
+        text-align: left;
+        max-width: 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    &:last-child {
+        text-align: right;
+    }
+`;
 export const Td = styled.td`
     cursor: pointer;
     padding: 8px 0;
@@ -124,10 +224,14 @@ export const Td = styled.td`
     }
     &:nth-child(3) {
         width: 25%;
+        padding: 0 20px;
         text-align: left;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        a {
+            font-size: 14px;
+        }
         @media (max-width: 768px) {
             display: none;
         }
@@ -137,23 +241,40 @@ export const Td = styled.td`
         text-align: right;
     }
 `;
-export const Cover = styled.img`
-    width: 50px;
-    height: 50px;
+export const Cover = styled.img<IPopularListCoverProps>`
+    width: 45px;
+    height: 45px;
+    border-radius: 4px;
 `;
 export const TitleWrap = styled.div`
-    width: 100%;
+    width: calc(100% - 60px);
     text-align: left;
     margin-left: 10px;
 `;
-export const Title = styled.p`
+export const Title = styled.h1`
     font-size: 16px;
     margin-bottom: 8px;
-    @media (max-width: 425px) {
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+    /* @media (max-width: 425px) {
         font-size: 14px;
+    } */
+`;
+export const ModalTitle = styled.h3`
+    font-size: 16px;
+    text-align: left;
+    font-weight: 700;
+    @media (max-width: 768px) {
+        text-align: center;
     }
 `;
-export const TrackArtist = styled.span`
+export const SubTitle = styled(Title)`
+    font-size: 14px;
+    padding: 5px;
+    margin: 0;
+`;
+export const ArtistWrap = styled.span`
     a {
         font-size: 14px;
         color: rgb(160, 160, 160);
@@ -161,4 +282,41 @@ export const TrackArtist = styled.span`
             font-size: 12px;
         }
     }
+`;
+
+export const Form = styled.form`
+    background-color: #232322;
+    max-width: 500px;
+    padding: 15px;
+    width: 80%;
+    border-radius: 8px;
+`;
+
+export const AlertTop = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`;
+export const AlertTitle = styled.h1`
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+`;
+export const AlertMessage = styled.p`
+    font-size: 16px;
+    margin-top: 15px;
+`;
+
+export const Background = styled.div`
+    width: 100dvw;
+    height: 100dvh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 11;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;

@@ -23,11 +23,21 @@ time, mark, audio, video {
      font-style: normal;
      font-weight: 400;
 	vertical-align: baseline;
-    @media (max-width:425px) {
-        font-size:12px;
-    }
+   ;
      &::-webkit-scrollbar {
         display: none;
+    }
+}
+h1{
+    font-size:16px;
+    @media (max-width:425px) {
+        font-size:14px;
+    }
+}
+p,span,a{
+    font-size:14px;
+    @media (max-width:425px) {
+        font-size:12px;
     }
 }
 
@@ -40,6 +50,11 @@ body {
     background-color:black;
     color:white;
   
+  
+}
+html{
+   
+    
 }
 ol, ul {
 	list-style: none;
