@@ -1,16 +1,17 @@
 import Cookies from 'js-cookie';
-import { IAllAlbum, IArtistAlbumInfo } from '../types/albumInfo';
+import { IAllAlbums, IArtistAlbumInfo } from '../types/albumInfo';
 import { getLocalStorage } from '../utils/util';
 
+const client_id = process.env.REACT_APP_CLIENT_ID || '';
+const client_secret = process.env.REACT_APP_SECRET_ID || '';
+const redirect_uri = process.env.REACT_APP_REDIRECT_URI || '';
+
 export const getWebToken = async () => {
-    const client_id = process.env.REACT_APP_CLIENT_ID || '';
-    const client_secret = process.env.REACT_APP_SECRET_ID || '';
     let access_token = getLocalStorage('webAccessToken');
     let expires_in = getLocalStorage('webExpiration');
     const now = new Date();
     const nowTimeNumber = now.getTime();
     if (access_token && expires_in && parseInt(expires_in, 10) - 10 > nowTimeNumber) {
-        console.log('재활용');
         return { access_token, expires_in };
     }
     const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -25,9 +26,8 @@ export const getWebToken = async () => {
         }),
     });
     if (!response.ok) {
-        console.log('네트워크 오류');
+        throw new Error('failed');
     }
-    console.log('웹 토큰 새로 발급');
     const json = await response.json();
     const newWebToken = json.access_token;
     const nowTime = new Date();
@@ -36,27 +36,27 @@ export const getWebToken = async () => {
     return { access_token: newWebToken, expires_in: newExpiration };
 };
 
-export const getSdkToken = async (code: string) => {
-    const client_id = process.env.REACT_APP_CLIENT_ID || '';
-    const client_secret = process.env.REACT_APP_SECRET_ID || '';
-    const redirect_uri = process.env.REACT_APP_REDIRECT_URI || '';
+export const getSdkToken = async (authCode: string) => {
     const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
-            code: code,
+            code: authCode,
             redirect_uri,
             grant_type: 'authorization_code',
             client_id,
             client_secret,
         }),
     });
+    if (!response.ok) {
+        throw new Error('failed');
+    }
     const json = await response.json();
     return json;
 };
-export const refreshToken = async () => {
+export const refreshAccessToken = async () => {
     const token = Cookies.get('refreshToken') as string;
     const client_id = process.env.REACT_APP_CLIENT_ID || '';
     const client_secret = process.env.REACT_APP_SECRET_ID || '';
@@ -72,11 +72,14 @@ export const refreshToken = async () => {
             client_secret: client_secret,
         }),
     });
+    if (!response.ok) {
+        throw new Error('failed');
+    }
     const json = await response.json();
     return json;
 };
 
-const fetchWithToken = async (url: string, token: string) => {
+const fetchHelper = async (url: string, token: string) => {
     const makeRequest = async (token: string) => {
         const response = await fetch(url, {
             method: 'GET',
@@ -86,7 +89,6 @@ const fetchWithToken = async (url: string, token: string) => {
         });
         return response;
     };
-
     let response = await makeRequest(token);
     if (response.status === 401) {
         const errorData = await response.json();
@@ -95,27 +97,26 @@ const fetchWithToken = async (url: string, token: string) => {
             response = await makeRequest(newTokenData.access_token);
         }
     }
-    if (!response.ok) {
-        throw new Error('API 요청에 실패했습니다.');
+    if (!response.ok && response.status !== 401) {
+        throw new Error('failed');
     }
-
     const json = await response.json();
     return json;
 };
 
 export const getArtist = async (token: string, artistId: string) => {
-    return await fetchWithToken(`https://api.spotify.com/v1/artists/${artistId}`, token);
+    return await fetchHelper(`https://api.spotify.com/v1/artists/${artistId}`, token);
 };
 
-export const searchTrack = async (token: string, search: string) => {
-    if (search) {
-        return await fetchWithToken(`https://api.spotify.com/v1/search?q=${search}&type=track`, token);
+export const searchTrack = async (token: string, searchValue: string) => {
+    if (searchValue) {
+        return await fetchHelper(`https://api.spotify.com/v1/search?q=${searchValue}&type=track`, token);
     } else {
         return null;
     }
 };
 export const getAllAlbums = async (token: string, artistId: string) => {
-    let allAlbums: IAllAlbum[] = [];
+    let allAlbums: IAllAlbums[] = [];
     let nextUrl: string | null = `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=album,single`;
     while (nextUrl) {
         let response = await fetch(nextUrl, {
@@ -141,21 +142,21 @@ export const getAllAlbums = async (token: string, artistId: string) => {
     return allAlbums;
 };
 export const getFeaturePlaylist = async (token: string) => {
-    return await fetchWithToken(`https://api.spotify.com/v1/browse/featured-playlists`, token);
+    return await fetchHelper(`https://api.spotify.com/v1/browse/featured-playlists`, token);
 };
 export const getNewAlbum = async (token: string) => {
-    return await fetchWithToken(`https://api.spotify.com/v1/browse/new-releases`, token);
+    return await fetchHelper(`https://api.spotify.com/v1/browse/new-releases`, token);
 };
 export const getPopularPlaylist = async (token: string, playlistId: string) => {
-    return await fetchWithToken(`https://api.spotify.com/v1/playlists/${playlistId}`, token);
+    return await fetchHelper(`https://api.spotify.com/v1/playlists/${playlistId}`, token);
 };
 
 export const getAlbum = async (token: string, albumId: string) => {
-    return await fetchWithToken(`https://api.spotify.com/v1/albums/${albumId}`, token);
+    return await fetchHelper(`https://api.spotify.com/v1/albums/${albumId}`, token);
 };
 export const getArtistAlbum = async (token: string, artistId: string) => {
-    return await fetchWithToken(`https://api.spotify.com/v1/artists/${artistId}/albums`, token);
+    return await fetchHelper(`https://api.spotify.com/v1/artists/${artistId}/albums`, token);
 };
 export const getArtistTopTrack = async (token: string, artistId: string) => {
-    return await fetchWithToken(`https://api.spotify.com/v1/artists/${artistId}/top-tracks`, token);
+    return await fetchHelper(`https://api.spotify.com/v1/artists/${artistId}/top-tracks`, token);
 };
