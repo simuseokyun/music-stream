@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { IArtistAlbum } from '../../types/artistInfo';
 
 const Container = styled.li`
@@ -14,22 +14,22 @@ const Container = styled.li`
         padding: 5px;
     }
 `;
-const AlbumTitle = styled.h1`
+const Title = styled.h1`
     margin-top: 10px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 `;
-const AlbumReleaseWrap = styled.div`
+const ReleaseWrap = styled.div`
     margin-top: 5px;
 `;
-const AlbumRelease = styled.span`
+const Release = styled.span`
     color: rgb(160, 160, 160);
 `;
-const AlbumType = styled(AlbumRelease)`
+const Type = styled(Release)`
     margin-left: 3px;
 `;
-const AlbumImg = styled.img`
+const Cover = styled.img`
     width: 100%;
     border-radius: 8px;
 `;
@@ -39,12 +39,12 @@ export const AlbumItem = ({ id, name, cover, type, year }: IArtistAlbum) => {
     const onClickAlbum = () => navigate(`/home/album/${id}`);
     return (
         <Container onClick={onClickAlbum}>
-            <AlbumImg src={cover} />
-            <AlbumTitle>{name}</AlbumTitle>
-            <AlbumReleaseWrap>
-                <AlbumRelease>{year}</AlbumRelease>
-                <AlbumType>{type}</AlbumType>
-            </AlbumReleaseWrap>
+            <Cover src={cover} alt="앨범 커버" />
+            <Title>{name}</Title>
+            <ReleaseWrap>
+                <Release>{year}</Release>
+                <Type>{type}</Type>
+            </ReleaseWrap>
         </Container>
     );
 };

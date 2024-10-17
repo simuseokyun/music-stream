@@ -1,20 +1,16 @@
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
-import { playlistList } from '../../state/atoms';
 import { durationTransform, usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
+import { playerTracksStorage, playerTracks } from '../../state/atoms';
 import { IArtistsTopTrack } from '../../types/artistInfo';
-import { PlayBtn, Tr, AddBtn } from '../../styles/common.style';
-import { PlaylistSelector } from '../categoryForm/category';
+import { PlayBtn, Tr, AddBtn, Cover } from '../../styles/common.style';
+import { PlaylistList } from '../categoryForm/category';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 const TdWrap = styled.div`
     display: flex;
     align-items: center;
 `;
-const Cover = styled.img`
-    width: 45px;
-    height: 45px;
-    border-radius: 8px;
-`;
+
 const Title = styled.p`
     margin-left: 10px;
 `;
@@ -54,20 +50,23 @@ export const TopFiveTracks = ({
 }: IArtistsTopTrack) => {
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
+    const storageTracks = useRecoilValue(playerTracksStorage);
+    const setPlayerTracks = useSetRecoilState(playerTracks);
     const { openCategory, addSong, mouseLeave } = usePlaylist;
-    const useTrack = useAddTrack(id, title, duration_ms, cover, album_title, artists, album_id, uri);
-    const { addTrack } = useTrack;
+    const { addTrack } = useAddTrack(id, title, cover, album_title, artists, album_id, uri);
+
     const playBtn = () => {
-        playMusic(uri, title, cover, artists[0].name, duration_ms);
+        setPlayerTracks(storageTracks);
+        playMusic(uri, title, cover, artists[0].name);
     };
     return (
         <Tr onMouseLeave={mouseLeave}>
             <Td>
-                <PlayBtn src="/images/playButton.png" onClick={playBtn} />
+                <PlayBtn src="/images/playButton.png" alt="재생" onClick={playBtn} />
             </Td>
             <Td>
                 <TdWrap>
-                    <Cover src={cover} alt="album_cover" />
+                    <Cover src={cover} alt="앨범커버" />
                     <Title>{title}</Title>
                 </TdWrap>
             </Td>
@@ -77,8 +76,8 @@ export const TopFiveTracks = ({
                     : durationTransform(duration_ms).seconds
             }`}</Td>
             <Td style={{ position: 'relative' }}>
-                <AddBtn src="/images/addButton.png" onClick={addSong} />
-                {openCategory && <PlaylistSelector addTrack={addTrack} />}
+                <AddBtn src="/images/addButton.png" alt="추가" onClick={addSong} />
+                {openCategory && <PlaylistList addTrack={addTrack} />}
             </Td>
         </Tr>
     );

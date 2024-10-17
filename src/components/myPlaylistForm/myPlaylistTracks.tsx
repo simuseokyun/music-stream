@@ -4,36 +4,11 @@ import { playlistList } from '../../state/atoms';
 import { useRecoilState } from 'recoil';
 import { IMyPlaylistTracks } from '../../types/myPlaylist';
 import { usePlayMusic } from '../../utils/util';
-import { Tr, Td, Dot } from '../../styles/common.style';
+import { Tr, Td, Dot, TitleWrap, Title, ArtistWrap, Cover, PlayBtn } from '../../styles/common.style';
 
 const TdWrap = styled.div`
     display: flex;
     align-items: center;
-`;
-const Title = styled.p`
-    @media (max-width: 425px) {
-        font-size: 14px;
-    }
-`;
-const TitleWrap = styled.div`
-    text-align: left;
-    margin-left: 10px;
-`;
-const ArtistsWrap = styled.div`
-    display: flex;
-`;
-const Cover = styled.img`
-    width: 45px;
-    height: 45px;
-`;
-const Artist = styled.p`
-    margin-top: 4px;
-    a {
-        color: rgb(160, 160, 160);
-        @media (max-width: 425px) {
-            font-size: 12px;
-        }
-    }
 `;
 
 const DeleteBtn = styled.img`
@@ -43,10 +18,7 @@ const DeleteBtn = styled.img`
     border-radius: 25px;
     display: inline-block;
 `;
-const PlayBtn = styled.img`
-    width: 25px;
-    height: 25px;
-`;
+
 export const PlaylistTracks = ({
     cover,
     title,
@@ -55,8 +27,8 @@ export const PlaylistTracks = ({
     album_title,
     playlist_id,
     uri,
-    duration,
-}: IMyPlaylistTracks) => {
+}: // duration,
+IMyPlaylistTracks) => {
     const [playlists, setPlaylist] = useRecoilState(playlistList);
     const playMusic = usePlayMusic();
     const deleteTrack = () => {
@@ -70,7 +42,7 @@ export const PlaylistTracks = ({
             return [...prev.slice(0, index), { ...prev[index], tracks: newTracks }, ...prev.slice(index + 1)];
         });
     };
-    const playBtn = () => playMusic(uri, title, cover, artists[0].name, duration);
+    const playBtn = () => playMusic(uri, title, cover, artists[0].name);
 
     return (
         <Tr>
@@ -82,14 +54,12 @@ export const PlaylistTracks = ({
                     <Cover src={cover} alt="album_cover" />
                     <TitleWrap>
                         <Title>{title}</Title>
-                        <ArtistsWrap>
-                            {artists.map((artist, index) => (
-                                <Artist key={index}>
-                                    <Link to={`/home/artist/${artist.id}`}>{artist.name}</Link>
-                                    {artists.length == 1 ? null : artists[index + 1] ? <Dot>,</Dot> : null}
-                                </Artist>
-                            ))}
-                        </ArtistsWrap>
+                        {artists.map((artist, i) => (
+                            <ArtistWrap key={artist.name}>
+                                <Link to={`/home/artist/${artist.id}`}>{artist.name}</Link>
+                                {artists.length == 1 ? undefined : artists[i + 1] ? <Dot>,</Dot> : undefined}
+                            </ArtistWrap>
+                        ))}
                     </TitleWrap>
                 </TdWrap>
             </Td>

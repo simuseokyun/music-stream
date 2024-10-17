@@ -6,29 +6,33 @@ import { useRecoilValue } from 'recoil';
 import { setMobile, typeTransform } from '../state/atoms';
 import { getLocalStorage } from '../utils/util';
 import { AllAlbumItem } from '../components/allAlbumForm/allAlbumItem';
-import { Message } from '../styles/common.style';
+import { Message, LoadingWrap, Loading } from '../styles/common.style';
 
 const Container = styled.div`
     width: 100%;
-    padding: 20px;
+    padding: 20px 20px 100px;
     background: #131212;
-    border-radius: 8px;
-    margin-bottom: 140px;
     @media (max-width: 768px) {
-        padding: 10px;
+        margin-top: 60px;
+        padding-bottom: 120px;
         background: black;
     }
 `;
 const Title = styled.h1`
-    font-size: 20px;
-    margin-bottom: 10px;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
 `;
-const AlbumList = styled.ul<{ state: string }>`
+const AlbumList = styled.ul<{ $state: string }>`
     width: 100%;
     display: grid;
     gap: 20px 5px;
-    grid-template-columns: ${({ state }) => `repeat(${state === 'true' ? 3 : 4}, 1fr)`};
+    grid-template-columns: ${({ $state }) => `repeat(${$state === 'true' ? 3 : 4}, 1fr)`};
 `;
+
+interface I {
+    artist: { name: string }[];
+}
 
 export const AllAlbumPage = () => {
     const token = getLocalStorage('webAccessToken');
@@ -47,15 +51,19 @@ export const AllAlbumPage = () => {
         }
     });
     if (isLoading) {
-        return <Message>로딩 중</Message>;
+        return (
+            <LoadingWrap>
+                <Loading src="/images/loading.png" />
+            </LoadingWrap>
+        );
     }
     if (isError) {
         return <Message>에러 발생</Message>;
     }
     return (
         <Container>
-            <Title>모든 앨범</Title>
-            <AlbumList state={isMobile.toString()}>
+            <Title>{allAlbumList?.[0]?.artists[0].name || ''} 의 모든앨범</Title>
+            <AlbumList $state={isMobile.toString()}>
                 {allAlbumList &&
                     allAlbumList.map((album) => (
                         <AllAlbumItem

@@ -1,4 +1,4 @@
-export interface IAlbumInfo {
+export interface IGetAlbumData {
     id: string;
     name: string;
     album_type: string;
@@ -31,6 +31,8 @@ export interface ITrackInfo {
     uri: string;
 }
 export interface IAlbumFirst {
+    id: string;
+    artistId: string;
     cover: string;
     artist: string;
     type: string;
@@ -38,7 +40,14 @@ export interface IAlbumFirst {
 }
 
 export interface IArtistAlbumInfo {
-    items: { id: string; name: string; album_type: string; images: { url: string }[]; release_date: string }[];
+    items: {
+        id: string;
+        name: string;
+        artists: { name: string }[];
+        album_type: string;
+        images: { url: string }[];
+        release_date: string;
+    }[];
     next: string;
 }
 export interface IAlbumData {
@@ -59,9 +68,10 @@ export interface IAlbumDataProp {
         }[];
     };
 }
-export interface IAllAlbum {
+export interface IAllAlbums {
     id: string;
     name: string;
+    artists: { name: string }[];
     album_type: string;
     images: { url: string }[];
     release_date: string;
@@ -73,7 +83,7 @@ export interface IAllAlbumProp {
     release: string;
     type: string;
 }
-export interface ISelectAlbumInfo {
+export interface IGetAlbumInfo {
     id: string;
     name: string;
     artist: { id: string; name: string };

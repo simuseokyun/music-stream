@@ -6,8 +6,8 @@ export interface IMyAlbum {
 }
 
 export interface IMyAlbumList {
+    id: string;
     cover: string;
     name: string;
     artist: string;
-    onClick: () => void;
 }

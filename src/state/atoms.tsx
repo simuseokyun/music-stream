@@ -27,6 +27,16 @@ export const playlistSelector = selector({
         return playlists;
     },
 });
+
+export const playlistSearch = selector({
+    // 내 플레이리스트 목록에 변화가 없으면 캐싱된 값을 넘기기 위해 생성
+    key: 'playlistSearch',
+    get: ({ get }) => {
+        const playlists = get(playlistList);
+        return playlists;
+    },
+});
+
 export const myAlbumList = atom<IMyAlbum[]>({
     key: 'myAlbumList',
     default: [],
@@ -48,18 +58,14 @@ export const selectPlaylist = selector({
     },
 });
 
-export const libraryPliState = atom({
-    key: 'libraryPliState',
-    default: true,
-});
-export const libraryAlbumState = atom({
-    key: 'libraryAlbumState',
-    default: false,
+export const libraryState = atom({
+    key: 'libraryState',
+    default: { playlist: true, album: false },
 });
 
 export const searchFormState = atom({
     key: 'searchFormState',
-    default: false,
+    default: true,
 });
 
 export const playlistFixFormState = atom({
@@ -74,7 +80,7 @@ export const deviceInfo = atom<string | null>({
 
 export const nowSongInfo = atom<INowPlaying>({
     key: 'nowSongInfo',
-    default: { title: '', cover: '/images/basicPlaylist.png', artist: '', playTime: null, is_playing: false },
+    default: { title: null, cover: '/images/basicPlaylist.png', artist: null, is_playing: false },
 });
 export const checkFormState = atom({
     key: 'checkFormState',
@@ -85,10 +91,33 @@ export const playerTracks = atom<IPlayerTracks[]>({
     key: 'playerTracks',
     default: [],
 });
+export const playerTracksStorage = atom<IPlayerTracks[]>({
+    key: 'playerTracksStorage',
+    default: [],
+});
 
 export const playerPrevAndNext = atom<IPlayerTracks[]>({
     key: 'playerPrevAndNext',
     default: [],
+});
+interface IAlertState {
+    requiredLogin: boolean;
+    requiredPlaylist: boolean;
+    addSong: boolean;
+    duplicateSong: boolean;
+}
+export const alertState = atom<IAlertState>({
+    key: 'alertState',
+    default: {
+        requiredLogin: false,
+        requiredPlaylist: false,
+        addSong: false,
+        duplicateSong: false,
+    },
+});
+export const gridState = atom({
+    key: 'gridState',
+    default: false,
 });
 export enum typeTransform {
     single = '싱글',

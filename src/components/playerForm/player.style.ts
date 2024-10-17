@@ -1,15 +1,16 @@
 import styled, { keyframes, css } from 'styled-components';
 
-export const Container = styled.div<{ song: string }>`
+export const Container = styled.div<{ $song: string | null }>`
     width: 100%;
     position: fixed;
     left: 0;
-    bottom: ${({ song }) => (song ? 0 : '-100px')};
+    bottom: ${({ $song }) => ($song ? '0' : '-100px')};
     transition: all 0.5s;
     z-index: 10;
     background: rgba(0, 0, 0, 0.9);
+
     @media (max-width: 768px) {
-        bottom: ${({ song }) => (song ? '52px' : '-100px')};
+        bottom: ${({ $song }) => ($song ? '52px' : '-100px')};
     }
 `;
 
@@ -90,6 +91,14 @@ export const StopBtn = styled.img`
     width: 30px;
     height: 30px;
     cursor: pointer;
+    &:hover {
+        transform: scale(1.1);
+    }
+    @media (max-width: 768px) {
+        &:hover {
+            transform: none;
+        }
+    }
 `;
 export const PlayBtn = styled(StopBtn)``;
 export const PrevBtn = styled.img`
@@ -97,6 +106,14 @@ export const PrevBtn = styled.img`
     width: 30px;
     height: 30px;
     margin-right: 10px;
+    &:hover {
+        transform: scale(1.1);
+    }
+    @media (max-width: 768px) {
+        &:hover {
+            transform: none;
+        }
+    }
 `;
 export const NextBtn = styled(PrevBtn)`
     margin-left: 10px;

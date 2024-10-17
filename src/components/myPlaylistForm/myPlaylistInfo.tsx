@@ -9,7 +9,7 @@ const Container = styled.div`
     display: flex;
     align-items: end;
     margin-bottom: 20px;
-    @media (max-width: 768px) {
+    @media (max-width: 425px) {
         display: block;
     }
 `;
@@ -20,14 +20,14 @@ const Cover = styled.img`
     height: 150px;
     border-radius: 8px;
     object-fit: cover;
-    @media (max-width: 768px) {
+    @media (max-width: 425px) {
         margin: auto;
     }
 `;
 
 const Info = styled.div`
     margin-left: 20px;
-    @media (max-width: 768px) {
+    @media (max-width: 425px) {
         margin: 20px 0 0 0;
     }
 `;
@@ -35,7 +35,7 @@ const Info = styled.div`
 const Title = styled.p`
     font-size: 24px;
     margin-bottom: 5px;
-    @media (max-width: 768px) {
+    @media (max-width: 425px) {
         font-size: 20px;
     }
 `;
@@ -49,8 +49,8 @@ const Btn = styled.button`
     text-align: center;
     background-color: #65d46e;
     border: none;
-    border-radius: 20px;
-    padding: 4px 8px;
+    border-radius: 4px;
+    padding: 2px 6px;
 `;
 export const MyPlaylistInfo = ({
     cover,
@@ -131,6 +131,7 @@ export const MyPlaylistInfo = ({
                     <Button text="수정" margin="0 0 0 5px" bgColor="white" onClick={onFixed} />
                 </Title>
                 <Length>{length + '곡'}</Length>
+
                 {top ? (
                     <Btn name={name} onClick={clearFixed}>
                         고정 해제

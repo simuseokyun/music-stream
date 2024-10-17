@@ -73,7 +73,7 @@ export const CheckForm = ({ name }: { name: string }) => {
             <Form visible={isVisible.toString()}>
                 <FormTop>
                     <FormTitle>플레이리스트 삭제</FormTitle>
-                    <CloseBtn src="/images/closeButton.png" onClick={onClose} />
+                    <CloseBtn src="/images/closeButton.png" alt="닫기" onClick={onClose} />
                 </FormTop>
                 <CheckMessage>{name}을 삭제하시겠습니까 ?</CheckMessage>
                 <BtnWrap>

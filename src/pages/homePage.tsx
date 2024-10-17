@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import { useQuery } from 'react-query';
-import { getWebToken, getSdkToken } from '../api/api';
 import Cookies from 'js-cookie';
 import styled from 'styled-components';
+import { getWebToken, getSdkToken } from '../api/api';
 import { useRecoilValue } from 'recoil';
 import { setLocalStorage, getLocalStorage, useHandleResize, extractAuthCodeFromUrl } from '../utils/util';
-import { playlistFixFormState, addPlaylistState } from '../state/atoms';
-import { Outlet } from 'react-router-dom';
+import { RequiredLoginAlert } from '../components/alertForm/requiredLoginAlert';
+import { RequiredPlaylist } from '../components/alertForm/requiredPlaylistAlert';
+import { playlistFixFormState, addPlaylistState, alertState } from '../state/atoms';
+
 import { SideBar } from '../components/navForm/sideBar';
 import { SearchInput } from '../components/searchForm/searchInput';
 import { AddPlaylistForm } from '../components/myPlaylistForm/addMyPlaylist';
@@ -15,7 +18,8 @@ import { FixPlaylistForm } from '../components/myPlaylistForm/fixMyplaylist';
 import { BottomBar } from '../components/navForm/bottomBar';
 import { Player } from '../components/playerForm/player';
 import { ISpotifySdkToken, ISpotifyWebToken } from '../types/auth';
-import { CreatePlayer } from '../components/createPlayer/createrPlayer';
+import { AddSongAlert } from '../components/alertForm/addSongAlert';
+import { DuplicateSongAlert } from '../components/alertForm/duplicateSongAlert';
 
 const Container = styled.div`
     max-width: 1180px;
@@ -28,7 +32,7 @@ const Content = styled.div`
     display: grid;
     grid-template-columns: 1fr 3fr;
     gap: 20px;
-    padding: 100px 20px 20px 20px;
+    padding: 20px;
     @media (max-width: 768px) {
         display: block;
         padding: 0;
@@ -37,6 +41,7 @@ const Content = styled.div`
 
 export const HomePage = () => {
     const addFormState = useRecoilValue(addPlaylistState);
+    const alertFormState = useRecoilValue(alertState);
     const fixFormState = useRecoilValue(playlistFixFormState);
     const { isMobile, handleResize } = useHandleResize();
     const sdkToken = getLocalStorage('sdkAccessToken');
@@ -86,14 +91,18 @@ export const HomePage = () => {
 
     return (
         <Container>
+            {alertFormState.addSong && <AddSongAlert />}
+            {alertFormState.duplicateSong && <DuplicateSongAlert />}
+            {alertFormState.requiredLogin && <RequiredLoginAlert />}
+            {alertFormState.requiredPlaylist && <RequiredPlaylist />}
             {addFormState && <AddPlaylistForm />}
             {fixFormState && <FixPlaylistForm />}
-            <SearchInput />
+
             <Content>
                 {isMobile ? <MobileHeader /> : <SideBar />}
                 {webTokenData && <Outlet />}
             </Content>
-            {sdkToken && <CreatePlayer />}
+
             {sdkToken && <Player />}
             {isMobile && <BottomBar />}
         </Container>

@@ -40,6 +40,10 @@ p,span,a{
         font-size:12px;
     }
 }
+li h1,li p,td h1,td p {
+ line-height: 1.5;
+}
+
 
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {

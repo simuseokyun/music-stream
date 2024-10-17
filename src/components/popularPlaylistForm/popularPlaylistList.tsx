@@ -16,15 +16,15 @@ export const PopularPlaylistList = ({ data }: IPopularPlaylistTracks) => {
             <Tbody>
                 {data.map(({ track }) => (
                     <PopularPlaylistTrack
-                        key={track.id}
-                        id={track.id}
-                        cover={track.album.images[0].url}
-                        title={track.name}
-                        artists={track.artists}
-                        album_id={track.album.id}
-                        album_title={track.album.name}
-                        duration={track.duration_ms}
-                        uri={track.uri}
+                        key={track?.id}
+                        id={track?.id}
+                        cover={track?.album?.images[0].url}
+                        title={track?.name}
+                        artists={track?.artists}
+                        album_id={track?.album.id}
+                        album_title={track?.album.name}
+                        duration={track?.duration_ms}
+                        uri={track?.uri}
                     />
                 ))}
             </Tbody>

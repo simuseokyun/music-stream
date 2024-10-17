@@ -4,36 +4,12 @@ import { useRecoilValue } from 'recoil';
 import { playlistList } from '../../state/atoms';
 import { useAddPlaylist, useAddTrack, usePlayMusic } from '../../utils/util';
 import { ISearchTrackProp } from '../../types/searchTracksInfo';
-import { Tr, Td, PlayBtn, AddBtn, Dot } from '../../styles/common.style';
-import { PlaylistSelector } from '../categoryForm/category';
-import { useEffect } from 'react';
+import { Tr, Td, PlayBtn, AddBtn, Dot, TitleWrap, Title, ArtistWrap, Cover } from '../../styles/common.style';
+import { PlaylistList } from '../categoryForm/category';
+
 const TdWrap = styled.div`
     display: flex;
     align-items: center;
-`;
-
-const TitleWrap = styled.div`
-    width: 100%;
-
-    text-align: left;
-    margin-left: 10px;
-`;
-const Title = styled.p``;
-
-const ArtistsWrap = styled.div`
-    display: flex;
-`;
-const ArtistNameWrap = styled.p`
-    margin-top: 6px;
-    a {
-        color: rgb(160, 160, 160);
-    }
-`;
-const Cover = styled.img`
-    width: 45px;
-    height: 45px;
-    background-position: center;
-    background-size: cover;
 `;
 
 export const SearchTrackItem = ({
@@ -49,9 +25,9 @@ export const SearchTrackItem = ({
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const { openCategory, addSong, mouseLeave } = usePlaylist;
-    const useTrack = useAddTrack(id, title, duration_ms, cover, album_title, artists, album_id, uri);
-    const { addTrack } = useTrack;
-    const playBtn = () => playMusic(uri, title, cover, artists[0].name, duration_ms);
+    const { addTrack } = useAddTrack(id, title, cover, album_title, artists, album_id, uri);
+
+    const playBtn = () => playMusic(uri, title, cover, artists[0].name);
     return (
         <Tr onMouseLeave={mouseLeave}>
             <Td>
@@ -62,14 +38,12 @@ export const SearchTrackItem = ({
                     <Cover src={cover} alt="앨범커버" />
                     <TitleWrap>
                         <Title>{title}</Title>
-                        <ArtistsWrap>
-                            {artists.map((artist, i) => (
-                                <ArtistNameWrap key={artist.id}>
-                                    <Link to={`/home/artist/${artist.id}`}>{artist.name}</Link>
-                                    {artists.length == 1 ? null : artists[i + 1] ? <Dot>,</Dot> : null}
-                                </ArtistNameWrap>
-                            ))}
-                        </ArtistsWrap>
+                        {artists.map((artist, i) => (
+                            <ArtistWrap key={artist.name}>
+                                <Link to={`/home/artist/${artist.id}`}>{artist.name}</Link>
+                                {artists.length == 1 ? undefined : artists[i + 1] ? <Dot>,</Dot> : undefined}
+                            </ArtistWrap>
+                        ))}
                     </TitleWrap>
                 </TdWrap>
             </Td>
@@ -78,7 +52,7 @@ export const SearchTrackItem = ({
             </Td>
             <Td style={{ position: 'relative' }}>
                 <AddBtn src="/images/addButton.png" onClick={addSong} />
-                {openCategory && <PlaylistSelector addTrack={addTrack} />}
+                {openCategory && <PlaylistList addTrack={addTrack} />}
             </Td>
         </Tr>
     );

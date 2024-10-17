@@ -8,7 +8,7 @@ export interface IMyPlaylistTracks {
         id: string;
         name: string;
     }[];
-    duration: number;
+    // duration: number;
     playlist_id: string;
 }
 
@@ -19,10 +19,10 @@ export interface IMyPlaylist {
     top: number | undefined;
 }
 
-export interface IAddTrack {
-    id: string;
-    name: string;
-    duration_ms: number;
+export interface ITrackData {
+    track_id: string;
+    track_title: string;
+    // duration_ms: number;
     cover: string;
     album_title: string;
     artists: { name: string; id: string }[];
@@ -37,7 +37,7 @@ export interface IPlaylist {
     tracks: {
         id: string;
         title: string;
-        duration_ms: number;
+        // duration_ms: number;
         cover: string;
         album_title: string;
         album_id: string;
@@ -54,7 +54,7 @@ export interface IMyPlaylistTracksProp {
         album_title: string;
         artists: { id: string; name: string }[];
         uri: string;
-        duration_ms: number;
+        // duration_ms: number;
         album_id: string;
     }[];
     playlist_id: string;

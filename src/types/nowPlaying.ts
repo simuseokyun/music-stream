@@ -1,7 +1,6 @@
 export interface INowPlaying {
-    title: string;
+    title: string | null;
     cover: string;
-    artist: string;
+    artist: string | null;
     is_playing: boolean;
-    playTime: number | null;
 }

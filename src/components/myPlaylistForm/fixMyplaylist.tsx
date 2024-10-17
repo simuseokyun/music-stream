@@ -2,29 +2,9 @@ import styled from 'styled-components';
 import { useState, useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selectPlaylist, playlistFixFormState, playlistList } from '../../state/atoms';
-import { Message } from '../../styles/common.style';
+import { Message, Background, Form } from '../../styles/common.style';
 import { Button } from '../common/buttonForm/button';
 
-const Container = styled.div`
-    width: 100%;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 11;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-`;
-const FixForm = styled.div`
-    background-color: #232322;
-    max-width: 500px;
-    padding: 20px;
-    width: 80%;
-    border-radius: 8px;
-`;
 const FormTop = styled.div`
     display: flex;
     justify-content: space-between;
@@ -53,6 +33,8 @@ const CoverWrap = styled.div`
     position: relative;
     width: 100px;
     height: 100px;
+    border-radius: 8px;
+    overflow: hidden;
     left: calc(50% - 50px);
 `;
 const Cover = styled.img`
@@ -61,6 +43,7 @@ const Cover = styled.img`
     left: 0;
     width: 100%;
     height: 100%;
+
     object-fit: cover;
 `;
 const CoverOverlay = styled.div`
@@ -69,8 +52,8 @@ const CoverOverlay = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgb(0, 0, 0, 0.1);
-    border-radius: 8px;
+    background-color: rgb(0, 0, 0, 0.7);
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -156,8 +139,8 @@ export const FixPlaylistForm = () => {
     };
 
     return (
-        <Container>
-            <FixForm>
+        <Background>
+            <Form>
                 <FormTop>
                     <FormTitle>플레이리스트 생성</FormTitle>
                 </FormTop>
@@ -189,7 +172,7 @@ export const FixPlaylistForm = () => {
                     <Button text="수정" bgColor="#65d46e" onClick={submitInfo} />
                     <Button text="취소" margin="0 0 0 5px" bgColor="white" onClick={submitInfo} />
                 </BtnWrap>
-            </FixForm>
-        </Container>
+            </Form>
+        </Background>
     );
 };

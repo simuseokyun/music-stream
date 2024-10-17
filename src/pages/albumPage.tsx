@@ -1,96 +1,101 @@
 import { useParams } from 'react-router-dom';
-import { playerTracks, typeTransform } from '../state/atoms';
+import styled from 'styled-components';
+import { typeTransform, alertState } from '../state/atoms';
 import { useQuery } from 'react-query';
 import { getAlbum } from '../api/api';
 import { getLocalStorage } from '../utils/util';
-import styled from 'styled-components';
-import { IAlbumInfo } from '../types/albumInfo';
-import { Message } from '../styles/common.style';
+import { IGetAlbumData } from '../types/albumInfo';
+import { Message, LoadingWrap, Loading } from '../styles/common.style';
 import { AlbumInfo } from '../components/albumForm/albumInfo';
-import { AlbumTrackList } from '../components/albumForm/albumTrackList';
-import { useSetRecoilState } from 'recoil';
+import { TrackList } from '../components/albumForm/albumTrackList';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { playerTracksStorage } from '../state/atoms';
+import { RequiredLoginAlert } from '../components/alertForm/requiredLoginAlert';
+import { RequiredPlaylist } from '../components/alertForm/requiredPlaylistAlert';
 
 const Container = styled.div`
-    background-color: rgba(0, 0, 0, 0.7);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-    z-index: 3;
+    background-color: #131212;
+    border-radius: 8px;
+    @media (max-width: 768px) {
+        margin-top: 60px;
+        overflow-y: scroll;
+        background-color: black;
+    }
 `;
 const AlbumWrap = styled.div`
-    background: linear-gradient(90deg, black 0%, #392f31);
-    width: 90%;
-    max-width: 860px;
-    height: 80vh;
-    position: relative;
+    height: inherit;
     border-radius: 8px;
-    padding-bottom: 100px;
-    overflow-y: scroll;
     @media (max-width: 768px) {
         width: 100%;
-        height: 100vh;
-        background: black;
     }
 `;
 const TrackListsWrap = styled.div`
-    padding: 0 20px 20px 20px;
+    background: #131212;
+    padding: 0 20px 100px 20px;
+    @media (max-width: 768px) {
+        background: black;
+        padding: 0 20px 150px 20px;
+    }
 `;
 
 const Copyright = styled.p`
     font-size: 12px;
-    padding-top: 20px;
+    margin-top: 20px;
     color: #e2e2e2;
+    @media (max-width: 768px) {
+    }
 `;
 
 export const AlbumPage = () => {
     const { albumId } = useParams();
     const token = getLocalStorage('webAccessToken');
-    const setPlayerTracks = useSetRecoilState(playerTracks);
+    const setStorageTracks = useSetRecoilState(playerTracksStorage);
+    const alertFormState = useRecoilValue(alertState);
 
     const {
         isLoading: albumLoading,
         data: albumData,
         isError,
-    } = useQuery<IAlbumInfo>(
+    } = useQuery<IGetAlbumData>(
         ['albumInfo', albumId],
         () => {
             if (token && albumId) {
                 const albumData = getAlbum(token, albumId);
                 return albumData;
             }
+
             return Promise.resolve(null);
         },
         {
             onSuccess: (data) => {
                 if (data && data.tracks && data.tracks.items) {
-                    const trackSummaries = data.tracks.items.map((track) => ({
+                    const tracks = data.tracks.items.map((track) => ({
                         uri: track.uri,
                         title: track.name,
                         name: track.artists[0].name,
                         cover: data.images[0].url,
                         playTime: track.duration_ms,
                     }));
-                    setPlayerTracks(trackSummaries);
+                    setStorageTracks(tracks);
                 }
             },
         }
     );
 
     if (albumLoading) {
-        return <Message>로딩 중</Message>;
+        return (
+            <LoadingWrap>
+                <Loading src="/images/loading.png" />
+            </LoadingWrap>
+        );
     }
     if (isError) {
         return <Message>에러 발생</Message>;
     }
     return (
         <Container>
+            {alertFormState.requiredLogin && <RequiredLoginAlert />}
+            {alertFormState.requiredPlaylist && <RequiredPlaylist />}
             {albumData && (
                 <AlbumWrap key={albumData?.id}>
                     <AlbumInfo
@@ -103,7 +108,7 @@ export const AlbumPage = () => {
                         trackLength={albumData?.total_tracks}
                     />
                     <TrackListsWrap>
-                        <AlbumTrackList data={albumData} />
+                        <TrackList data={albumData} />
                         <Copyright>{albumData?.copyrights[0].text}</Copyright>
                     </TrackListsWrap>
                 </AlbumWrap>

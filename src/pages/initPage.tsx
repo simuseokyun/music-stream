@@ -25,7 +25,14 @@ export const InitPage = () => {
     return (
         <Container>
             <Logo src="/images/spotifyLogo.png" alt="Logo" />
-            <Button margin="10px 0 0 0 " text="입장하기" bgColor="#65d46e" onClick={navigateHome} />
+            <Button
+                fontSize="16px"
+                margin="10px 0 0 0 "
+                padding="4px 8px"
+                text="입장하기"
+                bgColor="#65d46e"
+                onClick={navigateHome}
+            />
         </Container>
     );
 };

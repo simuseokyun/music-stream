@@ -1,30 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
-import { addPlaylistState, libraryAlbumState, libraryPliState, playlistList } from '../../state/atoms';
-import { CloseBtn, Message } from '../../styles/common.style';
+import { addPlaylistState, libraryState, playlistList } from '../../state/atoms';
+import { CloseBtn, Message, Background, Form } from '../../styles/common.style';
 
-const Container = styled.div`
-    width: 100%;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 11;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-`;
-const AddForm = styled.form`
-    background-color: #232322;
-    max-width: 500px;
-    padding: 20px;
-    width: 80%;
-    border-radius: 8px;
-`;
 const FormTop = styled.div`
     display: flex;
     justify-content: space-between;
@@ -45,14 +25,18 @@ const FormRight = styled.div`
     width: 100%;
     margin-left: 20px;
     @media (max-width: 768px) {
-        margin-left: 0;
+        margin: 10px 0 0 0;
     }
 `;
-const FormTitle = styled.h1``;
+const FormTitle = styled.h1`
+    font-size: 16px;
+`;
 const CoverWrap = styled.div`
     position: relative;
     width: 100px;
     height: 100px;
+    overflow: hidden;
+    border-radius: 8px;
     left: calc(50% - 50px);
 `;
 const Cover = styled.img`
@@ -69,8 +53,7 @@ const CoverOverlay = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgb(0, 0, 0, 0.1);
-    border-radius: 8px;
+    background-color: rgb(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -78,24 +61,24 @@ const CoverOverlay = styled.div`
         font-size: 12px;
     }
 `;
+const Title = styled.p``;
 
 const Input = styled.input`
     width: 100%;
     display: inline-block;
     padding: 4px;
-    margin-top: 10px;
+    margin-top: 5px;
     outline: none;
     color: white;
     border: 1px solid transparent;
     background-color: rgb(40, 40, 40);
 `;
-
-const Title = styled.p`
-    margin-bottom: 2px;
-    @media (max-width: 768px) {
-        margin-top: 10px;
-    }
+const DupMessage = styled.p`
+    font-size: 12px;
+    color: #65d46e;
+    margin-top: 4px;
 `;
+
 const BtnWrap = styled.div`
     text-align: right;
     margin-top: 20px;
@@ -110,13 +93,15 @@ const Btn = styled.button`
 `;
 
 export const AddPlaylistForm = () => {
-    const addPlaylist = useSetRecoilState(playlistList);
-    const openPlaylist = useSetRecoilState(addPlaylistState);
-    const setPliState = useSetRecoilState(libraryPliState);
-    const setAlbumState = useSetRecoilState(libraryAlbumState);
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
     const { register, handleSubmit, setValue } = useForm<{ title: string; file?: FileList }>();
+
+    const addPlaylist = useSetRecoilState(playlistList);
+    const setAddFormState = useSetRecoilState(addPlaylistState);
+    const setLibraryState = useSetRecoilState(libraryState);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [dupState, setDupState] = useState<boolean | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
     const handleClick = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
@@ -138,42 +123,44 @@ export const AddPlaylistForm = () => {
         addPlaylist((prev) => {
             const isDuplicate = prev.some((playlist) => playlist.title === title);
             if (isDuplicate) {
-                alert('중복된 플레이리스트가 존재합니다');
+                setDupState(true);
                 return prev;
+            } else {
+                const newPlaylist = {
+                    id: String(Date.now()),
+                    title: title || `플레이리스트#${prev.length + 1}`,
+                    cover: imagePreview ?? '/images/basicPlaylist.png',
+                    tracks: [],
+                };
+                setDupState(false);
+                return [...prev, newPlaylist];
             }
-            const newPlaylist = {
-                id: String(Date.now()),
-                title: title || `플레이리스트 #${prev.length + 1}`,
-                cover: imagePreview ? imagePreview : '/images/basicPlaylist.png',
-                tracks: [],
-            };
-
-            return [...prev, newPlaylist];
         });
-        setPliState(true);
-        setAlbumState(false);
-        openPlaylist(false);
         setValue('title', '');
     };
-
     const onClose = () => {
-        openPlaylist(false);
+        setAddFormState(false);
     };
+    useEffect(() => {
+        if (dupState) {
+            setAddFormState(true);
+        } else if (!dupState && dupState !== null) {
+            setAddFormState(false);
+            setLibraryState({ playlist: true, album: false });
+        }
+    }, [dupState]);
 
     return (
-        <Container>
-            <AddForm onSubmit={handleSubmit(onValid)}>
+        <Background>
+            <Form onSubmit={handleSubmit(onValid)}>
                 <FormTop>
                     <FormTitle>플레이리스트 생성</FormTitle>
-                    <CloseBtn src="/images/closeButton.png" onClick={onClose} />
+                    <CloseBtn src="/images/closeButton.png" alt="닫기" onClick={onClose} />
                 </FormTop>
                 <AddFormWrap>
                     <FormLeft>
                         <CoverWrap>
-                            <Cover
-                                src={imagePreview ? imagePreview : '/images/basicPlaylist.png'}
-                                alt="Preview"
-                            ></Cover>
+                            <Cover src={imagePreview ?? '/images/basicPlaylist.png'} alt="Preview"></Cover>
                             <CoverOverlay onClick={handleClick}>
                                 <Message>사진 선택</Message>
                             </CoverOverlay>
@@ -187,7 +174,7 @@ export const AddPlaylistForm = () => {
                         />
                     </FormLeft>
                     <FormRight>
-                        <Title>제목</Title>
+                        <Title>이름</Title>
                         <Input
                             {...register('title', {
                                 required: false,
@@ -196,12 +183,13 @@ export const AddPlaylistForm = () => {
                             type="text"
                             placeholder="플레이리스트 이름을 작성해주세요"
                         />
+                        {dupState && <DupMessage>중복된 플레이리스트가 존재합니다</DupMessage>}
                     </FormRight>
                 </AddFormWrap>
                 <BtnWrap>
                     <Btn type="submit">생성하기</Btn>
                 </BtnWrap>
-            </AddForm>
-        </Container>
+            </Form>
+        </Background>
     );
 };

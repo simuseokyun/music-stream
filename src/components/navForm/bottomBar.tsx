@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 import { searchFormState } from '../../state/atoms';
 import { Link } from 'react-router-dom';
-import { useCallback } from 'react';
+
 const Container = styled.div`
     width: 100%;
     position: fixed;
@@ -21,28 +21,33 @@ const List = styled.ul`
     display: flex;
 `;
 const Item = styled.li`
+    flex: 1;
+    text-align: center;
     font-size: 12px;
     padding: 20px 10px;
-    text-align: center;
-    flex: 1;
+    a {
+        font-size: 12px;
+    }
 `;
 
 export const BottomBar = () => {
     const searchState = useSetRecoilState(searchFormState);
-    const setSearch = () => {
-        searchState((prev) => !prev);
-    };
+    const navList = [
+        { text: '홈', url: '/home' },
+        { text: '검색', url: '/search' },
+        { text: '보관함', url: '/home/library' },
+    ];
     return (
         <Container>
             <Wrap>
                 <List>
-                    <Item>
-                        <Link to="/home">홈</Link>
-                    </Item>
-                    <Item onClick={setSearch}>검색</Item>
-                    <Item>
-                        <Link to="/home/library">라이브러리</Link>
-                    </Item>
+                    {navList.map((list, index) => {
+                        return (
+                            <Item key={index}>
+                                <Link to={list.url}>{list.text}</Link>
+                            </Item>
+                        );
+                    })}
                 </List>
             </Wrap>
         </Container>

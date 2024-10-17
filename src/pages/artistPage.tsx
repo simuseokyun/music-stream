@@ -3,24 +3,28 @@ import styled from 'styled-components';
 import { ArtistCover } from '../components/artistForm/artistCover';
 import { TopFiveTracksTable } from '../components/artistForm/topFiveTrackList';
 import { AlbumList } from '../components/artistForm/artistAlbumList';
-
+import { RequiredLoginAlert } from '../components/alertForm/requiredLoginAlert';
+import { RequiredPlaylist } from '../components/alertForm/requiredPlaylistAlert';
+import { useRecoilValue } from 'recoil';
+import { alertState } from '../state/atoms';
 const Container = styled.div`
-    width: 100%;
-    padding: 20px;
     background: #131212;
+    padding: 20px 20px 100px;
     border-radius: 8px;
-    overflow-x: hidden;
-    margin-bottom: 100px;
     @media (max-width: 768px) {
         background: black;
-        padding: 10px;
+        margin-top: 60px;
+        padding-bottom: 120px;
     }
 `;
 
 const Title = styled.h1`
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
-    margin: 30px 0 10px 0;
+    margin: 30px 5px 0 5px;
+    @media (max-width: 768px) {
+        font-size: 18px;
+    }
     @media (max-width: 425px) {
         font-size: 16px;
     }
@@ -33,6 +37,8 @@ const AllShow = styled.p`
 
 export const ArtistPage = () => {
     const { artistId } = useParams();
+    const alertFormState = useRecoilValue(alertState);
+
     return (
         <Container>
             <ArtistCover />

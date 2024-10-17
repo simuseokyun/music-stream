@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { IAllAlbumProp } from '../../types/albumInfo';
 
 const Item = styled.li`
@@ -17,10 +17,11 @@ const Item = styled.li`
         }
     }
 `;
-const Title = styled.h1`
+const Title = styled.p`
     margin-top: 10px;
     text-overflow: ellipsis;
     overflow: hidden;
+    line-height: 1.4;
     white-space: nowrap;
 `;
 const Cover = styled.img`
@@ -33,8 +34,7 @@ const RelaseWrap = styled.div`
 const Release = styled.span`
     color: rgb(160, 160, 160);
 `;
-const Type = styled.span`
-    color: rgb(160, 160, 160);
+const Type = styled(Release)`
     margin-left: 3px;
 `;
 
@@ -45,7 +45,7 @@ export const AllAlbumItem = ({ id, cover, name, release, type }: IAllAlbumProp) 
     };
     return (
         <Item onClick={onClickAlbum}>
-            <Cover src={cover} />
+            <Cover src={cover} alt="앨범 커버" />
             <Title>{name}</Title>
             <RelaseWrap>
                 <Release>{release}</Release>

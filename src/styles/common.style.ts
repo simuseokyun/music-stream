@@ -20,9 +20,8 @@ export const Tr = styled.tr`
     }
 `;
 
-export const Message = styled.p`
+export const Message = styled.h1`
     text-align: center;
-    font-size: 16px;
 `;
 export const LoadingWrap = styled.div`
     display: flex;
@@ -224,7 +223,7 @@ export const Td = styled.td`
     }
     &:nth-child(3) {
         width: 25%;
-        padding: 0 20px;
+
         text-align: left;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -253,13 +252,10 @@ export const TitleWrap = styled.div`
 `;
 export const Title = styled.h1`
     font-size: 16px;
-    margin-bottom: 8px;
+    margin-bottom: 2px;
     text-overflow: ellipsis;
     overflow-x: hidden;
     white-space: nowrap;
-    /* @media (max-width: 425px) {
-        font-size: 14px;
-    } */
 `;
 export const ModalTitle = styled.h3`
     font-size: 16px;
@@ -308,13 +304,13 @@ export const AlertMessage = styled.p`
 `;
 
 export const Background = styled.div`
-    width: 100dvw;
-    height: 100dvh;
     position: fixed;
     top: 0;
     left: 0;
+    width: 100dvw;
+    height: 100dvh;
     background-color: rgba(0, 0, 0, 0.7);
-    z-index: 11;
+    z-index: 31;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { INewAlbumItemProp } from '../../types/newAlbums';
+import { INewAlbumItemProp, INewAlbumCoverProp } from '../../types/newAlbums';
 import { useState } from 'react';
-import { INewAlbumCoverProps } from '../../types/newAlbums';
+import {} from '../../types/newAlbums';
 
 const Container = styled.li`
     width: 100%;
@@ -17,49 +17,49 @@ const Container = styled.li`
     }
 `;
 
-const Cover = styled.img<INewAlbumCoverProps>`
+const Cover = styled.img<INewAlbumCoverProp>`
     width: 100%;
     border-radius: 8px;
     display: ${({ $loaded }) => ($loaded == 'true' ? 'block' : 'none')};
+    margin-bottom: 5px;
 `;
 const Title = styled.h1`
     width: 100%;
-    margin-top: 10px;
-    overflow: hidden;
+    overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    @media (max-width: 425px) {
-        font-size: 12px;
-    }
 `;
 const Artist = styled.p`
     width: 100%;
-    font-size: 14px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     color: rgb(160, 160, 160);
-    margin-top: 5px;
+
+    @media (max-width: 768px) {
+        font-size: 14px;
+    }
     @media (max-width: 425px) {
         font-size: 12px;
     }
 `;
-const LoadingSpinner = styled.img`
+const LoadingImg = styled.img`
     width: 100%;
     border-radius: 8px;
 `;
 
 export const NewAlbumItem = ({ id, name, artist, cover }: INewAlbumItemProp) => {
     const [imageLoaded, setImageLoaded] = useState(false);
-    const navigate = useNavigate();
     const onLoadImage = () => setImageLoaded(true);
+
+    const navigate = useNavigate();
     const onClickAlbum = () => {
         navigate(`/home/album/${id}`);
     };
     return (
         <Container onClick={onClickAlbum}>
-            {!imageLoaded && <LoadingSpinner src="/images/basicPlaylist.png" />}
-            <Cover src={cover} alt="albumCover" onLoad={onLoadImage} $loaded={imageLoaded.toString()} />
+            {!imageLoaded && <LoadingImg src="/images/basicPlaylist.png" alt="로딩이미지" />}
+            <Cover src={cover} alt="앨범커버" onLoad={onLoadImage} $loaded={imageLoaded.toString()} />
             <Title>{name}</Title>
             <Artist>{artist}</Artist>
         </Container>

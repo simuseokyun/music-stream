@@ -1,16 +1,17 @@
 import styled from 'styled-components';
 import { Button } from '../common/buttonForm/button';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { libraryAlbumState, libraryPliState, myAlbumList } from '../../state/atoms';
-import { ISelectAlbumInfo } from '../../types/albumInfo';
+import { myAlbumList, libraryState } from '../../state/atoms';
+import { IGetAlbumInfo } from '../../types/albumInfo';
 
 const Container = styled.div`
-    display: flex;
     position: relative;
-    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, #392f31);
+    background: linear-gradient(180deg, #666633, #111111);
+    display: flex;
     align-items: end;
     padding: 20px;
+    border-radius: 8px 8px 0 0;
     @media (max-width: 768px) {
         background: black;
     }
@@ -31,67 +32,41 @@ const Cover = styled.img`
 const Info = styled.div`
     margin-left: 20px;
     @media (max-width: 425px) {
-        margin: 10px 0 0 0;
+        margin: 10px 0 0;
     }
 `;
 const Type = styled.p``;
-const Title = styled.h2`
+const Title = styled.h1`
     font-size: 40px;
     font-weight: 700;
-    margin: 10px 0;
+    margin: 5px 0;
     @media (max-width: 768px) {
         font-size: 20px;
-        margin: 5px 0;
     }
 `;
-const Artist = styled.span`
-    font-weight: 700;
-    @media (max-width: 768px) {
-        font-size: 14px;
-    }
-`;
-const Year = styled.span`
+const Artist = styled.span``;
+const ReleaseYear = styled.span`
     margin-left: 10px;
-    @media (max-width: 768px) {
-        font-size: 14px;
-    }
 `;
-const TotalTracks = styled(Year)`
-    @media (max-width: 768px) {
-        font-size: 14px;
-    }
-`;
-const SpanWrap = styled.div`
+const TrackLength = styled(ReleaseYear)``;
+const SubInfo = styled.div`
     margin-bottom: 10px;
 `;
-const CloseBtn = styled.button`
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    padding: 4px 6px;
-    font-weight: 700;
-    background-color: #e2e2e2;
-    border-radius: 4px;
-    border: none;
-`;
 
-export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: ISelectAlbumInfo) => {
-    const [myAlbums, setMyAlbums] = useRecoilState(myAlbumList);
-    const setPliState = useSetRecoilState(libraryPliState);
-    const setAlbumState = useSetRecoilState(libraryAlbumState);
+export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: IGetAlbumInfo) => {
+    const location = useLocation();
     const navigate = useNavigate();
+    const [myAlbums, setMyAlbums] = useRecoilState(myAlbumList);
+    const setLibraryState = useSetRecoilState(libraryState);
     const saveAlbumState = [...myAlbums].find((album) => {
         return album.name === name;
     });
-    const onClose = () => {
-        navigate(-1);
-    };
-    const saveAlbum = () => {
+
+    const addAlbum = () => {
         setMyAlbums((prev) => {
             return [...prev, { cover, name, artist: artist.name, id }];
         });
-        setAlbumState(true);
-        setPliState(false);
+        setLibraryState({ playlist: false, album: true });
     };
     const deleteAlbum = () => {
         setMyAlbums((prev) => {
@@ -104,24 +79,24 @@ export const AlbumInfo = ({ id, name, cover, type, year, trackLength, artist }: 
 
     return (
         <Container>
-            <Cover src={cover} />
+            <Cover src={cover} alt="앨범커버" />
             <Info>
                 <Type>{type}</Type>
                 <Title>{name}</Title>
-                <SpanWrap>
+                <SubInfo>
                     <Artist>
                         <Link to={`/home/artist/${artist.id}`}>{artist.name}</Link>
                     </Artist>
-                    <Year>{year}</Year>
-                    <TotalTracks>{trackLength}곡</TotalTracks>
-                </SpanWrap>
+                    <ReleaseYear>{year}</ReleaseYear>
+                    <TrackLength>{trackLength}곡</TrackLength>
+                </SubInfo>
+
                 {saveAlbumState ? (
-                    <Button bgColor="#e2e2e2" text="찜 해제" onClick={deleteAlbum} />
+                    <Button fontSize="12px" padding="4px" bgColor="#e2e2e2" text="앨범 삭제" onClick={deleteAlbum} />
                 ) : (
-                    <Button bgColor="#65d46e" text="앨범 찜하기" onClick={saveAlbum} />
+                    <Button fontSize="12px" padding="4px" bgColor="#65d46e" text="앨범 추가" onClick={addAlbum} />
                 )}
             </Info>
-            <CloseBtn onClick={onClose}>X</CloseBtn>
         </Container>
     );
 };

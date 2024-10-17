@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { commaSeparate, getLocalStorage } from '../../utils/util';
-import { getArtist } from '../../api/api잠시주석';
 import { useQuery } from 'react-query';
-import { IArtistInfo } from '../../types/artistInfo';
 import { useParams } from 'react-router-dom';
-import { Message } from '../../styles/common.style';
+import { commaSeparate, getLocalStorage } from '../../utils/util';
+import { getArtist } from '../../api/api';
+import { IArtistInfo } from '../../types/artistInfo';
+import { Message, Loading, LoadingWrap } from '../../styles/common.style';
 
 const TopWrap = styled.div`
     position: relative;
@@ -16,13 +16,13 @@ const TopWrap = styled.div`
         height: 200px;
     }
 `;
-const Top = styled.div<{ img: string }>`
+const Top = styled.div<{ $img: string }>`
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
-    background-image: url(${(props) => props.img});
+    background-image: url(${({ $img }) => $img});
     background-position: center;
     background-size: cover;
     opacity: 0.7;
@@ -65,7 +65,7 @@ export const ArtistCover = () => {
         isLoading,
         data: artistInfo,
         isError,
-    } = useQuery<IArtistInfo>('artistCover', async () => {
+    } = useQuery<IArtistInfo>(['artistCover', artistId], async () => {
         if (artistId) {
             const artistData = await getArtist(token, artistId);
             return artistData;
@@ -74,14 +74,18 @@ export const ArtistCover = () => {
         }
     });
     if (isLoading) {
-        return <Message>로딩 중</Message>;
+        return (
+            <LoadingWrap>
+                <Loading src="/images/loading.png" />
+            </LoadingWrap>
+        );
     }
     if (isError || !artistInfo) {
         return <Message>에러 발생</Message>;
     }
     return (
         <TopWrap>
-            <Top img={artistInfo?.images[0].url}></Top>
+            <Top $img={artistInfo?.images[0].url}></Top>
             <TopOverlay>
                 <Name>{artistInfo?.name}</Name>
                 <Follower>팔로워 : {commaSeparate(artistInfo?.followers.total)}명</Follower>

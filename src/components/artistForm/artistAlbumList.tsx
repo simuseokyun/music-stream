@@ -3,15 +3,15 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { getLocalStorage } from '../../utils/util';
-import { getArtistAlbum } from '../../api/api잠시주석';
+import { getArtistAlbum } from '../../api/api';
 import { setMobile, typeTransform } from '../../state/atoms';
 import { IArtistAlbums } from '../../types/artistInfo';
 import { AlbumItem } from './artistAlbumItem';
 
-const Container = styled.ul<{ state: string }>`
+const Container = styled.ul<{ $state: string }>`
     width: 100%;
     display: grid;
-    grid-template-columns: ${({ state }) => `repeat(${state === 'true' ? 3 : 4}, 1fr)`};
+    grid-template-columns: ${({ $state }) => `repeat(${$state === 'true' ? 3 : 4}, 1fr)`};
     @media (max-width: 768px) {
     }
 `;
@@ -20,11 +20,7 @@ export const AlbumList = () => {
     const { artistId } = useParams();
     const token = getLocalStorage('webAccessToken') || '';
     const isMobile = useRecoilValue(setMobile);
-    const {
-        isLoading,
-        data: albumInfo,
-        isError,
-    } = useQuery<IArtistAlbums>(
+    const { data: albumInfo } = useQuery<IArtistAlbums>(
         'artistAlbum',
         async () => {
             if (artistId) {
@@ -40,7 +36,7 @@ export const AlbumList = () => {
     );
 
     return (
-        <Container state={isMobile.toString()}>
+        <Container $state={isMobile.toString()}>
             {albumInfo &&
                 albumInfo.items
                     .slice(0, isMobile ? 3 : 4)

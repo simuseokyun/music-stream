@@ -4,7 +4,7 @@ import { IPopularPlaylist } from '../../types/popularPlaylists';
 import { useState } from 'react';
 import { IPopularListCoverProps } from '../../types/popularPlaylists';
 
-const Container = styled.li`
+const Item = styled.li`
     width: 100%;
     padding: 10px;
     border-radius: 8px;
@@ -29,11 +29,15 @@ const Cover = styled.img<IPopularListCoverProps>`
 `;
 const Title = styled.h1`
     margin-top: 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.2;
+    font-size: 16px;
+
+    @media (max-width: 425px) {
+        font-size: 14px;
+    }
 `;
-const LoadingSpinner = styled.img`
+
+const LoadingImg = styled.img`
     width: 100%;
     border-radius: 8px;
 `;
@@ -43,12 +47,12 @@ export const FeaturePlaylistItem = ({ id, name, cover }: IPopularPlaylist) => {
     const onLoadImage = () => setImageLoaded(true);
 
     return (
-        <Container>
+        <Item>
             <Link to={`/home/popularPlaylist/${id}`}>
-                {!imageLoaded && <LoadingSpinner src="/images/basicPlaylist.png" />}
-                <Cover src={cover} alt="albumCover" onLoad={onLoadImage} $loaded={imageLoaded.toString()} />
+                {!imageLoaded && <LoadingImg src="/images/basicPlaylist.png" alt="기본이미지" />}
+                <Cover src={cover} alt="앨범커버" onLoad={onLoadImage} $loaded={imageLoaded.toString()} />
                 <Title>{name}</Title>
             </Link>
-        </Container>
+        </Item>
     );
 };

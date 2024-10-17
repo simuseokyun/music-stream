@@ -60,5 +60,5 @@ export interface IPopularPlaylistTracks {
     }[];
 }
 export interface IPopularListCoverProps {
-    $loaded: string;
+    $loaded?: string;
 }

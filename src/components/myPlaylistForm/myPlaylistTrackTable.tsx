@@ -23,7 +23,7 @@ export const MyPlaylistTrackTable = ({ tracks, playlist_id }: IMyPlaylistTracksP
                         artists={track.artists}
                         album_id={track.album_id}
                         album_title={track.album_title}
-                        duration={track.duration_ms}
+                        // duration={track.duration_ms}
                         uri={track.uri}
                     />
                 ))}

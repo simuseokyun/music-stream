@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { IAlbumFirst } from '../../types/albumInfo';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     display: flex;
+    margin-left: 5px;
 `;
 
 const Cover = styled.img`
@@ -23,7 +25,7 @@ const Info = styled.div`
 const Type = styled.p`
     font-size: 20px;
     @media (max-width: 768px) {
-        font-size: 18px;
+        font-size: 16px;
     }
     @media (max-width: 425px) {
         font-size: 12px;
@@ -33,6 +35,7 @@ const Title = styled.h1`
     font-weight: 700;
     font-size: 38px;
     margin: 10px 0;
+    cursor: pointer;
     @media (max-width: 768px) {
         font-size: 24px;
         margin: 5px 0;
@@ -43,22 +46,30 @@ const Title = styled.h1`
 `;
 const Artist = styled.span`
     font-size: 20px;
+    cursor: pointer;
     @media (max-width: 768px) {
-        font-size: 18px;
+        font-size: 16px;
     }
     @media (max-width: 425px) {
         font-size: 12px;
     }
 `;
 
-export const NewAlbumFirst = ({ cover, artist, type, name }: IAlbumFirst) => {
+export const NewAlbumFirst = ({ id, artistId, cover, artist, type, name }: IAlbumFirst) => {
+    const navigate = useNavigate();
+    const navigateAlbum = () => {
+        navigate(`/home/album/${id}`);
+    };
+    const navigateArtist = () => {
+        navigate(`/home/artist/${artistId}`);
+    };
     return (
         <Container>
             <Cover src={cover} />
             <Info>
                 <Type>{type}</Type>
-                <Title>{name}</Title>
-                <Artist>{artist}</Artist>
+                <Title onClick={navigateAlbum}>{name}</Title>
+                <Artist onClick={navigateArtist}>{artist}</Artist>
             </Info>
         </Container>
     );
