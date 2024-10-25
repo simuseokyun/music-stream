@@ -37,7 +37,7 @@ export interface IPopularPlaylistInfoProp {
     artists: { id: string; name: string }[];
     album_id: string;
     album_title: string;
-    uri: string;
+    trackUri: string;
 }
 
 export interface IPopularPlaylistListInfo {

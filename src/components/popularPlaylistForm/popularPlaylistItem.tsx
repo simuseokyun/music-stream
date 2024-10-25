@@ -20,14 +20,14 @@ export const PopularPlaylistTrack = ({
     artists,
     album_id,
     album_title,
-    uri,
+    trackUri,
 }: IPopularPlaylistInfoProp) => {
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
-    const useTrack = useAddTrack(id, title, cover, album_title, artists, album_id, uri);
+    const useTrack = useAddTrack(id, title, cover, album_title, artists, album_id, trackUri);
     const { openCategory, addSong, mouseLeave } = usePlaylist;
     const { addTrack } = useTrack;
-    const playBtn = () => playMusic(uri, title, cover, artists[0].name);
+    const playBtn = () => playMusic({ trackUri, title, cover, artist: artists[0].name });
 
     return (
         <Tr onMouseLeave={mouseLeave}>

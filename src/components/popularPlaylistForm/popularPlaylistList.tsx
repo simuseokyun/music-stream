@@ -24,7 +24,7 @@ export const PopularPlaylistList = ({ data }: IPopularPlaylistTracks) => {
                         album_id={track?.album.id}
                         album_title={track?.album.name}
                         duration={track?.duration_ms}
-                        uri={track?.uri}
+                        trackUri={track?.uri}
                     />
                 ))}
             </Tbody>

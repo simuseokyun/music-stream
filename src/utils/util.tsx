@@ -77,7 +77,8 @@ export const usePlayMusic = () => {
     const [nowTrackInfo, setNowTrackInfo] = useState('');
     useEffect(() => {
         if (nowTrackInfo.length) {
-            const targetIndex = allTrackValue.findIndex((track) => track.uri === nowTrackInfo);
+            const targetIndex = allTrackValue.findIndex((track) => track.trackUri === nowTrackInfo);
+
             const [previousTrack, nextTrack] = [
                 allTrackValue[targetIndex - 1]
                     ? allTrackValue[targetIndex - 1]
@@ -89,7 +90,14 @@ export const usePlayMusic = () => {
         }
     }, [nowTrackInfo]);
 
-    const playMusic = async (trackUri: string, title: string, cover: string, artist: string, pn?: boolean) => {
+    interface S {
+        trackUri: string;
+        title: string;
+        cover: string;
+        artist: string;
+        pn?: boolean;
+    }
+    const playMusic = async ({ trackUri, title, cover, artist, pn }: S) => {
         try {
             if (!token && !deviceId) {
                 setAlertState((prev) => {
@@ -126,7 +134,7 @@ export const usePlayMusic = () => {
                         const createPlayer = () => {
                             return new Promise((resolve, reject) => {
                                 const player = new window.Spotify.Player({
-                                    name: '재생성된 플레이어',
+                                    name: '토큰 다시 받고 만든 플레이어',
                                     getOAuthToken: (cb) => {
                                         cb(newToken.access_token!);
                                     },
@@ -182,19 +190,22 @@ export const usePlayMusic = () => {
                                     }),
                                 }
                             );
-                            if (response.ok) {
-                                setNowSongState(() => ({
-                                    title,
-                                    cover,
-                                    artist,
-                                    is_playing: true,
-                                }));
+                            if (!pn) {
+                                setAllTrackValue(storageTracks);
                             }
+                            setNowTrackInfo(trackUri);
+                            setNowSongState(() => ({
+                                title,
+                                cover,
+                                artist,
+                                is_playing: true,
+                            }));
+                            return;
                         } else {
-                            alert('왜 안될까?');
+                            throw new Error('새로운 디바이스 생성에러');
                         }
                     } else {
-                        alert('리프레쉬 토큰이 실행안됨');
+                        throw new Error('에러');
                     }
                 }
             }
@@ -555,7 +566,7 @@ export const useCreatePlayer = () => {
     const setSong = useSetRecoilState(nowSongInfo);
     const createPlayer = async () => {
         const player = new window.Spotify.Player({
-            name: '스타벅스에서 최초 생성된 플레이어',
+            name: '최초 생성된 플레이어',
             getOAuthToken: (cb) => {
                 if (sdkToken) {
                     cb(sdkToken);
@@ -574,6 +585,7 @@ export const useCreatePlayer = () => {
             });
             player.addListener('player_state_changed', (state) => {
                 if (state && state.paused && !state.loading) {
+                    console.log(state);
                     setSong((prev) => {
                         return { ...prev, is_playing: false };
                     });
@@ -586,6 +598,7 @@ export const useCreatePlayer = () => {
 
             player.addListener('authentication_error', ({ message }) => {
                 console.error('Authentication Error:', message);
+                player.disconnect();
             });
 
             player.addListener('account_error', ({ message }) => {

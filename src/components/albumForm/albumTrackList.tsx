@@ -22,7 +22,7 @@ export const TrackList = ({ data }: IAlbumData) => {
                         cover={data.images[0].url}
                         artists={artists}
                         album_id={data.id}
-                        uri={uri}
+                        trackUri={uri}
                     />
                 ))}
             </Tbody>

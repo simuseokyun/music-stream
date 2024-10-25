@@ -39,6 +39,7 @@ const Td = styled.td`
 `;
 
 export const TopFiveTracks = ({
+    trackUri,
     id,
     cover,
     title,
@@ -46,18 +47,17 @@ export const TopFiveTracks = ({
     album_id,
     album_title,
     duration_ms,
-    uri,
 }: IArtistsTopTrack) => {
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const storageTracks = useRecoilValue(playerTracksStorage);
     const setPlayerTracks = useSetRecoilState(playerTracks);
     const { openCategory, addSong, mouseLeave } = usePlaylist;
-    const { addTrack } = useAddTrack(id, title, cover, album_title, artists, album_id, uri);
+    const { addTrack } = useAddTrack(id, title, cover, album_title, artists, album_id, trackUri);
 
     const playBtn = () => {
         setPlayerTracks(storageTracks);
-        playMusic(uri, title, cover, artists[0].name);
+        playMusic({ trackUri, title, cover, artist: artists[0].name });
     };
     return (
         <Tr onMouseLeave={mouseLeave}>

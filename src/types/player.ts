@@ -1,5 +1,5 @@
 export interface IPlayerTracks {
-    uri: string;
+    trackUri: string;
     title: string;
     name: string;
     cover: string;

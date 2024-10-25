@@ -30,17 +30,17 @@ const Title = styled.h1`
     margin-bottom: 2px;
 `;
 
-export const TrackItem = ({ track_id, track_title, cover, album_title, artists, album_id, uri }: ITrackData) => {
+export const TrackItem = ({ track_id, track_title, cover, album_title, artists, album_id, trackUri }: ITrackData) => {
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const storageTracks = useRecoilValue(playerTracksStorage);
     const setPlayerTracks = useSetRecoilState(playerTracks);
     const { openCategory, addSong, mouseLeave } = usePlaylist;
-    const { addTrack } = useAddTrack(track_id, track_title, cover, album_title, artists, album_id, uri);
+    const { addTrack } = useAddTrack(track_id, track_title, cover, album_title, artists, album_id, trackUri);
 
     const playBtn = () => {
         setPlayerTracks(storageTracks);
-        playMusic(uri, track_title, cover, artists[0].name);
+        playMusic({ trackUri, title: track_title, cover, artist: artists[0].name });
     };
 
     return (

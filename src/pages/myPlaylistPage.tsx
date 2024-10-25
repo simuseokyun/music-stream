@@ -45,11 +45,10 @@ export const MyPlaylistPage = () => {
     const updatePlayerTracks = () => {
         if (playlist?.tracks.length) {
             const tracks = playlist.tracks.map((track) => ({
-                uri: track.uri,
+                trackUri: track.uri,
                 title: track.title,
                 name: track.artists[0].name,
                 cover: track.cover,
-                // playTime: track.duration_ms,
             }));
             setStorageTracks(tracks);
         }

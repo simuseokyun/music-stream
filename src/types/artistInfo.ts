@@ -28,7 +28,7 @@ export interface IArtistsTopTrack {
     album_id: string;
     album_title: string;
     duration_ms: number;
-    uri: string;
+    trackUri: string;
 }
 
 export interface IArtistAlbum {

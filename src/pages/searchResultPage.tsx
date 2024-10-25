@@ -52,11 +52,10 @@ export const SearchResultPage = () => {
             onSuccess: (data) => {
                 if (data && data.tracks && data.tracks.items) {
                     const addTracks = data.tracks.items.map((track) => ({
-                        uri: track.uri,
+                        trackUri: track.uri,
                         title: track.name,
                         name: track.album.artists[0].name,
                         cover: track.album.images[0]?.url,
-                        playTime: track.duration_ms,
                     }));
                     setStorageTracks(addTracks);
                 }
@@ -99,7 +98,7 @@ export const SearchResultPage = () => {
                                 album_id={item.album.id}
                                 album_title={item.album.name}
                                 duration_ms={item.duration_ms}
-                                uri={item.uri}
+                                trackUri={item.uri}
                             />
                         );
                     })}

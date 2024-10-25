@@ -44,11 +44,10 @@ export const TopFiveTracksTable = () => {
             onSuccess: (data) => {
                 if (data && data.tracks && data.tracks) {
                     const tracks = data.tracks.map((track) => ({
-                        uri: track.uri,
+                        trackUri: track.uri,
                         title: track.name,
                         name: track.artists[0].name,
                         cover: track.album.images[0]?.url,
-                        playTime: track.duration_ms,
                     }));
                     setTracksStorage(tracks);
                 }
@@ -73,13 +72,13 @@ export const TopFiveTracksTable = () => {
                             <TopFiveTracks
                                 key={track.id}
                                 id={track.id}
+                                trackUri={track.uri}
                                 cover={track.album.images[0].url}
                                 title={track.name}
                                 artists={track.artists}
                                 album_id={track.album.id}
                                 album_title={track.album.name}
                                 duration_ms={track.duration_ms}
-                                uri={track.uri}
                             />
                         ))}
             </Tbody>

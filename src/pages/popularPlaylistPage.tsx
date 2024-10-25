@@ -58,7 +58,7 @@ export const PopularPlaylistPage = () => {
             onSuccess: (data) => {
                 if (data && data?.tracks && data?.tracks?.items) {
                     const tracks = data.tracks.items.map(({ track }) => ({
-                        uri: track.uri,
+                        trackUri: track.uri,
                         title: track.name,
                         name: track.artists[0].name,
                         cover: track.album.images[0].url,

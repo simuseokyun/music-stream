@@ -12,22 +12,13 @@ const TdWrap = styled.div`
     align-items: center;
 `;
 
-export const SearchTrackItem = ({
-    id,
-    cover,
-    title,
-    album_id,
-    album_title,
-    artists,
-    duration_ms,
-    uri,
-}: ISearchTrackProp) => {
+export const SearchTrackItem = ({ id, cover, title, album_id, album_title, artists, trackUri }: ISearchTrackProp) => {
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const { openCategory, addSong, mouseLeave } = usePlaylist;
-    const { addTrack } = useAddTrack(id, title, cover, album_title, artists, album_id, uri);
+    const { addTrack } = useAddTrack(id, title, cover, album_title, artists, album_id, trackUri);
 
-    const playBtn = () => playMusic(uri, title, cover, artists[0].name);
+    const playBtn = () => playMusic({ trackUri, title, cover, artist: artists[0].name });
     return (
         <Tr onMouseLeave={mouseLeave}>
             <Td>

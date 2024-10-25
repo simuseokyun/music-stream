@@ -4,34 +4,32 @@ import { searchFormState } from '../../state/atoms';
 import { Link } from 'react-router-dom';
 
 const Container = styled.div`
-    width: 100%;
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
+    height: 50px;
     background-color: rgba(0, 0, 0, 0.8);
     z-index: 10;
 `;
 const Wrap = styled.div`
-    margin: auto;
-    max-width: 1180px;
     width: 80%;
+    max-width: 500px;
+    margin: auto;
 `;
-const List = styled.ul`
+const NavList = styled.ul`
     display: flex;
 `;
-const Item = styled.li`
+const NavItem = styled.li`
     flex: 1;
     text-align: center;
-    font-size: 12px;
-    padding: 20px 10px;
+    padding: 10px;
     a {
         font-size: 12px;
     }
 `;
 
 export const BottomBar = () => {
-    const searchState = useSetRecoilState(searchFormState);
     const navList = [
         { text: '홈', url: '/home' },
         { text: '검색', url: '/search' },
@@ -40,15 +38,15 @@ export const BottomBar = () => {
     return (
         <Container>
             <Wrap>
-                <List>
+                <NavList>
                     {navList.map((list, index) => {
                         return (
-                            <Item key={index}>
+                            <NavItem key={index}>
                                 <Link to={list.url}>{list.text}</Link>
-                            </Item>
+                            </NavItem>
                         );
                     })}
-                </List>
+                </NavList>
             </Wrap>
         </Container>
     );

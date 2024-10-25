@@ -22,12 +22,11 @@ export interface IMyPlaylist {
 export interface ITrackData {
     track_id: string;
     track_title: string;
-    // duration_ms: number;
     cover: string;
     album_title: string;
     artists: { name: string; id: string }[];
     album_id: string;
-    uri: string;
+    trackUri: string;
 }
 
 export interface IPlaylist {

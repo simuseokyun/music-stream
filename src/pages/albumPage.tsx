@@ -70,11 +70,10 @@ export const AlbumPage = () => {
             onSuccess: (data) => {
                 if (data && data.tracks && data.tracks.items) {
                     const tracks = data.tracks.items.map((track) => ({
-                        uri: track.uri,
+                        trackUri: track.uri,
                         title: track.name,
                         name: track.artists[0].name,
                         cover: data.images[0].url,
-                        playTime: track.duration_ms,
                     }));
                     setStorageTracks(tracks);
                 }
