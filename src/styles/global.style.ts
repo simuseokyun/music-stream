@@ -18,7 +18,7 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 14px;;
-    font-family: "Noto Sans KR", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-optical-sizing: auto;
      font-style: normal;
      font-weight: 400;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { playlistList } from '../../state/atoms';
+import { playlistList, setMobile } from '../../state/atoms';
 import { IPopularPlaylistInfoProp } from '../../types/popularPlaylists';
 import { usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
 import { PlayBtn, Tr, AddBtn, Td, Dot, TitleWrap, Title, ArtistWrap, Cover } from '../../styles/common.style';
@@ -28,9 +28,16 @@ export const PopularPlaylistTrack = ({
     const { openCategory, addSong, mouseLeave } = usePlaylist;
     const { addTrack } = useTrack;
     const playBtn = () => playMusic({ trackUri, title, cover, artist: artists[0].name });
+    const isMobile = useRecoilValue(setMobile);
+
+    const mobilePlayBtn = () => {
+        if (isMobile) {
+            playBtn();
+        }
+    };
 
     return (
-        <Tr onMouseLeave={mouseLeave}>
+        <Tr onMouseLeave={mouseLeave} onClick={mobilePlayBtn}>
             <Td>
                 <PlayBtn src="/images/playButton.png" onClick={playBtn} />
             </Td>

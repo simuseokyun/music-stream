@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { playlistList } from '../../state/atoms';
+import { playlistList, setMobile } from '../../state/atoms';
 import { useAddPlaylist, useAddTrack, usePlayMusic } from '../../utils/util';
 import { ISearchTrackProp } from '../../types/searchTracksInfo';
 import { Tr, Td, PlayBtn, AddBtn, Dot, TitleWrap, Title, ArtistWrap, Cover } from '../../styles/common.style';
@@ -13,14 +13,21 @@ const TdWrap = styled.div`
 `;
 
 export const SearchTrackItem = ({ id, cover, title, album_id, album_title, artists, trackUri }: ISearchTrackProp) => {
+    const isMobile = useRecoilValue(setMobile);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const { openCategory, addSong, mouseLeave } = usePlaylist;
     const { addTrack } = useAddTrack(id, title, cover, album_title, artists, album_id, trackUri);
 
     const playBtn = () => playMusic({ trackUri, title, cover, artist: artists[0].name });
+
+    const mobilePlayBtn = () => {
+        if (isMobile) {
+            playBtn();
+        }
+    };
     return (
-        <Tr onMouseLeave={mouseLeave}>
+        <Tr onMouseLeave={mouseLeave} onClick={mobilePlayBtn}>
             <Td>
                 <PlayBtn src="/images/playButton.png" onClick={playBtn} />
             </Td>

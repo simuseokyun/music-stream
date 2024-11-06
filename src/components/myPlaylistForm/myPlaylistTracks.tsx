@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { playlistList } from '../../state/atoms';
-import { useRecoilState } from 'recoil';
+import { playlistList, setMobile } from '../../state/atoms';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { IMyPlaylistTracks } from '../../types/myPlaylist';
 import { usePlayMusic } from '../../utils/util';
 import { Tr, Td, Dot, TitleWrap, Title, ArtistWrap, Cover, PlayBtn } from '../../styles/common.style';
@@ -31,6 +31,7 @@ export const PlaylistTracks = ({
 IMyPlaylistTracks) => {
     const [playlists, setPlaylist] = useRecoilState(playlistList);
     const playMusic = usePlayMusic();
+    const isMobile = useRecoilValue(setMobile);
     const deleteTrack = () => {
         setPlaylist((prev) => {
             const index = playlists.findIndex((list) => {
@@ -43,7 +44,11 @@ IMyPlaylistTracks) => {
         });
     };
     const playBtn = () => playMusic({ trackUri: uri, title: title, cover, artist: artists[0].name });
-
+    const mobilePlayBtn = () => {
+        if (isMobile) {
+            playBtn();
+        }
+    };
     return (
         <Tr>
             <Td>

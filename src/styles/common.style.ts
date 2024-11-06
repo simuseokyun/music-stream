@@ -207,8 +207,8 @@ export const Td = styled.td`
     &:first-child {
         width: 6%;
         text-align: left;
-        @media (max-width: 425px) {
-            width: 100px;
+        @media (max-width: 768px) {
+            display: none;
         }
     }
 

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { playerTracksStorage, playerTracks } from '../../state/atoms';
+import { playerTracksStorage, playerTracks, setMobile } from '../../state/atoms';
 import { usePlayMusic, useAddPlaylist, useAddTrack } from '../../utils/util';
 import { Dot, AddBtn, PlayBtn, Tr, ArtistWrap } from '../../styles/common.style';
 import { ITrackData } from '../../types/myPlaylist';
@@ -31,6 +31,7 @@ const Title = styled.h1`
 `;
 
 export const TrackItem = ({ track_id, track_title, cover, album_title, artists, album_id, trackUri }: ITrackData) => {
+    const isMobile = useRecoilValue(setMobile);
     const playMusic = usePlayMusic();
     const usePlaylist = useAddPlaylist();
     const storageTracks = useRecoilValue(playerTracksStorage);

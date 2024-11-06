@@ -97,12 +97,10 @@ export const HomePage = () => {
             {alertFormState.requiredPlaylist && <RequiredPlaylist />}
             {addFormState && <AddPlaylistForm />}
             {fixFormState && <FixPlaylistForm />}
-
             <Content>
                 {isMobile ? <MobileHeader /> : <SideBar />}
                 {webTokenData && <Outlet />}
             </Content>
-
             {sdkToken && <Player />}
             {isMobile && <BottomBar />}
         </Container>
