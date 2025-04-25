@@ -5,8 +5,6 @@ import { useState } from 'react';
 import {} from '../../types/newAlbums';
 
 const Container = styled.li`
-    width: 100%;
-    padding: 10px;
     border-radius: 8px;
     overflow: hidden;
     &:hover {
@@ -46,7 +44,6 @@ const Artist = styled.p`
 const LoadingImage = styled.img`
     width: 100%;
     height: 100%;
-    border-radius: 8px;
 `;
 
 export const NewAlbumItem = ({ id, name, artist, cover }: INewAlbumItemProp) => {
@@ -58,11 +55,11 @@ export const NewAlbumItem = ({ id, name, artist, cover }: INewAlbumItemProp) => 
         navigate(`/album/${id}`);
     };
     return (
-        <Container onClick={onClickAlbum}>
+        <div onClick={onClickAlbum} className="md:hover:bg-[#1a191a] p-[10px] rounded-md cursor-pointer">
             {/* {!imageLoaded && <LoadingImage src="/assets/loading.png" alt="로딩이미지" />} */}
-            <Cover src={cover} alt="앨범커버" onLoad={onLoadImage} $loaded={imageLoaded.toString()} />
-            <Title>{name}</Title>
-            <Artist>{artist}</Artist>
-        </Container>
+            <img className="rounded-md" src={cover} alt="앨범커버" onLoad={onLoadImage} />
+            <h1 className="text-ellipsis text-md mt-2">{name}</h1>
+            <p className="artists  text-sm text-sub mt-1">{artist}</p>
+        </div>
     );
 };
