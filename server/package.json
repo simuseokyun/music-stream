@@ -5,15 +5,20 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "nodemon server.js"
+        "dev": "nodemon --watch src --exec node src/index.js"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",
         "dotenv": "^16.5.0",
         "express": "^5.1.0",
+        "nodemon": "^3.1.9",
         "spotify-preview-finder": "^1.1.1"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.1"
     }
 }
