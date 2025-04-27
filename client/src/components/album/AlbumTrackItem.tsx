@@ -9,7 +9,7 @@ import { useAddTrack } from '../../hooks/useAddTrack';
 import { AddBtn, PlayBtn, Tr } from '../../styles/common.style';
 import { ITrackData } from '../../types/myPlaylist';
 import { PlaylistList } from '../common/Category';
-import { ArtistMap } from '../common/ArtistMap';
+import { Artists } from '../common/Artists';
 
 const Td = styled.td`
     padding: 10px 5px;
@@ -43,24 +43,19 @@ export const TrackItem = ({ track_id, track_title, cover, album_title, artists, 
     const { openCategory, addSong, mouseLeave } = usePlaylist;
     const { addTrack } = useAddTrack(track_id, track_title, cover, album_title, artists, album_id, trackUri);
 
-    const onPlay = () => {
-        setPlayerTracks(storageTracks);
-        playMusic({ trackUri, title: track_title, cover, artist: artists[0].name });
-    };
-
     return (
-        <Tr onMouseLeave={mouseLeave}>
-            <Td>
-                <PlayBtn src="/assets/playButton.png" onClick={onPlay} alt="재생" />
-            </Td>
-            <Td>
-                <Title>{track_title}</Title>
-                <ArtistMap artists={artists} />
-            </Td>
-            <Td style={{ position: 'relative' }}>
-                <AddBtn src="/assets/addButton.png" alt="추가" onClick={addSong} />
+        <tr onMouseLeave={mouseLeave}>
+            <td className="w-[40px]">
+                <img src="/assets/playButton.svg" alt="재생" />
+            </td>
+            <td className="w-auto py-2 pr-10">
+                <h1 className="text-ellipsis mb-1 font-semibold text-sm md:text-base">{track_title}</h1>
+                <Artists artists={artists} />
+            </td>
+            <td className="w-[40px] relative">
+                <img src="/assets/addButton.svg" alt="추가" />
                 {openCategory && <PlaylistList addTrack={addTrack} />}
-            </Td>
-        </Tr>
+            </td>
+        </tr>
     );
 };

@@ -1,4 +1,4 @@
-import { Tr, Thead, Tbody, Table } from '../../styles/common.style';
+import { Tr, Thead, Tbody } from '../../styles/common.style';
 import styled from 'styled-components';
 import { TrackItem } from './AlbumTrackItem';
 import { IAlbumData } from '../../types/albumInfo';
@@ -25,15 +25,8 @@ export const Th = styled.th`
 
 export const TrackList = ({ data }: IAlbumData) => {
     return (
-        <Table>
-            <Thead>
-                <Tr>
-                    <Th>#</Th>
-                    <Th>제목</Th>
-                    <Th></Th>
-                </Tr>
-            </Thead>
-            <Tbody>
+        <table className="w-table-auto w-full table-fixed mt-2">
+            <tbody>
                 {data?.tracks?.items.map(({ id, name, artists, uri }) => (
                     <TrackItem
                         key={id}
@@ -46,7 +39,7 @@ export const TrackList = ({ data }: IAlbumData) => {
                         trackUri={uri}
                     />
                 ))}
-            </Tbody>
-        </Table>
+            </tbody>
+        </table>
     );
 };
