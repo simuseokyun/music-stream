@@ -1,19 +1,19 @@
-import { Table, Thead, Tbody, Tr, Th } from '../../styles/common.style';
+import { Thead, Tbody, Tr, Th } from '../../styles/common.style';
 import { PlaylistTracks } from './myPlaylistTracks';
 import { IMyPlaylistTracksProp } from '../../types/myPlaylist';
 
 export const MyPlaylistTrackTable = ({ tracks, playlistId }: IMyPlaylistTracksProp) => {
     return (
-        <Table>
-            <Thead>
-                <Tr>
-                    <Th>#</Th>
-                    <Th>제목</Th>
-                    <Th>앨범</Th>
-                    <Th></Th>
-                </Tr>
-            </Thead>
-            <Tbody>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>제목</th>
+                    <th>앨범</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
                 {tracks?.map((track) => (
                     <PlaylistTracks
                         playlistId={playlistId}
@@ -27,7 +27,7 @@ export const MyPlaylistTrackTable = ({ tracks, playlistId }: IMyPlaylistTracksPr
                         uri={track.uri}
                     />
                 ))}
-            </Tbody>
-        </Table>
+            </tbody>
+        </table>
     );
 };

@@ -6,19 +6,6 @@ import { IMyPlaylistTracks } from '../../types/myPlaylist';
 import { usePlayMusic } from '../../hooks/usePlayMusic';
 import { Tr, Td, Dot, TitleWrap, Title, ArtistWrap, Cover, PlayBtn } from '../../styles/common.style';
 
-const TdWrap = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const DeleteBtn = styled.img`
-    width: 25px;
-    height: 25px;
-    background-color: white;
-    border-radius: 25px;
-    display: inline-block;
-`;
-
 export const PlaylistTracks = ({
     cover,
     title,
@@ -50,31 +37,31 @@ IMyPlaylistTracks) => {
         }
     };
     return (
-        <Tr>
-            <Td>
-                <PlayBtn src="/assets/playButton.png" onClick={playBtn} />
-            </Td>
-            <Td>
-                <TdWrap>
-                    <Cover src={cover} alt="album_cover" />
-                    <TitleWrap>
-                        <Title>{title}</Title>
+        <tr>
+            <td>
+                <img className="action-button" src="/assets/playButton.png" onClick={playBtn} />
+            </td>
+            <td>
+                <div className="song-wrap">
+                    <img className="img-medium" src={cover} alt="album_cover" />
+                    <div>
+                        <h1 className="text-ellipsis">{title}</h1>
                         {artists.map((artist, i) => (
-                            <ArtistWrap key={artist.name}>
+                            <span key={artist.name}>
                                 <Link to={`/artist/${artist.id}`}>{artist.name}</Link>
                                 {artists.length == 1 ? undefined : artists[i + 1] ? <Dot>,</Dot> : undefined}
-                            </ArtistWrap>
+                            </span>
                         ))}
-                    </TitleWrap>
-                </TdWrap>
-            </Td>
-            <Td>
+                    </div>
+                </div>
+            </td>
+            <td>
                 <Link to={`/album/${albumId}`}>{albumTitle}</Link>
-            </Td>
+            </td>
 
-            <Td>
-                <DeleteBtn src="/assets/deleteButton.png" onClick={deleteTrack} />
-            </Td>
-        </Tr>
+            <td>
+                <img className="action-button" src="/assets/deleteButton.png" onClick={deleteTrack} />
+            </td>
+        </tr>
     );
 };

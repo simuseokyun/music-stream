@@ -8,53 +8,6 @@ import { DeleteCheckAlert } from '../common/DeleteCheckAlert';
 import { MoreBtn } from '../common/buttonForm/MoreButton';
 import { MyPlaylistCategory } from '../common/MyPlaylistCategory';
 import { useState } from 'react';
-const Container = styled.div`
-    display: flex;
-    align-items: end;
-    margin-bottom: 20px;
-    @media (max-width: 425px) {
-        display: block;
-    }
-`;
-
-const Cover = styled.img`
-    background-color: #232323;
-    width: 150px;
-    height: 150px;
-    border-radius: 8px;
-    object-fit: cover;
-    @media (max-width: 425px) {
-        margin: auto;
-    }
-`;
-
-const Info = styled.div`
-    margin-left: 20px;
-    @media (max-width: 425px) {
-        margin: 20px 0 0 0;
-    }
-`;
-
-const Title = styled.p`
-    font-size: 24px;
-    margin-bottom: 5px;
-    @media (max-width: 425px) {
-        font-size: 20px;
-    }
-`;
-
-const Length = styled.p`
-    /* margin-bottom: 10px; */
-`;
-
-const Btn = styled.button`
-    display: inline-block;
-    text-align: center;
-    background-color: #65d46e;
-    border: none;
-    border-radius: 4px;
-    padding: 2px 6px;
-`;
 
 export const MyPlaylistInfo = ({
     cover,
@@ -75,17 +28,17 @@ export const MyPlaylistInfo = ({
         });
     };
     return (
-        <Container>
-            <Cover src={cover}></Cover>
-            <Info>
-                <Title>{name}</Title>
-                <Length>{length + '곡'}</Length>
-                <div style={{ position: 'relative' }}>
+        <div className="flex items-end mb-5 max-[425px]:block">
+            <img className="img-large" src={cover}></img>
+            <div className="ml-4">
+                <h1 className="text-[24px] mb-[5px] max-[425px]:text-[20px">{name}</h1>
+                <p className="mb-2">{length + '곡'}</p>
+                <div className="relative">
                     <MoreBtn toggle={onToggle} />
                     {setting && <MyPlaylistCategory name={name} top={top} />}
                 </div>
-            </Info>
+            </div>
             {checkForm && <DeleteCheckAlert name={name} />}
-        </Container>
+        </div>
     );
 };

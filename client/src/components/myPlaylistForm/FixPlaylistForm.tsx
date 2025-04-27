@@ -2,81 +2,8 @@ import styled from 'styled-components';
 import { useState, useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selectPlaylist, playlistFixFormState, playlistList } from '../../store/atoms';
-import { Message, Container, Form } from '../../styles/common.style';
+import { Container, Form } from '../../styles/common.style';
 import { Button } from '../common/buttonForm/Button';
-
-const Wrap = styled.div`
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    margin-top: 20px;
-    @media (max-width: 768px) {
-        display: block;
-    }
-`;
-const FormLeft = styled.div``;
-const FormRight = styled.div`
-    width: 100%;
-    margin-left: 20px;
-    @media (max-width: 768px) {
-        margin-left: 0;
-    }
-`;
-const FormTitle = styled.h1``;
-const CoverWrap = styled.div`
-    position: relative;
-    width: 100px;
-    height: 100px;
-    border-radius: 8px;
-    overflow: hidden;
-    left: calc(50% - 50px);
-`;
-const Cover = styled.img`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-`;
-const Overlay = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(0, 0, 0, 0.7);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    p {
-        font-size: 12px;
-    }
-`;
-
-const Input = styled.input`
-    width: 100%;
-    display: inline-block;
-    padding: 4px;
-    outline: none;
-    margin-top: 5px;
-    color: white;
-    border: 1px solid transparent;
-    background-color: rgb(40, 40, 40);
-`;
-
-const Title = styled.p`
-    margin-bottom: 2px;
-    @media (max-width: 768px) {
-        margin-top: 10px;
-    }
-`;
-const BtnWrap = styled.div`
-    text-align: right;
-    margin-top: 20px;
-`;
 
 export const FixPlaylistForm = () => {
     const playlist = useRecoilValue(selectPlaylist);
@@ -137,38 +64,54 @@ export const FixPlaylistForm = () => {
     };
 
     return (
-        <Container>
-            <Form>
-                <FormTitle>플레이리스트 수정</FormTitle>
-                <Wrap>
-                    <FormLeft>
-                        <CoverWrap>
-                            <Cover
-                                src={imagePreview ? imagePreview : '/assets/basicPlaylist.png'}
-                                alt="Preview"
-                            ></Cover>
-                            <Overlay onClick={handleClick}>
-                                <Message>사진 선택</Message>
-                            </Overlay>
-                        </CoverWrap>
-                        <Input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={handleFileChange}
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                        />
-                    </FormLeft>
-                    <FormRight>
-                        <Title>제목</Title>
-                        <Input type="text" value={title} onChange={onTitleChange}></Input>
-                    </FormRight>
-                </Wrap>
-                <BtnWrap>
-                    <Button text="수정" bgColor="#65d46e" onClick={onEditTitle} />
-                    <Button text="취소" margin="0 0 0 5px" bgColor="white" onClick={onClose} />
-                </BtnWrap>
-            </Form>
-        </Container>
+        <div className="bg-black fixed w-full h-full z-10 flex justify-center items-center flex-col">
+            <div className="max-w-[500px] p-[15px] w-[80%] rounded-[8px] bg-main">
+                <div className="flex justify-between items-center mb-[20px]">
+                    <h1>플레이리스트 생성</h1>
+                    <img className="img-small" src="/assets/closeButton.png" alt="닫기" onClick={onClose} />
+                </div>
+                <form onSubmit={onEditTitle}>
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <div className="relative w-[100px] h-[100px] overflow-hidden rounded-[8px] left-1/2 -translate-x-1/2">
+                                <img
+                                    className="absolute top-0 left-0 w-full h-full object-cover"
+                                    src={imagePreview ?? '/assets/basicPlaylist.png'}
+                                    alt="Preview"
+                                ></img>
+                                <div
+                                    className="absolute top-0 left-0 w-full h-full bg-black/60 flex justify-center items-center"
+                                    onClick={handleClick}
+                                >
+                                    <p className="text-xs text-center">사진 선택</p>
+                                </div>
+                            </div>
+                            <input
+                                className="hidden"
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleFileChange}
+                                accept="image/*"
+                            />
+                        </div>
+                        <div className="w-full ml-[20px]">
+                            <label htmlFor="name">이름</label>
+                            <input
+                                className="w-full inline-block bg-[#282828] rounded-xl p-1.5 text-sm mt-2"
+                                id="name"
+                                type="text"
+                                placeholder="플레이리스트 이름을 작성해주세요"
+                            />
+                            {/* {dupState && <DupMessage>중복된 플레이리스트가 존재합니다</DupMessage>} */}
+                        </div>
+                    </div>
+                </form>
+                <div className="text-right mt-[20px]">
+                    <button type="submit" className="p-[4px] px-[8px] ">
+                        수정
+                    </button>
+                </div>
+            </div>
+        </div>
     );
 };
