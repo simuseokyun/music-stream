@@ -49,21 +49,20 @@ export const FiveTrackItem = ({ trackUri, id, cover, title, artists, albumId, al
         playMusic({ trackUri, title, cover, artist: artists[0].name });
     };
     return (
-        <Tr onMouseLeave={mouseLeave}>
-            <Td>
-                <PlayBtn src="/assets/playButton.png" alt="재생" onClick={playBtn} />
-            </Td>
-            <Td>
-                <TdWrap>
-                    <Cover src={cover} alt="앨범커버" />
-                    <Title>{title}</Title>
-                </TdWrap>
-            </Td>
-
-            <Td style={{ position: 'relative' }}>
-                <AddBtn src="/assets/addButton.png" alt="추가" onClick={addSong} />
+        <tr onMouseLeave={mouseLeave}>
+            <td className="w-0 sm:w-[40px]">
+                <img src="/assets/playButton.svg" alt="재생" onClick={playBtn} />
+            </td>
+            <td className="w-auto py-1">
+                <div className="flex items-center">
+                    <img className="img-medium rounded-md" src={cover} alt="앨범커버" />
+                    <h1 className="text-ellipsis ml-2 font-semibold text-sm md:text-base">{title}</h1>
+                </div>
+            </td>
+            <td className="w-[40px] text-right relative">
+                <img src="/assets/addButton.svg" alt="추가" onClick={addSong} />
                 {openCategory && <PlaylistList addTrack={addTrack} />}
-            </Td>
-        </Tr>
+            </td>
+        </tr>
     );
 };

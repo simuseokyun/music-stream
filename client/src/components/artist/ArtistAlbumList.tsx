@@ -9,7 +9,6 @@ import { IArtistAlbums } from '../../types/artistInfo';
 import { AlbumItem } from './ArtistAlbumItem';
 
 const Container = styled.ul<{ $state: string }>`
-    width: 100%;
     display: grid;
     grid-template-columns: ${({ $state }) => `repeat(${$state === 'true' ? 3 : 4}, 1fr)`};
     @media (max-width: 768px) {
@@ -19,7 +18,7 @@ const Container = styled.ul<{ $state: string }>`
 export const AlbumList = () => {
     const { artistId } = useParams();
     const token = getLocalStorage('webAccessToken') || '';
-    const isMobile = useRecoilValue(setMobile);
+
     const { data: albumInfo } = useQuery<IArtistAlbums>({
         queryKey: ['getArtistAlbum', artistId],
         queryFn: () => {
@@ -29,10 +28,10 @@ export const AlbumList = () => {
     });
 
     return (
-        <Container $state={isMobile.toString()}>
+        <div className="grid grid-cols-3 md:grid-cols-4 ">
             {albumInfo &&
                 albumInfo.items
-                    .slice(0, isMobile ? 3 : 4)
+                    .slice(0, 4)
                     .map(({ id, name, images, album_type, release_date }) => (
                         <AlbumItem
                             key={id}
@@ -43,6 +42,6 @@ export const AlbumList = () => {
                             year={release_date.slice(0, 4)}
                         />
                     ))}
-        </Container>
+        </div>
     );
 };

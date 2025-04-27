@@ -5,7 +5,7 @@ import { commaSeparate } from '../../utils/commaSeparate';
 import { getLocalStorage } from '../../utils/getLocalStorage';
 import { getArtist } from '../../api/getInfo';
 import { IArtistInfo } from '../../types/artistInfo';
-import { Message, Loading, LoadingWrap } from '../../styles/common.style';
+import { Loading, LoadingWrap } from '../../styles/common.style';
 
 const Container = styled.div`
     position: relative;
@@ -62,11 +62,7 @@ const Follower = styled.span`
 export const ArtistCover = () => {
     const token = getLocalStorage('webAccessToken');
     const { artistId } = useParams();
-    const {
-        isLoading,
-        data: artistData,
-        isError,
-    } = useQuery<IArtistInfo>({
+    const { isLoading, data, isError } = useQuery<IArtistInfo>({
         queryKey: ['artistCover', artistId],
         queryFn: async () => {
             if (artistId && token) {
@@ -79,25 +75,34 @@ export const ArtistCover = () => {
     });
     if (isLoading) {
         return (
-            <LoadingWrap>
-                <Loading src="/assets/loading.png" />
-            </LoadingWrap>
+            <div className="flex-1 flex justify-center items-center">
+                <img className="img-medium m-20 animate-spin" src="/assets/loading.png" />
+            </div>
         );
     }
     if (isError) {
-        return <Message>에러 발생</Message>;
+        return (
+            <div className="flex-1">
+                <h1 className="text-center m-20">아티스트를 찾을 수 없습니다</h1>
+            </div>
+        );
     }
-    if (!artistData) {
-        return <Message>데이터가 없습니다</Message>;
+    if (!data) {
+        return (
+            <div className="flex-1">
+                <h1 className="text-center m-20">아티스트를 찾을 수 없습니다</h1>
+            </div>
+        );
     }
-    const { name, images, followers } = artistData;
+    console.log(data);
+    const { name, images, followers } = data;
     return (
-        <Container>
-            <Cover $img={images[0].url}></Cover>
-            <Overlay>
-                <Artist>{name}</Artist>
-                <Follower>팔로워 : {commaSeparate(followers.total)}명</Follower>
-            </Overlay>
-        </Container>
+        <div className="relative w-full h-[300px] rounded-[8px] overflow-hidden md:h-[400px]">
+            <img src={images[0].url} className="absolute w-full h-full top-0 left-0 object-cover" />
+            <div className="absolute flex flex-col justify-end p-[20px] w-full h-full top-0 left-0">
+                <h1 className="font-bold text-4xl">{name}</h1>
+                <span>팔로워 : {commaSeparate(followers.total)}명</span>
+            </div>
+        </div>
     );
 };
