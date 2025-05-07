@@ -6,16 +6,7 @@ import { IMyPlaylistTracks } from '../../types/myPlaylist';
 import { usePlayMusic } from '../../hooks/usePlayMusic';
 import { Tr, Td, Dot, TitleWrap, Title, ArtistWrap, Cover, PlayBtn } from '../../styles/common.style';
 
-export const PlaylistTracks = ({
-    cover,
-    title,
-    albumId,
-    artists,
-    albumTitle,
-    playlistId,
-    uri,
-}: // duration,
-IMyPlaylistTracks) => {
+export const PlaylistTracks = ({ cover, title, albumId, artists, albumTitle, playlistId, uri }: IMyPlaylistTracks) => {
     const [playlists, setPlaylist] = useRecoilState(playlistList);
     const playMusic = usePlayMusic();
     const isMobile = useRecoilValue(setMobile);
