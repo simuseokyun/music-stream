@@ -1,27 +1,5 @@
-import { Tr, Thead, Tbody } from '../../styles/common.style';
-import styled from 'styled-components';
 import { TrackItem } from './AlbumTrackItem';
 import { IAlbumData } from '../../types/albumInfo';
-
-export const Th = styled.th`
-    border-bottom: 1px solid #808080;
-    padding: 10px 5px;
-    &:first-child {
-        width: 30px;
-    }
-    &:nth-child(2) {
-        width: 80%;
-        text-align: left;
-        max-width: 0;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-
-    &:last-child {
-        text-align: right;
-    }
-`;
 
 export const TrackList = ({ data }: IAlbumData) => {
     return (
