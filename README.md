@@ -32,6 +32,7 @@ src/
 ├── components/     # 재사용 가능한 UI 컴포넌트
 ├── hooks/          # 커스텀 훅
 ├── pages/          # 페이지 컴포넌트
-├── store/          # Zustand 전역 상태
-└── styles/
+├── store/          # Zustand를 활용한 전역 상태 관리
+└── styles/         # 전역 스타일 또는 Tailwind 설정 파일
+└── utils/          # 공통 유틸 함수 및 헬퍼 로직
 ```
