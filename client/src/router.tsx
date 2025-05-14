@@ -3,15 +3,13 @@ import { createBrowserRouter } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { Album } from './pages/album/Album';
 import { Artist } from './pages/artist/Artist';
-
 import { SearchResult } from './pages/search/SearchResult';
 import { Library } from './pages/library/Library';
-
-import { MyPlaylist } from './pages/myPlaylist/MyPlaylist';
+import { Playlist } from './pages/myPlaylist/MyPlaylist';
 import { AllAlbum } from './pages/allAlbum/AllAlbum';
-import { PopularPlaylist } from './pages/popularPlaylist/PopularPlaylist';
 import { NotFound } from './pages/NotFound';
 import { Search } from './pages/search/Search';
+import { NewAlbum } from './components/home/newAlbumList';
 
 export const router = createBrowserRouter([
     {
@@ -22,6 +20,7 @@ export const router = createBrowserRouter([
                 path: '/',
                 element: <Home />,
                 children: [
+                    { path: 'home', element: <NewAlbum /> },
                     {
                         path: 'search',
                         element: <Search />,
@@ -39,13 +38,10 @@ export const router = createBrowserRouter([
                         element: <Album />,
                     },
                     {
-                        path: 'myPlaylist/:playlistId',
-                        element: <MyPlaylist />,
+                        path: 'me/playlist/:playlistId',
+                        element: <Playlist />,
                     },
-                    {
-                        path: 'popularPlaylist/:playlistId',
-                        element: <PopularPlaylist />,
-                    },
+
                     {
                         path: 'allAlbum/:artistId',
                         element: <AllAlbum />,
@@ -57,7 +53,6 @@ export const router = createBrowserRouter([
                 ],
             },
         ],
-
         errorElement: <NotFound />,
     },
 ]);
