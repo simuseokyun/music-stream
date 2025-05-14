@@ -7,10 +7,14 @@
 ## 기술 스택
 
 - **React** – 사용자 인터페이스 개발
-- **styled-components** – CSS-in-JS 방식으로 스타일 관리 => 추후 tailwind로 변경 예정
+- **typescript** – 음악 관련 데이터 제공
+- **tailWind** – CSS
 - **TanStack Query (React Query)** – 비동기 데이터 패칭 및 서버 상태 관리
-- **Zustand** – 간단하고 가벼운 전역 상태 관리
+- **Zustand** – 전역 상태 관리
 - **Spotify Web API** – 음악 관련 데이터 제공
+- **Spotify_Preview_Finder** – 노래 30초 미리듣기
+- **React-hook-form** – 폼 상태 관리 및 유효성 검사 라이브러리
+- **Express** – Node.js 기반의 웹 서버 프레임워크
 
 ## 🚀 주요 기능
 
@@ -29,5 +33,5 @@ src/
 ├── hooks/          # 커스텀 훅
 ├── pages/          # 페이지 컴포넌트
 ├── store/          # Zustand 전역 상태
-└── styles/         # styled-components 관련 설정
+└── styles/
 ```
