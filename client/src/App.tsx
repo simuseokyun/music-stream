@@ -1,32 +1,25 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { RecoilRoot } from 'recoil';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
 import { RouterProvider } from 'react-router-dom';
-import { router } from './router';
-import { CookiesProvider } from 'react-cookie';
-import { ThemeProvider } from 'styled-components';
-import { theme } from './theme';
+import { router } from './routes/router';
 
 const client = new QueryClient({
     defaultOptions: {
         queries: {
             retry: false,
             refetchOnWindowFocus: false,
-            refetchOnMount: false,
+            refetchOnMount: true,
             refetchOnReconnect: false,
         },
     },
 });
 function App() {
     return (
-        <RecoilRoot>
-            <QueryClientProvider client={client}>
-                <CookiesProvider>
-                    <ThemeProvider theme={theme}>
-                        <RouterProvider router={router} />
-                    </ThemeProvider>
-                </CookiesProvider>
-            </QueryClientProvider>
-        </RecoilRoot>
+        <QueryClientProvider client={client}>
+            <RouterProvider router={router} />
+            <ReactQueryDevtools />
+        </QueryClientProvider>
     );
 }
 export default App;

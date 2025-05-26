@@ -1,10 +1,17 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-
+import './styles/global.css';
 import App from './App';
 
-createRoot(document.getElementById('root') as HTMLElement).render(
-    <StrictMode>
-        <App />
-    </StrictMode>
-);
+const rootElement = document.getElementById('root') as HTMLElement;
+const root = createRoot(rootElement);
+
+if (process.env.NODE_ENV === 'development') {
+    root.render(
+        <StrictMode>
+            <App />
+        </StrictMode>
+    );
+} else {
+    root.render(<App />);
+}
