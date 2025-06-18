@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import getPlaylists from '../../services/playlist/playlist';
+import { getPlaylists } from '../../services/playlist/playlist';
 import { PlaylistListResponse } from '../../types/api/playlist';
 import { InfiniteData } from '@tanstack/react-query';
 
