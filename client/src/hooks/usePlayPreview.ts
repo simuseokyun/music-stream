@@ -1,27 +1,18 @@
-import usePlayerState from '../store/usePlayerState';
-
-interface State {
-    id: string;
-    title: string;
-    artist: string;
-    image: string;
-}
+import usePlayerStore from '../store/player';
+import { TrackToPlay } from '../types/models/player.';
 const usePlayPreview = () => {
-    const { setState } = usePlayerState();
-    const playPreview = async ({ id, title, artist, image }: State) => {
+    const { setState } = usePlayerStore();
+    const playPreview = async ({ id, title, artist, image }: TrackToPlay) => {
         console.log(id, title, artist, image);
         try {
-            const response = await fetch(
-                `${import.meta.env.VITE_SERVER_URI}/api/preview?title=${encodeURIComponent(title)}`,
-                {
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ id }),
-                }
-            );
-            console.log(response);
+            const response = await fetch(`/api/preview?title=${encodeURIComponent(title)}`, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id }),
+            });
+
             if (!response.ok) {
                 throw new Error('API 요청 실패');
             }

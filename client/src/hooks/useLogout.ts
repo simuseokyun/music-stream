@@ -1,18 +1,20 @@
-import Cookies from 'js-cookie';
-import { useSetRecoilState } from 'recoil';
-import { useToggleMusic } from './useToggleMusic';
-import { deviceInfo } from '../store/atoms';
+import { useQueryClient } from '@tanstack/react-query';
+import { fetchWithAuth } from '../services/api/client';
+import useUserStore from '../store/user';
 
-export const useLogout = () => {
-    const setDevice = useSetRecoilState(deviceInfo);
-    const { pause } = useToggleMusic();
-    const logoutSpotify = () => {
-        pause();
-        localStorage.removeItem('sdkAccessToken');
-        localStorage.removeItem('sdkExpiration');
-        Cookies.remove('refreshToken');
-        window.location.href = '/';
-        setDevice(null);
+const useLogout = () => {
+    const { setUser } = useUserStore();
+    const queryClient = useQueryClient();
+    const onLogout = async () => {
+        const response = await fetchWithAuth(`/api/logout`, {
+            method: 'post',
+        });
+        if (response.status) {
+            queryClient.clear();
+            setUser(null);
+        }
     };
-    return { logoutSpotify };
+    return { onLogout };
 };
+
+export default useLogout;
