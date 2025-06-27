@@ -1,45 +1,52 @@
-import styled from 'styled-components';
-import { Thead, Tbody, Tr } from '../../styles/common.style';
-import { useQuery } from '@tanstack/react-query';
-
-import { IArtistTopTracks } from '../../types/artistInfo';
-import { useParams } from 'react-router-dom';
-import { getArtistTopTrack } from '../../api/getInfo';
-import { getLocalStorage } from '../../utils/getLocalStorage';
-import { FiveTrackItem } from './FiveTrackItem';
-import { useSetRecoilState } from 'recoil';
-import { playerTracksStorage } from '../../store/atoms';
-
-export const FiveTrackList = () => {
-    const token = getLocalStorage('webAccessToken');
-    const { artistId } = useParams();
-    const setTracksStorage = useSetRecoilState(playerTracksStorage);
-    const { isLoading, data, isError } = useQuery<IArtistTopTracks>({
-        queryKey: ['getArtistTopTrack', artistId],
-        queryFn: () => {
-            return getArtistTopTrack(token!, artistId!);
-        },
+import { TrackToPlay } from '../../types/models/player.';
+import TrackItem from './FiveTrackItem';
+import usePlayPreview from '../../hooks/player/usePlayPreview';
+import usePlayThrottle from '../../hooks/player/usePlayThrottle';
+import useGetArtistTrack from '../../hooks/track/useGetArtistTrack';
+import { useCurrentPlaylistStore } from '../../store/player';
+import useThrottledToast from '../../hooks/common/useTrottledToast';
+export default function TrackList({ artistId }: { artistId?: string }) {
+    const toast = useThrottledToast();
+    const { setPlaylist, setIndex } = useCurrentPlaylistStore();
+    const { playPreview } = usePlayPreview();
+    const { data, isLoading, isError } = useGetArtistTrack(artistId);
+    const onPlay = usePlayThrottle(async ({ id, title, artist, image }: TrackToPlay) => {
+        const list = data?.tracks.length ? data.tracks : null;
+        try {
+            if (list) {
+                const index = list.findIndex((item) => item.id === id);
+                const newList = list.slice(0, 5).map(({ id, name, artists, album }) => ({
+                    id,
+                    title: name,
+                    artist: artists[0].name,
+                    image: album?.images[0]?.url,
+                }));
+                const result = await playPreview({ id, title, artist, image });
+                if (!result.success) {
+                }
+                setPlaylist([...newList]);
+                setIndex(index);
+            } else {
+                toast('error', '재생할 곡이 없습니다', id);
+            }
+        } catch (error) {}
     });
-    if (!data) {
-        return <h1 className="text-center">데이터가 없습니다</h1>;
+    if (isLoading) {
+        return null;
+    }
+    if (isError || !data?.tracks.length) {
+        return (
+            <div className="flex-1">
+                <h1 className="text-center m-20">곡을 찾을 수 없습니다</h1>
+            </div>
+        );
     }
     const { tracks } = data;
     return (
         <table className="w-table-auto w-full table-fixed">
             <tbody>
-                {tracks.slice(0, 5).map((track) => (
-                    <FiveTrackItem
-                        key={track.id}
-                        id={track.id}
-                        trackUri={track.uri}
-                        cover={track.album.images[0].url}
-                        title={track.name}
-                        artists={track.artists}
-                        albumId={track.album.id}
-                        albumTitle={track.album.name}
-                    />
-                ))}
+                {tracks?.slice(0, 5).map((track) => <TrackItem key={track.id} track={track} onPlay={onPlay} />)}
             </tbody>
         </table>
     );
-};
+}
