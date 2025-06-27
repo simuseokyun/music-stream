@@ -1,39 +1,24 @@
-import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
-import { getLocalStorage } from '../../utils/common/setLocalStorage';
-import { getArtistAlbum } from '../../api/getInfo';
-import { AlbumType } from '../../types/models/album';
-import { AlbumListResponse } from '../../types/api/album';
-import { AlbumItem } from './AlbumItem';
+import AlbumItem from './AlbumItem';
+import useGetArtistAlbums from '../../hooks/album/useArtistAlbums';
+import { useViewportStore } from '../../store/common';
 
-export const AlbumList = () => {
-    const { artistId } = useParams();
-    const token = getLocalStorage('webAccessToken');
-    const { data: albumList } = useQuery<AlbumListResponse>({
-        queryKey: ['artistAlbum', artistId],
-        queryFn: async () => {
-            if (token) {
-                return getArtistAlbum(token, artistId!);
-            }
-        },
-        enabled: !!artistId,
-    });
-
+export default function AlbumList({ artistId }: { artistId?: string }) {
+    const { data, isLoading, isError } = useGetArtistAlbums(artistId);
+    const isMobile = useViewportStore((state) => state.isMobile);
+    if (isLoading) {
+        return null;
+    }
+    if (isError || !data) {
+        return (
+            <div className="flex-1">
+                <h1 className="text-center m-20">앨범을 찾을 수 없습니다</h1>
+            </div>
+        );
+    }
+    const albumList = data?.items.slice(0, isMobile ? 6 : 4);
     return (
         <div className="grid grid-cols-3 md:grid-cols-4 ">
-            {albumList &&
-                albumList?.items
-                    .slice(0, 4)
-                    .map(({ id, name, images, album_type, release_date }) => (
-                        <AlbumItem
-                            key={id}
-                            id={id}
-                            name={name}
-                            cover={images[0].url}
-                            type={album_type === 'album' ? AlbumType.album : AlbumType.single}
-                            year={release_date.slice(0, 4)}
-                        />
-                    ))}
+            {albumList?.map((item) => <AlbumItem key={item.id} album={item} />)}
         </div>
     );
-};
+}
