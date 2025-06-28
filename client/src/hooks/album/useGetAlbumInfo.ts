@@ -2,15 +2,16 @@ import { getLocalStorage } from '../../utils/common/setLocalStorage';
 import { useQuery } from '@tanstack/react-query';
 import { AlbumDataResponse } from '../../types/api/album';
 import { useEffect } from 'react';
-import { getAlbum } from '../../api/getInfo';
+import { getAlbum } from '../../services/album/album';
 import useAlbumStore from '../../store/album';
-const useGetAlbumInfo = (albumId?: string) => {
-    const token = getLocalStorage('webAccessToken');
+import { useParams } from 'react-router-dom';
+const useGetAlbumInfo = () => {
+    const { albumId } = useParams();
     const setAlbumInfo = useAlbumStore((state) => state.setAlbumInfo);
     const { isLoading, data, isError } = useQuery<AlbumDataResponse>({
         queryKey: ['albumInfo', albumId],
-        queryFn: async () => getAlbum(token!, albumId!),
-        enabled: Boolean(token && albumId),
+        queryFn: async () => getAlbum(albumId!),
+        enabled: !!albumId,
         staleTime: Infinity,
         gcTime: Infinity,
     });
