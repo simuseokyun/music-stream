@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { UsePlayer } from '../types/store/store';
+import { UseCurrentPlaylist, UsePlayer } from '../types/store/store';
 
 const usePlayerStore = create<UsePlayer>((set) => ({
     isPlaying: false,
@@ -7,15 +7,25 @@ const usePlayerStore = create<UsePlayer>((set) => ({
     artist: '',
     url: '',
     image: '',
-    setState: (state) => {
+    setState: ({ title, artist, url, image }) => {
         set(() => ({
             isPlaying: true,
-            title: state.title,
-            artist: state.artist,
-            url: state.url,
-            image: state.image,
+            title,
+            artist,
+            url,
+            image,
         }));
     },
     setIsPlaying: (state) => set(() => ({ isPlaying: state })),
 }));
-export default usePlayerStore;
+const useCurrentPlaylistStore = create<UseCurrentPlaylist>((set) => ({
+    playlist: [],
+    currentIndex: 0,
+    source: '',
+    setIndex: (num) => set(() => ({ currentIndex: num })),
+    setPlaylist: (state) => {
+        set(() => ({ playlist: state }));
+    },
+}));
+
+export { usePlayerStore, useCurrentPlaylistStore };
