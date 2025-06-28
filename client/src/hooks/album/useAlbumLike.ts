@@ -1,50 +1,39 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchWithAuth } from '../../services/api/client';
-
-interface Info {
-    album: { id: string; images: { url: string }[]; name: string; artists: { id: string; name: string }[] };
-    added_at: string;
-}
-interface IFollowingAlbums {
-    items: Info[];
-}
+import { MyAlbumListResponse } from '../../types/api/album';
+import { addAlbum as onAddAlbum, deleteAlbum as onDeleteAlbum, checkAlbumLike } from '../../services/album/album';
 
 export const useAlbumLike = (id: string, name: string, artist_name: string, artist_id: string, image: string) => {
     const [isLiked, setIsLiked] = useState<null | boolean>(null);
     const { albumId } = useParams();
     const queryClient = useQueryClient();
 
-    const checkAlbumLike = async () => {
-        const data = await fetchWithAuth(`/api/me/albums/check?id=${albumId}`);
-        return data;
-    };
-
     const setAlbumState = async () => {
-        const cached = queryClient.getQueryData<InfiniteData<IFollowingAlbums>>(['album', 'following']);
+        if (!albumId) {
+            setIsLiked(null);
+            return;
+        }
+        const cached = queryClient.getQueryData<InfiniteData<MyAlbumListResponse>>(['album', 'following']);
         let liked = false;
         if (cached) {
-            const album = cached.pages.flatMap((page) => page.items).find(({ album }) => album.id === albumId);
+            const album = cached?.pages.flatMap((page) => page.items).find(({ album }) => album.id === albumId);
             liked = !!album;
             setIsLiked(liked);
         } else {
-            const result = await checkAlbumLike();
+            const result = await checkAlbumLike(albumId);
             liked = result?.[0] === true;
             setIsLiked(liked);
         }
     };
 
     const addAlbum = useMutation({
-        mutationFn: async () => {
-            await fetchWithAuth(`/api/me/albums/add`, {
-                method: 'put',
-                headers: { 'Content-Type': 'application/json' },
-                data: { ids: [albumId] },
-            });
+        mutationFn: () => {
+            if (!albumId) return Promise.reject('앨범 아이디 필요');
+            return onAddAlbum(albumId);
         },
         onMutate: () => {
-            const data = queryClient.getQueryData<InfiniteData<IFollowingAlbums>>(['album', 'following']);
+            const data = queryClient.getQueryData<InfiniteData<MyAlbumListResponse>>(['album', 'following']);
             if (!data) {
                 setIsLiked(true);
                 return;
@@ -81,20 +70,17 @@ export const useAlbumLike = (id: string, name: string, artist_name: string, arti
     });
 
     const deleteAlbum = useMutation({
-        mutationFn: async () => {
-            await fetchWithAuth(`/api/me/albums/delete`, {
-                method: 'delete',
-                headers: { 'Content-Type': 'application/json' },
-                data: { ids: [albumId] },
-            });
+        mutationFn: () => {
+            if (!albumId) return Promise.reject('앨범 아이디 필요');
+            return onDeleteAlbum(albumId);
         },
         onMutate: () => {
-            const data = queryClient.getQueryData<InfiniteData<IFollowingAlbums>>(['album', 'following']);
+            const data = queryClient.getQueryData<InfiniteData<MyAlbumListResponse>>(['album', 'following']);
             if (!data) {
                 setIsLiked(false);
                 return;
             }
-            const newData: InfiniteData<IFollowingAlbums> = {
+            const newData: InfiniteData<MyAlbumListResponse> = {
                 ...data,
                 pages: data.pages.map((page) => ({
                     ...page,
