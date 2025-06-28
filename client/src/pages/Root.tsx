@@ -1,79 +1,53 @@
 import { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getWebToken } from '../api/getWebToken';
-import { getSdkToken } from '../api/getSdkToken';
-import { setLocalStorage } from '../utils/setLocalStorage';
-import { extractAuthCodeFromUrl } from '../utils/extractAuthCodeFromUrl';
-import { SearchInput } from '../components/searchForm/searchInput';
-import { SideBar } from '../components/common/SideBar';
-import { MobileFooter } from '../components/common/MobileFooter';
-import { MobileHeader } from '../components/common/MobileHeader';
-import { Player } from '../components/playerForm/player';
-import { ISpotifyWebToken } from '../types/auth';
-import useIsMobile from '../store/useIsMobile';
-import { AddPlaylistModal } from '../components/myPlaylistForm/AddplaylistModal';
-import useAddPlaylistModal from '../store/useAddPlaylistModal';
-import useUserInfo from '../store/useUserInfo';
-import useCategoryState from '../store/useCategoryState';
-import { PlaylistCategory } from '../components/common/PlaylistCategory';
-import CheckUser from '../components/auth/CheckUser';
-
+import '../services/api/interceptor';
+import { Outlet } from 'react-router-dom';
+import { SearchInput } from '../components/searchResult/SearchInput';
+import SideBar from '../components/layout/SideBar';
+import MobileFooter from '../components/layout/MobileFooter';
+import MobileHeader from '../components/layout/MobileHeader';
+import Player from '../components/player/Player';
+import useCheckUser from '../hooks/auth/useCheckUser';
+import { ToastContainer } from 'react-toastify';
+import ModalContainer from '../components/modal/ModalContainer';
+import { useViewportStore } from '../store/common';
+import useGetWebToken from '../hooks/auth/useGetWebToken';
+import useGetSdkToken from '../hooks/auth/useGetSdkToken';
+import useUserStore from '../store/user';
+import { useLocation } from 'react-router-dom';
 export const Root = () => {
-    const setIsMobile = useIsMobile((state) => state.setIsMobile);
-
-    const AddPlaylistState = useAddPlaylistModal((state) => state.open);
-    const categoryState = useCategoryState((state) => state.open);
-    const navigate = useNavigate();
-    const home = window.location.href;
-    const authCode = extractAuthCodeFromUrl(home) || '';
-    const { data: webToken, status } = useQuery<ISpotifyWebToken>({
-        queryKey: ['getWebToken'],
-        queryFn: getWebToken,
-        retry: 2,
-        staleTime: 50 * 60 * 1000,
-        gcTime: 60 * 60 * 1000,
-    });
-
-    const { isLoading, isError, error } = useQuery({
-        queryKey: ['getSdkToken'],
-        queryFn: () => getSdkToken(authCode),
-        enabled: !!authCode,
-        retry: 2,
-    });
-
-    useEffect(() => {
-        if (authCode) {
-            window.history.replaceState({}, document.title, window.location.pathname);
-            navigate('/home');
-        }
-    }, [authCode]);
+    const { search } = useLocation();
+    const queryParams = new URLSearchParams(search);
+    const authCode = queryParams.get('code') || '';
+    const { data, isLoading, isError, error } = useGetWebToken();
+    const { isSuccess } = useGetSdkToken(authCode);
+    useCheckUser();
+    const setIsMobile = useViewportStore((state) => state.setIsMobile);
+    const { hydrated, resetHydrated } = useUserStore();
     useEffect(() => {
         const userAgent = navigator.userAgent;
         const mobile = /Mobi|Android|iPhone|iPad|iPod/i.test(userAgent);
         setIsMobile(mobile);
     }, []);
-
     useEffect(() => {
-        if (webToken) {
-            const { access_token, expires_in } = webToken;
-            setLocalStorage('webAccessToken', access_token);
-            setLocalStorage('webExpiration', expires_in);
+        if (isSuccess) {
+            resetHydrated();
         }
-    }, []);
-
+    }, [isSuccess]);
+    if (!hydrated) {
+        return null;
+    }
     if (isLoading) {
+        return null;
+    }
+    if (isError || !data?.access_token)
         return (
-            <div className="flex-1 flex justify-center items-center">
-                <img className="img-medium m-20 animate-spin" src="/assets/loading.png" />
+            <div className="flex-1">
+                <h1 className="text-center mt">{error?.message}</h1>
             </div>
         );
-    }
     return (
         <div className="w-full bg-[inherit]">
-            <CheckUser />
-            {AddPlaylistState && <AddPlaylistModal />}
-            {categoryState && <PlaylistCategory />}
+            <ModalContainer />
             <div className="p-[20px] pt-[40px] pb-[120px] md:pb-30 md:p-[20px] max-w-[1200px] mx-auto">
                 <div className="hidden md:block">
                     <SearchInput />
@@ -81,10 +55,20 @@ export const Root = () => {
                 <div className="block p-0 mt-[60px] md:flex md:gap-5 md:items-start md:m-0">
                     <SideBar />
                     <MobileHeader />
-                    {webToken && <Outlet />}
+                    <Outlet />
                 </div>
                 <MobileFooter />
             </div>
+            <ToastContainer
+                position="bottom-center"
+                autoClose={1000}
+                limit={1}
+                hideProgressBar={true}
+                theme="dark"
+                newestOnTop
+                closeOnClick
+                pauseOnHover
+            />
             <Player />
         </div>
     );
