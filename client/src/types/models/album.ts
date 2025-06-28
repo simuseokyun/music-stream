@@ -10,14 +10,6 @@ export interface ArtistAlbumItem {
     album: Album;
 }
 
-export interface AllAlbumItem {
-    id: string;
-    name: string;
-    cover: string;
-    release: string;
-    type: string;
-}
-
 export interface AlbumTab {
     id: string;
     name: string;
