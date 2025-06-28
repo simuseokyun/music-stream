@@ -1,16 +1,12 @@
-import useModalStore from '../../store/useModalStore';
-import { AddPlaylistModal } from './AddplaylistModal';
-import { PlaylistCategory } from '../common/PlaylistCategory';
+import { useModalStore } from '../../store/common';
+import AddPlaylistModal from './AddplaylistModal';
+import PlaylistCategory from '../common/PlaylistCategory';
 
-export const ModalContainer = () => {
+export default function ModalContainer() {
     const { type, close } = useModalStore();
-
-    if (!type) return null;
-
-    return (
-        <>
-            {type === 'addPlaylist' && <AddPlaylistModal onClose={close} />}
-            {type === 'selectPlaylist' && <PlaylistCategory onClose={close} />}
-        </>
-    );
-};
+    const modalMap = {
+        addPlaylist: <AddPlaylistModal onClose={close} />,
+        selectPlaylist: <PlaylistCategory onClose={close} />,
+    } as const;
+    return type ? modalMap[type] : null;
+}
