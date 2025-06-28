@@ -1,16 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { ArtistFiveTracksResponse } from '../../types/api/track';
-import { getLocalStorage } from '../../utils/common/setLocalStorage';
-import { getArtistTopTrack } from '../../api/getInfo';
+
+import { getArtistTopTrack } from '../../services/artist/artist';
 const useGetArtistTrack = (artistId?: string) => {
-    const token = getLocalStorage('webAccessToken');
-    const { data, isError } = useQuery<ArtistFiveTracksResponse>({
+    const { data, isLoading, isError } = useQuery<ArtistFiveTracksResponse>({
         queryKey: ['ArtistPopularTracks', artistId],
         queryFn: () => {
-            return getArtistTopTrack(token!, artistId!);
+            return getArtistTopTrack(artistId!);
         },
-        enabled: Boolean(token && artistId),
+        enabled: !!artistId,
     });
-    return { data, isError };
+    return { data, isLoading, isError };
 };
 export default useGetArtistTrack;

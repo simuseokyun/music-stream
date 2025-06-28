@@ -2,10 +2,11 @@ import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery, InfiniteData } from '@tanstack/react-query';
 import { SearchResultsResponse } from '../../types/api/searchResult';
-import { getLocalStorage } from '../../utils/common/setLocalStorage';
-import { getSearchResult } from '../../api/getInfo';
-const useGetSearchResult = (title: string | null) => {
-    const token = getLocalStorage('webAccessToken');
+import { useSearchParams } from 'react-router-dom';
+import getSearchTracks from '../../services/track/track';
+const useGetSearchResult = () => {
+    const [searchParams] = useSearchParams();
+    const title = searchParams.get('q');
     const { ref, inView } = useInView({ delay: 100, rootMargin: '100px' });
     const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<
         SearchResultsResponse,
@@ -15,7 +16,7 @@ const useGetSearchResult = (title: string | null) => {
         number
     >({
         queryKey: ['searchResult', title!],
-        queryFn: ({ pageParam = 0 }) => getSearchResult(token!, title!, pageParam),
+        queryFn: ({ pageParam = 0 }) => getSearchTracks(title!, pageParam),
         initialPageParam: 0,
         getNextPageParam: (lastPage) => {
             if (!lastPage.tracks.next) return undefined;
@@ -23,7 +24,7 @@ const useGetSearchResult = (title: string | null) => {
             const nextOffset = url.searchParams.get('offset');
             return Number(nextOffset);
         },
-        enabled: Boolean(token && title),
+        enabled: !!title,
         staleTime: Infinity,
         gcTime: Infinity,
     });

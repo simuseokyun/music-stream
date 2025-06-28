@@ -23,7 +23,8 @@ export const useGetPlaylists = () => {
             const nextOffset = url.searchParams.get('offset');
             return Number(nextOffset);
         },
-        staleTime: 5000,
+        staleTime: 5 * 60 * 1000,
+        gcTime: 6 * 60 * 1000,
     });
     useEffect(() => {
         if (inView && hasNextPage && !isFetchingNextPage) {
