@@ -14,6 +14,7 @@ export type Track = {
     id: string;
     name: string;
     album: { images: { url: string }[]; artists: { id: string; name: string }[] };
+    is_local: boolean;
 };
 type FiveTrack = {
     id: string;
