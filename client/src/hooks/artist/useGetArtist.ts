@@ -1,15 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { ArtistResponse } from '../../types/api/artist';
-import { getArtist } from '../../api/getInfo';
+import { getArtist } from '../../services/artist/artist';
 import { getLocalStorage } from '../../utils/common/setLocalStorage';
 const useGetArtist = (artistId?: string) => {
-    const token = getLocalStorage('webAccessToken');
     const { isLoading, data, isError } = useQuery<ArtistResponse>({
         queryKey: ['artistCover', artistId],
         queryFn: async () => {
-            return getArtist(token!, artistId!);
+            return getArtist(artistId!);
         },
-        enabled: Boolean(token && artistId),
+        enabled: !!artistId,
     });
     return { data, isLoading, isError };
 };
