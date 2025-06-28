@@ -1,16 +1,16 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { Root } from '../pages/Root';
-import { Album } from '../pages/album/Album';
-import { Artist } from '../pages/artist/Artist';
-import { SearchResult } from '../pages/search/SearchResult';
-import { Library } from '../pages/library/Library';
-import { Playlist } from '../pages/myPlaylist/MyPlaylist';
-import { AllAlbum } from '../pages/allAlbum/AllAlbum';
-import { Error } from '../components/common/Error/Error';
-import { Search } from '../pages/search/Search';
-import { NewAlbum } from '../components/Home/newAlbumList';
-import ProtectedRoute from '../components/common/ProtectedRoute';
-import Login from '../pages/login/Login';
+import Album from '../pages/album';
+import Artist from '../pages/artist';
+import SearchResult from '../pages/searchResult';
+import Library from '../pages/library';
+import Playlist from '../pages/playlist';
+import AllAlbum from '../pages/allAlbum';
+import Error from '../components/common/Error';
+import Search from '../components/layout/SearchForm';
+import NewAlbum from '../components/home/AlbumList';
+import ProtectedRoute from './ProtectedRoute';
+import Login from '../pages/auth/login';
 
 export const router = createBrowserRouter([
     {
@@ -18,6 +18,7 @@ export const router = createBrowserRouter([
         element: <Root />,
         errorElement: <Error />,
         children: [
+            { index: true, element: <NewAlbum /> },
             { path: 'home', element: <NewAlbum /> },
             { path: 'login', element: <Login /> },
             { path: 'seek', element: <Search /> },
