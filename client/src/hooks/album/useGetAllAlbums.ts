@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { useInfiniteQuery, InfiniteData } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 import { AlbumListResponse } from '../../types/api/album';
-import { getLocalStorage } from '../../utils/common/setLocalStorage';
-import { getAllAlbums } from '../../api/getInfo';
+import { getAllAlbum } from '../../services/album/album';
+import { useParams } from 'react-router-dom';
 
-const useGetAllAlbums = (artistId?: string) => {
-    const token = getLocalStorage('webAccessToken');
+const useGetAllAlbums = () => {
+    const { artistId } = useParams();
     const { ref, inView } = useInView({ delay: 100, rootMargin: '100px' });
     const { data, isLoading, isError, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery<
         AlbumListResponse,
@@ -17,7 +17,9 @@ const useGetAllAlbums = (artistId?: string) => {
     >({
         queryKey: ['allAlbum', artistId],
         queryFn: ({ pageParam = 0 }) => {
-            return getAllAlbums(token!, artistId!, pageParam);
+            if (!artistId) Promise.reject('');
+
+            return getAllAlbum(artistId!, pageParam);
         },
         initialPageParam: 0,
         getNextPageParam: (lastPage) => {
@@ -28,7 +30,7 @@ const useGetAllAlbums = (artistId?: string) => {
         },
         staleTime: Infinity,
         gcTime: Infinity,
-        enabled: Boolean(token && artistId),
+        enabled: !!artistId,
     });
 
     useEffect(() => {

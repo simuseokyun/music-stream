@@ -3,7 +3,7 @@ import { InfiniteData } from '@tanstack/react-query';
 import { getFollowingAlbums } from '../../services/album/album';
 import { useEffect } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { AlbumListResponse, MyAlbumListResponse } from '../../types/api/album';
+import { MyAlbumListResponse } from '../../types/api/album';
 const useGetMyAlbums = () => {
     const { ref, inView } = useInView({ delay: 100, rootMargin: '100px' });
     const { isLoading, data, isError, error, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<
