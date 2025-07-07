@@ -1,6 +1,8 @@
 import { CustomRoute, METHOD } from '../types';
 import callSpotifyApi from '../utils/callSpotifyApi';
-const baseUrl = process.env.BASE_URL;
+import { BASE_URL_API } from '../config';
+import StatusError from '../errors/statusError';
+import { errorMessages } from '..';
 export const playlistRoute: CustomRoute[] = [
     {
         method: METHOD.GET,
@@ -10,11 +12,20 @@ export const playlistRoute: CustomRoute[] = [
                 const offset = query.cursor;
                 const accessToken = cookies.access_token;
                 if (!accessToken) {
-                    return res.status(401).json({ error: 'Access token is missing' });
+                    return res.status(401).json({ error: '엑세스 토큰이 존재하지 않습니다.' });
                 }
-                const data = await callSpotifyApi(`${baseUrl}/v1/me/playlists?limit=10&offset=${offset}`, accessToken);
+                const data = await callSpotifyApi(`${BASE_URL_API}/v1/me/playlists?limit=10&offset=${offset}`, {
+                    token: accessToken,
+                });
+
                 return res.json(data);
-            } catch {}
+            } catch (error) {
+                if (error instanceof StatusError) {
+                    return res.status(error.status).json({ message: errorMessages[error.status] });
+                } else {
+                    return res.status(500).json({ message: errorMessages[500] });
+                }
+            }
         },
     },
     {
@@ -26,14 +37,22 @@ export const playlistRoute: CustomRoute[] = [
                 const offset = query.cursor;
                 const accessToken = cookies.access_token;
                 if (!accessToken) {
-                    return res.status(401).json({ error: 'Access token is missing' });
+                    return res.status(401).json({ message: '액세스 토큰이 존재하지 않습니다' });
                 }
                 const data = await callSpotifyApi(
-                    `${baseUrl}/v1/playlists/${playlistId}/tracks?offset=${offset}`,
-                    accessToken
+                    `${BASE_URL_API}/v1/playlists/${playlistId}/tracks?offset=${offset}`,
+                    {
+                        token: accessToken,
+                    }
                 );
                 return res.json(data);
-            } catch {}
+            } catch (error) {
+                if (error instanceof StatusError) {
+                    return res.status(error.status).json({ message: errorMessages[error.status] });
+                } else {
+                    return res.status(500).json({ message: errorMessages[500] });
+                }
+            }
         },
     },
     {
@@ -44,11 +63,17 @@ export const playlistRoute: CustomRoute[] = [
                 const playlistId = params.playlistId;
                 const accessToken = cookies.access_token;
                 if (!accessToken) {
-                    return res.status(401).json({ error: 'Access token is missing' });
+                    return res.status(401).json({ message: '엑세스 토큰이 존재하지 않습니다' });
                 }
-                const data = await callSpotifyApi(`${baseUrl}/v1/playlists/${playlistId}`, accessToken);
+                const data = await callSpotifyApi(`${BASE_URL_API}/v1/playlists/${playlistId}`, { token: accessToken });
                 return res.json(data);
-            } catch {}
+            } catch (error) {
+                if (error instanceof StatusError) {
+                    return res.status(error.status).json({ message: errorMessages[error.status] });
+                } else {
+                    return res.status(500).json({ message: errorMessages[500] });
+                }
+            }
         },
     },
     {
@@ -59,16 +84,48 @@ export const playlistRoute: CustomRoute[] = [
                 const { name, description, user } = body;
                 const accessToken = cookies.access_token;
                 if (!accessToken) {
-                    return res.status(401).json({ error: 'Access token is missing' });
+                    return res.status(401).json({ message: '액세스 토큰이 존재하지 않습니다' });
                 }
-                const data = await callSpotifyApi(`${baseUrl}/v1/users/${user}/playlists`, accessToken, {
+                const data = await callSpotifyApi(`${BASE_URL_API}/v1/users/${user}/playlists`, {
                     method: 'POST',
+                    token: accessToken,
                     data: { name, description, user },
                 });
                 return res.json(data);
-            } catch {}
+            } catch (error) {
+                if (error instanceof StatusError) {
+                    return res.status(error.status).json({ message: errorMessages[error.status] });
+                } else {
+                    return res.status(500).json({ message: errorMessages[500] });
+                }
+            }
         },
     },
+    {
+        method: METHOD.DELETE,
+        route: '/api/me/playlist/delete/:playlistId',
+        handler: async ({ params, cookies }, res) => {
+            try {
+                const playlistId = params.playlistId;
+                const accessToken = cookies.access_token;
+                if (!accessToken) {
+                    return res.status(401).json({ message: '액세스 토큰이 존재하지 않습니다' });
+                }
+                await callSpotifyApi(`${BASE_URL_API}/v1/playlists/${playlistId}/followers`, {
+                    method: 'DELETE',
+                    token: accessToken,
+                });
+                return res.json({ message: '플레이리스트를 삭제하였습니다' });
+            } catch (error) {
+                if (error instanceof StatusError) {
+                    return res.status(error.status).json({ message: errorMessages[error.status] });
+                } else {
+                    return res.status(500).json({ message: errorMessages[500] });
+                }
+            }
+        },
+    },
+
     {
         method: METHOD.POST,
         route: '/api/me/playlist/track/add/:playlistId',
@@ -76,16 +133,23 @@ export const playlistRoute: CustomRoute[] = [
             try {
                 const accessToken = cookies.access_token;
                 const playlistId = params.playlistId;
-                const uri = body.trackUri;
+                const trackId = body.trackId;
                 if (!accessToken) {
-                    return res.status(401).json({ error: 'Access token is missing' });
+                    return res.status(401).json({ error: '액세스 토큰이 존재하지 않습니다' });
                 }
-                const data = await callSpotifyApi(`${baseUrl}/v1/playlists/${playlistId}/tracks`, accessToken, {
+                const data = await callSpotifyApi(`${BASE_URL_API}/v1/playlists/${playlistId}/tracks`, {
                     method: 'POST',
-                    data: { uris: [uri] },
+                    token: accessToken,
+                    data: { uris: [`spotify:track:${trackId}`] },
                 });
                 return res.json(data);
-            } catch {}
+            } catch (error) {
+                if (error instanceof StatusError) {
+                    return res.status(error.status).json({ message: errorMessages[error.status] });
+                } else {
+                    return res.status(500).json({ message: errorMessages[500] });
+                }
+            }
         },
     },
     {
@@ -95,16 +159,24 @@ export const playlistRoute: CustomRoute[] = [
             try {
                 const accessToken = cookies.access_token;
                 const playlistId = params.playlistId;
-                const uri = body.trackUri;
+                const id = body.id;
                 if (!accessToken) {
-                    return res.status(401).json({ error: 'Access token is missing' });
+                    return res.status(401).json({ message: '액세스 토큰이 존재하지 않습니다' });
                 }
-                const data = await callSpotifyApi(`${baseUrl}/v1/playlists/${playlistId}/tracks`, accessToken, {
+                const data = await callSpotifyApi(`${BASE_URL_API}/v1/playlists/${playlistId}/tracks`, {
                     method: 'DELETE',
-                    data: { trakcs: [{ uri, position: 0 }] },
+                    token: accessToken,
+                    data: { tracks: [{ uri: `spotify:track:${id}`, position: 0 }] },
+                    headers: { 'Content-Type': 'application/json' },
                 });
                 return res.json(data);
-            } catch {}
+            } catch (error) {
+                if (error instanceof StatusError) {
+                    return res.status(error.status).json({ message: errorMessages[error.status] });
+                } else {
+                    return res.status(500).json({ message: errorMessages[500] });
+                }
+            }
         },
     },
 ];

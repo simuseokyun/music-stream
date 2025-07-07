@@ -1,31 +1,22 @@
+import axios, { isAxiosError } from 'axios';
 import { CustomRoute, METHOD } from '../types';
 import callSpotifyApi from '../utils/callSpotifyApi';
-import axios from 'axios';
-import { client_id, client_secret, redirect_uri, baseUrl, basicAuth } from '../config';
+import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, BASE_URL_AUTH, BASIC_AUTH } from '../config';
+import StatusError from '../errors/statusError';
+import { errorMessages } from '..';
 
 const authRoute: CustomRoute[] = [
     {
         method: METHOD.GET,
         route: '/api/webToken',
-        handler: async (req, res) => {
-            // try {
-            //     const params = new URLSearchParams();
-            //     params.append('grant_type', 'client_credentials');
-            //     params.append('client_id', client_id);
-            //     params.append('client_secret', client_secret);
-            //     const data = await callSpotifyApi(`${baseUrl}/api/token`, '', {
-            //         data: params.toString(),
-            //         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            //     });
-            //     console.log(data, params);
-            //     return res.json(data);
-            // } catch {}
+        handler: async (_req, res) => {
             try {
-                const params = new URLSearchParams();
-                params.append('grant_type', 'client_credentials');
-                params.append('client_id', client_id);
-                params.append('client_secret', client_secret);
-                const response = await axios.post('https://accounts.spotify.com/api/token', params.toString(), {
+                const params = new URLSearchParams({
+                    grant_type: 'client_credentials',
+                    client_id: CLIENT_ID,
+                    client_secret: CLIENT_SECRET,
+                });
+                const response = await axios.post(`${BASE_URL_AUTH}/api/token`, params.toString(), {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
@@ -33,33 +24,31 @@ const authRoute: CustomRoute[] = [
                 const data = response.data;
                 return res.json(data);
             } catch (error) {
-                if (axios.isAxiosError(error)) {
-                    console.error('Spotify token fetch error:', error.response?.data || error.message);
-                    return res.status(500).json({ error: 'Failed to fetch Spotify token' });
-                } else if (error instanceof Error) {
-                    // 일반적인 Error 타입일 때
-                    console.error('Spotify token fetch error:', error.message);
-                    return res.status(500).json({ error: 'Failed to fetch Spotify token' });
+                if (isAxiosError(error)) {
+                    return res.status(error.status || 500).json({ message: errorMessages[error.status || 500] });
                 } else {
-                    // 그 외 예외
-                    console.error('Spotify token fetch unknown error:', error);
-                    return res.status(500).json({ error: 'Failed to fetch Spotify token' });
+                    return res.status(500).json({ message: errorMessages[500] });
                 }
             }
         },
     },
     {
         method: METHOD.POST,
-        route: '/api/auth/token',
+        route: '/api/auth/sdkToken',
         handler: async ({ body: { code } }, res) => {
             try {
-                const params = new URLSearchParams();
-                params.append('code', code);
-                params.append('redirect_uri', redirect_uri || '');
-                params.append('grant_type', 'authorization_code');
-                params.append('client_id', client_id);
-                params.append('client_secret', client_secret);
-                const data = await callSpotifyApi(`${baseUrl}/api/token`, '', { data: params.toString() });
+                const params = new URLSearchParams({
+                    code,
+                    redirect_uri: REDIRECT_URI,
+                    grant_type: 'authorization_code',
+                    client_id: CLIENT_ID,
+                    client_secret: CLIENT_SECRET,
+                });
+                const data = await callSpotifyApi(`${BASE_URL_AUTH}/api/token`, {
+                    method: 'POST',
+                    data: params.toString(),
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                });
                 const { access_token, refresh_token } = data;
                 res.cookie('access_token', access_token, {
                     httpOnly: true,
@@ -71,13 +60,17 @@ const authRoute: CustomRoute[] = [
                     httpOnly: true,
                     secure: false,
                     sameSite: 'lax',
-                    maxAge: 30 * 24 * 60 * 60 * 1000,
                 });
                 return res.json({
-                    loginSuccess: true,
+                    state: true,
+                    message: '액세스 토큰과 리프레시 토큰이 성공적으로 발급되었습니다',
                 });
-            } catch {
-                res.status(500).json({ message: '토큰 발급 실패' });
+            } catch (error) {
+                if (error instanceof StatusError) {
+                    return res.status(error.status).json({ message: errorMessages[error.status] });
+                } else {
+                    return res.status(500).json({ message: errorMessages[500] });
+                }
             }
         },
     },
@@ -85,36 +78,41 @@ const authRoute: CustomRoute[] = [
         method: METHOD.POST,
         route: '/api/auth/refresh',
         handler: async ({ cookies }, res) => {
-            const refresh_token = cookies.refresh_token;
+            const refreshToken = cookies.refresh_token;
+            if (!refreshToken) {
+                return res.status(401).json({ message: '로그인 후 이용해주세요' });
+            }
             try {
-                const data = await callSpotifyApi(`${baseUrl}/api/token`, basicAuth, {
+                const data = await callSpotifyApi(`${BASE_URL_AUTH}/api/token`, {
                     method: 'POST',
-                    data: new URLSearchParams({ grand_type: 'refresh_token', refresh_token, client_id }),
+                    token: BASIC_AUTH,
+                    data: new URLSearchParams({
+                        grant_type: 'refresh_token',
+                        refresh_token: refreshToken,
+                        client_id: CLIENT_ID,
+                    }).toString(),
+                    refresh: true,
                 });
-                const { access_token, refresh_token: newRefreshToken } = data;
+                const { access_token } = data;
                 res.cookie('access_token', access_token, {
                     httpOnly: true,
                     secure: false,
                     sameSite: 'lax',
                     maxAge: 3600 * 1000,
                 });
-
-                res.cookie('refresh_token', data.refresh_token, {
-                    httpOnly: true,
-                    secure: false,
-                    sameSite: 'lax',
-                    maxAge: 3600 * 1000,
-                });
-            } catch {}
+                return res.json({ state: true, message: '액세스 토큰이 성공적으로 재발급 되었습니다' });
+            } catch {
+                return res.status(401).json({ message: '리프레시 토큰이 만료되었습니다. 다시 로그인해주세요.' });
+            }
         },
     },
     {
-        method: METHOD.GET,
+        method: METHOD.POST,
         route: '/api/logout',
         handler: ({ cookies }, res) => {
-            const accessToken = cookies.access_token;
-            if (!accessToken) {
-                return res.status(204).json({ message: '이미 로그아웃된 상태입니다.' });
+            const refreshToken = cookies.refresh_token;
+            if (!refreshToken) {
+                return res.status(200).json({ message: '이미 로그아웃된 상태입니다.' });
             }
             res.clearCookie('access_token', {
                 httpOnly: true,
