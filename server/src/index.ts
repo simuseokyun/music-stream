@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({
+    path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development',
+});
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -23,11 +25,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 export const errorMessages: ErrorMessages = {
-    400: '값이 누락되었거나 잘못된 값을 보냈습니다',
     401: '잘못된 토큰 또는 만료된 토큰입니다. 사용자를 다시 인증해주세요',
     403: '잘못된 요청입니다. 사용자를 재인증해도 이 요청은 실행되지 않습니다',
-    429: '앱이 속도 제한을 초과하였습니다.',
-    500: '네트워크 에러입니다.',
+    429: '앱이 속도 제한을 초과하였습니다. 잠시 후 다시 시도해주세요',
+    500: '네트워크 에러입니다',
 };
 
 const routes: CustomRoute[] = [...userRoute, ...authRoute, ...playerRoute, ...playlistRoute, ...albumRoute];
