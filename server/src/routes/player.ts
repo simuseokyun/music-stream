@@ -10,15 +10,15 @@ const playerRoute: CustomRoute[] = [
             try {
                 const { title } = query;
                 const { id } = body;
-                if (!title || !id) return res.status(401).json({ message: '곡 정보를 찾을 수 없습니다' });
+                if (!title || !id) return res.status(400).json({ message: '곡 정보를 찾을 수 없습니다' });
                 const data = await spotifyPreviewFinder(title as string, 20);
                 const trackInfo = data?.results.find((track: { spotifyUrl: string }) => {
                     const urlParts = track.spotifyUrl.split('/');
                     const trackId = urlParts[urlParts.length - 1];
                     return id === trackId;
                 });
-                if (!trackInfo || !data.success) {
-                    return res.status(403).json({ message: '해당 곡은 재생할 수 없습니다' });
+                if (!trackInfo) {
+                    return res.status(404).json({ message: '해당 곡을 찾을 수 없습니다' });
                 }
                 return res.json([{ ...trackInfo }]);
             } catch (error) {

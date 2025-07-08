@@ -43,10 +43,10 @@ const authRoute: CustomRoute[] = [
                     grant_type: 'authorization_code',
                     client_id: CLIENT_ID,
                     client_secret: CLIENT_SECRET,
-                });
+                }).toString();
                 const data = await callSpotifyApi(`${BASE_URL_AUTH}/api/token`, {
                     method: 'POST',
-                    data: params.toString(),
+                    data: params,
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 });
                 const { access_token, refresh_token } = data;
@@ -54,16 +54,17 @@ const authRoute: CustomRoute[] = [
                     httpOnly: true,
                     secure: false,
                     sameSite: 'lax',
-                    maxAge: 3600 * 1000,
+                    maxAge: 60 * 60 * 1000,
                 });
                 res.cookie('refresh_token', refresh_token, {
                     httpOnly: true,
                     secure: false,
                     sameSite: 'lax',
+                    maxAge: 14 * 24 * 60 * 60 * 1000,
                 });
                 return res.json({
                     state: true,
-                    message: '액세스 토큰과 리프레시 토큰이 성공적으로 발급되었습니다',
+                    message: '토큰이 성공적으로 발급되었습니다',
                 });
             } catch (error) {
                 if (error instanceof StatusError) {
@@ -78,19 +79,20 @@ const authRoute: CustomRoute[] = [
         method: METHOD.POST,
         route: '/api/auth/refresh',
         handler: async ({ cookies }, res) => {
-            const refreshToken = cookies.refresh_token;
-            if (!refreshToken) {
+            const token = cookies.refresh_token;
+            if (!token) {
                 return res.status(401).json({ message: '로그인 후 이용해주세요' });
             }
+            const params = new URLSearchParams({
+                grant_type: 'refresh_token',
+                refresh_token: token,
+                client_id: CLIENT_ID,
+            }).toString();
             try {
                 const data = await callSpotifyApi(`${BASE_URL_AUTH}/api/token`, {
                     method: 'POST',
                     token: BASIC_AUTH,
-                    data: new URLSearchParams({
-                        grant_type: 'refresh_token',
-                        refresh_token: refreshToken,
-                        client_id: CLIENT_ID,
-                    }).toString(),
+                    data: params,
                     refresh: true,
                 });
                 const { access_token } = data;
@@ -98,11 +100,15 @@ const authRoute: CustomRoute[] = [
                     httpOnly: true,
                     secure: false,
                     sameSite: 'lax',
-                    maxAge: 3600 * 1000,
+                    maxAge: 60 * 60 * 1000,
                 });
                 return res.json({ state: true, message: '액세스 토큰이 성공적으로 재발급 되었습니다' });
-            } catch {
-                return res.status(401).json({ message: '리프레시 토큰이 만료되었습니다. 다시 로그인해주세요.' });
+            } catch (error) {
+                if (error instanceof StatusError) {
+                    return res.status(error.status).json({ message: errorMessages[error.status] });
+                } else {
+                    return res.status(500).json({ message: errorMessages[500] });
+                }
             }
         },
     },
@@ -110,9 +116,9 @@ const authRoute: CustomRoute[] = [
         method: METHOD.POST,
         route: '/api/logout',
         handler: ({ cookies }, res) => {
-            const refreshToken = cookies.refresh_token;
-            if (!refreshToken) {
-                return res.status(200).json({ message: '이미 로그아웃된 상태입니다.' });
+            const token = cookies.refresh_token;
+            if (!token) {
+                return res.status(200).json({ message: '이미 로그아웃된 상태입니다' });
             }
             res.clearCookie('access_token', {
                 httpOnly: true,
