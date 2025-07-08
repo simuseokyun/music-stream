@@ -1,13 +1,13 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { errorMessages } from '..';
+import StatusError from '../errors/statusError';
 const callSpotifyApi = async (
     url: string,
-    accessToken: string,
-
     options: {
         method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
-        data?: any;
+        token?: string;
+        data?: string | Record<string, any>;
         headers?: Record<string, string>;
+        refresh?: boolean;
     } = {}
 ) => {
     try {
@@ -16,25 +16,24 @@ const callSpotifyApi = async (
             method: options.method || 'GET',
             data: options.data,
             headers: {
-                Authorization: `Bearer ${accessToken}`,
-                // 'Content-Type': 'application/json',
+                Authorization: options.token
+                    ? options.refresh
+                        ? `Basic ${options.token}`
+                        : `Bearer ${options.token}`
+                    : undefined,
                 ...options.headers,
             },
         };
-
         const response = await axios(config);
         return response.data;
-    } catch (error: any) {
-        if (error.response) {
-            const status = error.response.status;
-            const message = errorMessages[status] || error.response.data?.error?.message || error.response.statusText;
-            throw new Error(message);
-        } else if (error.request) {
-            throw new Error('Spotify API로부터 응답이 없습니다.');
-        } else {
-            throw new Error(error.message);
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            const status = error.response?.status || 500;
+            throw new StatusError(status);
+        } else if (error instanceof SyntaxError || error instanceof TypeError) {
+            throw new StatusError(400);
         }
+        throw new StatusError(500);
     }
 };
-
 export default callSpotifyApi;
