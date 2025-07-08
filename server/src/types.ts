@@ -12,6 +12,6 @@ export interface CustomRoute {
     route: string;
     handler: (req: Request, res: Response) => void;
 }
-export interface errorMessage {
+export interface ErrorMessages {
     [key: number]: string;
 }
