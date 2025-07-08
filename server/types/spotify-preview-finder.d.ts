@@ -11,7 +11,7 @@ declare module 'spotify-preview-finder' {
         results: TrackResult[];
     }
 
-    const searchAndGetLinks: (trackName: string, limit?: number) => Promise<SearchResult>;
+    const searchAndGetLinks: (songName: string, limit?: number) => Promise<SearchResult>;
 
     export default searchAndGetLinks;
 }
