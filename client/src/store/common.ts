@@ -1,13 +1,9 @@
 import { create } from 'zustand';
-import { UseViewport, UseCategory, UseModal } from '../types/store/store';
+import { UseViewport, UseCategory, UseModal, UsePlayerKey } from '../types/store/store';
 
 const useViewportStore = create<UseViewport>((set) => ({
     isMobile: false,
-    setIsMobile: (state) => {
-        set(() => ({
-            isMobile: state,
-        }));
-    },
+    setIsMobile: (isMobile) => set({ isMobile }),
 }));
 
 const useCategoryStore = create<UseCategory>((set) => ({
@@ -25,4 +21,8 @@ const useModalStore = create<UseModal>((set) => ({
     close: () => set({ type: null }),
 }));
 
-export { useCategoryStore, useViewportStore, useModalStore };
+const usePlayerKey = create<UsePlayerKey>((set) => ({
+    key: 0,
+    setKey: (value) => set({ key: value }),
+}));
+export { useCategoryStore, useViewportStore, useModalStore, usePlayerKey };
