@@ -1,4 +1,7 @@
 export default {
-    content: ['./src/**/*.{js,ts,jsx,tsx,html}'],
-    theme: {},
+    content: ['./src/**/*.{js,ts,jsx,tsx}'],
+    theme: {
+        extend: {},
+    },
+    plugins: [],
 };
