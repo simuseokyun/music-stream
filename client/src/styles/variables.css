@@ -1,0 +1,12 @@
+:root {
+    --color-accent: #1ed760;
+    --color-main: #0d0d0d;
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-sub: rgb(160, 160, 160);
+    --color-active: rgba(255, 255, 255, 0.2);
+    --borderRadius-main: 8px;
+    --font-size-sm: 12px;
+    --font-size-md: 16px;
+    --font-size-lg: 20px;
+}

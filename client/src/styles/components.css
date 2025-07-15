@@ -1,0 +1,50 @@
+@layer components {
+    .img-large {
+        @apply w-[150px] h-[150px];
+    }
+
+    .img-medium {
+        @apply w-[50px] h-[50px];
+    }
+
+    .img-small {
+        @apply w-[25px] h-[25px];
+    }
+    .text-sub {
+        color: var(--color-sub);
+        font-size: var(--font-size-md);
+    }
+    .action-button {
+        @apply inline-block w-[30px] h-[30px] p-[2px] rounded-full transition-transform;
+        @screen md {
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
+    .bg-main {
+        background-color: var(--color-main);
+    }
+    .bg-accent {
+        background-color: var(--color-accent);
+    }
+    .bg-white {
+        background-color: var(--color-white);
+    }
+    .bg-active {
+        background-color: var(--color-active);
+    }
+
+    .text-sm {
+        font-size: var(--font-size-sm);
+    }
+    .text-md {
+        font-size: var(--font-size-md);
+    }
+    .text-lg {
+        font-size: var(--font-size-lg);
+    }
+    .bg-sub {
+        background-color: var(--color-sub);
+    }
+}
