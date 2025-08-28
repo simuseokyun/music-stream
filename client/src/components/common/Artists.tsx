@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function Artists({ artists }: { artists: { name: string; id: string }[] }) {
     return (
-        <div className="mt-0.5 text-ellipsis">
+        <div className="mt-0.5 truncate">
             {artists?.map((artist, i) => {
                 return (
                     <Link
