@@ -20,7 +20,7 @@ export default function TrackList({ data }: { data: AlbumInfoResponse }) {
             artist: data?.artists[0]?.name,
             image: data?.images[0]?.url,
         }));
-        await playTrack(index, newList);
+        playTrack(index, newList);
     });
 
     return (

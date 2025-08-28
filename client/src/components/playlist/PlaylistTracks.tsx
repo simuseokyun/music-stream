@@ -22,7 +22,7 @@ export default function TrackList({ playlistId }: { playlistId?: string }) {
             artist: album.artists[0]?.name,
             image: album?.images[0]?.url,
         }));
-        await playTrack(index, newList);
+        playTrack(index, newList);
     });
 
     if (isLoading) return null;

@@ -20,7 +20,7 @@ export default function TrackList({ artistId }: { artistId?: string }) {
             artist: album?.artists[0]?.name,
             image: album?.images[0]?.url,
         }));
-        await playTrack(index, newList);
+        playTrack(index, newList);
     });
 
     if (isLoading) {
