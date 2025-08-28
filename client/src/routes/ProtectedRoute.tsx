@@ -7,7 +7,7 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
     if (!hydrated) {
         return (
             <div className="flex-1 flex justify-center items-center">
-                <img className="img-medium m-20 animate-spin" src="/assets/loading.png" alt="Loading" />
+                <img className="img-medium m-20 animate-spin" src="/assets/loading.png" alt="로딩 아이콘" />
             </div>
         );
     }
