@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
+import { getWebToken } from '../../services/auth/auth';
 import { WebToken } from '../../types/api/auth';
-import { getWebToken } from '../../services/auth/\bauth';
 
 const useGetWebToken = () => {
     const { data, isLoading, isError, error } = useQuery<WebToken>({
-        queryKey: ['webToken'],
+        queryKey: ['token', 'web'],
         queryFn: getWebToken,
         retry: 2,
         staleTime: 50 * 60 * 1000,
