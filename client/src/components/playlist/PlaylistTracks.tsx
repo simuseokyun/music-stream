@@ -1,44 +1,45 @@
+import TrackItem from './PlaylistTrackItem';
+import Loading from '../common/Loading';
+import usePlayTrack from '../../hooks/player/usePlayTrack';
 import useGetPlaylist from '../../hooks/playlist/useGetPlaylist';
-import PlaylistTrackItem from './PlaylistTrackItem';
 import usePlayThrottle from '../../hooks/player/usePlayThrottle';
-import { TrackToPlay } from '../../types/models/player.';
-import usePlayPreview from '../../hooks/player/usePlayPreview';
-import { useCurrentPlaylistStore } from '../../store/player';
-export default function PlaylistTracks({ playlistId }: { playlistId?: string }) {
-    const { data, isLoading, isError, ref } = useGetPlaylist(playlistId);
-    const { playPreview } = usePlayPreview();
-    const { setPlaylist, setIndex } = useCurrentPlaylistStore();
-    const onPlay = usePlayThrottle(({ id, title, artist, image }: TrackToPlay) => {
+import useThrottledToast from '../../hooks/common/useTrottledToast';
+
+export default function TrackList({ playlistId }: { playlistId?: string }) {
+    const { data, isLoading, isError, error, isFetchingNextPage, ref } = useGetPlaylist(playlistId);
+    const { playTrack } = usePlayTrack();
+    const toast = useThrottledToast();
+    const onPlay = usePlayThrottle(async ({ id }: { id: string }) => {
         const list = data?.pages.flatMap((page) => page?.items) ?? [];
-        if (list) {
-            const index = list.findIndex((item) => item.track.id === id);
-            const newList = list.map(({ track }) => ({
-                id: track.id,
-                title: track.name,
-                artist: track.album.artists[0].name,
-                image: track.album.images[0].url,
-            }));
-            setPlaylist([...newList]);
-            setIndex(index);
+        if (!list) {
+            toast('error', '곡을 재생할 수 없습니다');
+            return;
         }
-        playPreview({ id, title, artist, image });
-    }, 1000);
+        const index = list.findIndex((item) => item?.track.id === id);
+        const newList = list.map(({ track: { id, name, album } }) => ({
+            id,
+            title: name,
+            artist: album.artists[0]?.name,
+            image: album?.images[0]?.url,
+        }));
+        await playTrack(index, newList);
+    });
 
     if (isLoading) return null;
     if (isError)
         return (
             <div className="flex-1">
-                <h1 className="text-center m-20">데이터를 불러올 수 없습니다</h1>
+                <h1 className="text-center m-20">{error?.message}</h1>
             </div>
         );
 
     return (
-        <>
-            <table className="w-table-auto w-full table-fixed mt-2">
+        <div className="mt-2">
+            <table className="w-full table-fixed ">
                 <tbody>
                     {data?.pages.map((page) =>
                         page?.items.map(({ track }, index) => (
-                            <PlaylistTrackItem
+                            <TrackItem
                                 key={track.id + index}
                                 track={track}
                                 playlistId={playlistId as string}
@@ -48,8 +49,9 @@ export default function PlaylistTracks({ playlistId }: { playlistId?: string }) 
                     )}
                 </tbody>
             </table>
-            <div ref={ref} className="h-[10px]" />
+            {isFetchingNextPage && <Loading />}
             {!data?.pages[0].items.length && <h1 className="text-center font-bold mt-10">곡을 추가해주세요</h1>}
-        </>
+            <div ref={ref} />
+        </div>
     );
 }
