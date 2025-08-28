@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useViewportStore } from '../../store/common';
-import { useMemo } from 'react';
 
 export const usePagenation = (itemsLength: number) => {
     const { isMobile } = useViewportStore();
