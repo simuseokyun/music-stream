@@ -1,13 +1,19 @@
-import useUserStore from '../../store/user';
 import { useEffect } from 'react';
-import axios from 'axios';
+import { getDataWithAuth } from '../../services/api/client';
+import useUserStore from '../../store/user';
+
 const useCheckUser = () => {
     const { setUser, hydrated, setHydrated } = useUserStore();
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get('/api/me');
-                setUser(response.data);
+                const response = await getDataWithAuth('/api/me/check');
+                if (response?.loginState) {
+                    const { id, email, display_name } = response;
+                    setUser({ id, email, display_name });
+                } else {
+                    throw new Error('현재 로그아웃 상태입니다');
+                }
             } catch (error) {
                 setUser(null);
             } finally {
