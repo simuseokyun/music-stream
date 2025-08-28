@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import { addAlbum, deleteAlbum, checkAlbumLike } from '../../services/album/album';
 import { MyAlbumListResponse } from '../../types/api/album';
-import { addAlbum as onAddAlbum, deleteAlbum as onDeleteAlbum, checkAlbumLike } from '../../services/album/album';
+import { AlbumTab } from '../../types/models/album';
 
-export const useAlbumLike = (id: string, name: string, artist_name: string, artist_id: string, image: string) => {
-    const [isLiked, setIsLiked] = useState<null | boolean>(null);
+export const useAlbumLike = ({ id, name, artistId, artistName, image }: AlbumTab) => {
+    const [isLiked, setIsLiked] = useState(false);
     const { albumId } = useParams();
     const queryClient = useQueryClient();
-
-    const setAlbumState = async () => {
+    const checkAlbumState = async () => {
         if (!albumId) {
-            setIsLiked(null);
-            return;
+            setIsLiked(false);
+            throw new Error('앨범 아이디가 필요합니다');
         }
-        const cached = queryClient.getQueryData<InfiniteData<MyAlbumListResponse>>(['album', 'following']);
+        const cached = queryClient.getQueryData<InfiniteData<MyAlbumListResponse>>(['albums', 'following']);
         let liked = false;
         if (cached) {
             const album = cached?.pages.flatMap((page) => page.items).find(({ album }) => album.id === albumId);
@@ -22,86 +22,84 @@ export const useAlbumLike = (id: string, name: string, artist_name: string, arti
             setIsLiked(liked);
         } else {
             const result = await checkAlbumLike(albumId);
-            liked = result?.[0] === true;
+            liked = result?.liked === true;
             setIsLiked(liked);
         }
     };
 
-    const addAlbum = useMutation({
+    const { mutate: likedAlbum } = useMutation({
         mutationFn: () => {
-            if (!albumId) return Promise.reject('앨범 아이디 필요');
-            return onAddAlbum(albumId);
+            if (!albumId) throw new Error('앨범 아이디가 필요합니다');
+            return addAlbum(albumId);
         },
         onMutate: () => {
-            const data = queryClient.getQueryData<InfiniteData<MyAlbumListResponse>>(['album', 'following']);
-            if (!data) {
-                setIsLiked(true);
-                return;
-            }
-            const newData = {
-                ...data,
-                pages: [
-                    {
-                        items: [
-                            {
-                                album: {
-                                    id,
-                                    name,
-                                    artists: [{ id: artist_id, name: artist_name }],
-                                    images: [{ url: image }],
-                                },
-                            },
-                            ...data.pages[0].items,
-                        ],
+            const cache = queryClient.getQueryData<InfiniteData<MyAlbumListResponse>>(['albums', 'following']);
+            if (cache) {
+                const newAlbum = {
+                    album: {
+                        id,
+                        name,
+                        artists: [{ id: artistId, name: artistName }],
+                        images: [{ url: image }],
                     },
-                    ...data.pages.slice(1),
-                ],
-            };
-            queryClient.setQueryData(['album', 'following'], newData);
+                };
+                const firstPage = cache.pages[0];
+                const restPages = cache.pages.slice(1);
+                const myAlbums = {
+                    ...cache,
+                    pages: [
+                        {
+                            ...firstPage,
+                            items: [newAlbum, ...firstPage.items],
+                        },
+                        ...restPages,
+                    ],
+                };
+                queryClient.setQueryData(['albums', 'following'], myAlbums);
+            }
             setIsLiked(true);
-            return { data };
+            return { data: cache };
         },
-        onError: (err, variables, context) => {
+        onError: (_err, _variables, context) => {
             if (context?.data) {
-                queryClient.setQueryData(['album', 'following'], context.data);
+                queryClient.setQueryData(['albums', 'following'], context.data);
                 setIsLiked(false);
             }
         },
     });
 
-    const deleteAlbum = useMutation({
+    const { mutate: unLikedAlbum } = useMutation({
         mutationFn: () => {
-            if (!albumId) return Promise.reject('앨범 아이디 필요');
-            return onDeleteAlbum(albumId);
+            if (!albumId) throw new Error('앨범 아이디가 필요합니다');
+            return deleteAlbum(albumId);
         },
         onMutate: () => {
-            const data = queryClient.getQueryData<InfiniteData<MyAlbumListResponse>>(['album', 'following']);
-            if (!data) {
-                setIsLiked(false);
-                return;
-            }
-            const newData: InfiniteData<MyAlbumListResponse> = {
-                ...data,
-                pages: data.pages.map((page) => ({
+            const cache = queryClient.getQueryData<InfiniteData<MyAlbumListResponse>>(['albums', 'following']);
+            if (cache) {
+                const filteredPages = cache.pages.map((page) => ({
                     ...page,
                     items: page.items.filter(({ album }) => album.id !== albumId),
-                })),
-            };
-            queryClient.setQueryData(['album', 'following'], newData);
+                }));
+                const myAlbums: InfiniteData<MyAlbumListResponse> = {
+                    ...cache,
+                    pages: filteredPages,
+                };
+                queryClient.setQueryData(['albums', 'following'], myAlbums);
+            }
             setIsLiked(false);
-            return { data };
+            return { data: cache };
         },
-        onError: (err, variables, context) => {
+        onError: (_err, _variables, context) => {
             if (context?.data) {
-                queryClient.setQueryData(['album', 'following'], context.data);
+                queryClient.setQueryData(['albums', 'following'], context.data);
                 setIsLiked(true);
             }
         },
     });
 
     useEffect(() => {
-        setAlbumState();
+        checkAlbumState();
     }, []);
 
-    return { isLiked, addAlbum, deleteAlbum };
+    return { isLiked, likedAlbum, unLikedAlbum };
 };
