@@ -5,7 +5,7 @@ import { usePagenation } from '../../hooks/album/usePagenation';
 import useGetNewAlbums from '../../hooks/album/useGetNewAlbums';
 export default function Home() {
     const { data, isLoading, isError } = useGetNewAlbums();
-    const { onNextBtn, onPrevBtn, index, offset } = usePagenation(data?.albums?.items.length || 0);
+    const { onNext, onPrev, index, offset } = usePagenation(data?.albums?.items.length || 0);
 
     if (isLoading) {
         return <Loading />;
@@ -22,7 +22,7 @@ export default function Home() {
         <div className="flex-1">
             <div className="flex justify-between items-center mb-3">
                 <h1 className="text-2xl font-bold">최신 음악</h1>
-                <Pagenation onPrev={onPrevBtn} onNext={onNextBtn} />
+                <Pagenation onPrev={onPrev} onNext={onNext} />
             </div>
             <div className="grid grid-cols-3 lg:grid-cols-4">
                 {data?.albums?.items
