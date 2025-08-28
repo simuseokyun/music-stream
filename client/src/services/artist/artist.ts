@@ -1,10 +1,22 @@
-import { axiosWithoutAuth } from '../api/client';
+import { getDataWithAuth } from '../api/client';
 
-const getArtist = async (artistId: string) => {
-    return axiosWithoutAuth(`/v1/artists/${artistId}`);
+const getFollowingArtists = () => {
+    return getDataWithAuth(`/api/me/artists`);
 };
-const getArtistTopTrack = async (artistId: string) => {
-    return axiosWithoutAuth(`/v1/artists/${artistId}/top-tracks`);
+const checkArtistFollow = (artistId: string) => {
+    return getDataWithAuth(`/api/me/artists/check?id=${artistId}`);
+};
+const artistFollow = (artistId: string) => {
+    return getDataWithAuth(`/api/me/artists/follow`, {
+        method: 'PUT',
+        data: { ids: artistId },
+    });
+};
+const artistUnfollow = (artistId: string) => {
+    return getDataWithAuth(`/api/me/artists/unfollow`, {
+        method: 'DELETE',
+        data: { ids: artistId },
+    });
 };
 
-export { getArtist, getArtistTopTrack };
+export { getFollowingArtists, checkArtistFollow, artistFollow, artistUnfollow };
