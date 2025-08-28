@@ -30,7 +30,7 @@ const usePlayerControl = () => {
         const { id, title, artist, image } = nextTrack;
         const result = await playPreview({ id, title, artist, image });
         if (!result.playState) {
-            await playNextTrack(index + 1, true);
+            playNextTrack(index + 1, true);
         }
     };
     const onNext = usePlayThrottle(async () => {
@@ -48,7 +48,7 @@ const usePlayerControl = () => {
         }
         setIndex(currentIndex - 1);
         const { id, title, artist, image } = prevTrack;
-        await playPreview({
+        playPreview({
             id,
             title,
             artist,

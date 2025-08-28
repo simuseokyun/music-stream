@@ -14,7 +14,7 @@ const usePlayTrack = () => {
                 setIndex(index);
                 setPlaylist([...list]);
             } else {
-                await playTrack(index + 1, list);
+                playTrack(index + 1, list);
             }
         } catch {
             toast('error', '곡 재생에 실패했습니다');
