@@ -9,8 +9,8 @@ export const usePagenation = (itemsLength: number) => {
         return Math.ceil(itemsLength / offset) - 1;
     }, [itemsLength, offset]);
 
-    const onNextBtn = () => setIndex((prev) => (prev >= maxPage ? 0 : prev + 1));
-    const onPrevBtn = () => setIndex((prev) => (prev <= 0 ? maxPage : prev - 1));
+    const onNext = () => setIndex((prev) => (prev >= maxPage ? 0 : prev + 1));
+    const onPrev = () => setIndex((prev) => (prev <= 0 ? maxPage : prev - 1));
 
-    return { isMobile, index, setIndex, onNextBtn, onPrevBtn, offset };
+    return { isMobile, index, setIndex, onNext, onPrev, offset };
 };
