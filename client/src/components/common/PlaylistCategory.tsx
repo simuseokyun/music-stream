@@ -1,35 +1,41 @@
-import Loading from './Loading';
-import { useViewportStore } from '../../store/common';
 import Modal from './Modal';
 import { useGetPlaylists } from '../../hooks/playlist/useGetPlaylists';
 import useAddTrack from '../../hooks/track/useAddTrack';
+import { useViewportStore } from '../../store/common';
 export default function PlaylistCategory({ onClose }: { onClose: () => void }) {
-    const isMobile = useViewportStore((state) => state.isMobile);
-    const { data, isLoading, isError, isFetchingNextPage, ref } = useGetPlaylists();
+    const { data, isLoading, isError, error, ref } = useGetPlaylists();
     const { mutate: addTrack } = useAddTrack(onClose);
-
+    const isMobile = useViewportStore((state) => state.isMobile);
     if (isLoading) {
         return null;
     }
-    if (isError || !data?.pages[0].items.length) {
+    if (isError || !data) {
         return (
             <div className="flex-1">
-                <h1 className="text-center mt-20">목록을 불러 올 수 없습니다</h1>
+                <h1 className="text-center mt-20">{error?.message}</h1>
             </div>
         );
     }
+    if (!data.pages[0].items?.length) {
+        return (
+            <div className="flex-1">
+                <h1 className="text-center mt-20">플레이리스트를 생성해주세요</h1>
+            </div>
+        );
+    }
+
     return (
         <Modal onClose={onClose} modalTitle="플레이리스트 추가">
-            <ul className="items-center">
+            <ul>
                 {data?.pages.map((page) =>
-                    page?.items.map((item) => {
+                    page?.items.map((playlist) => {
                         return (
                             <li
-                                key={item.id}
-                                className={`p-2 rounded-md cursor-pointer ${!isMobile && 'md:hover:bg-[#1a191a]'}`}
-                                onClick={() => addTrack(item.id)}
+                                key={playlist?.id}
+                                className={`p-2 rounded-md ${!isMobile && 'md:hover:bg-[#1a191a]'}`}
+                                onClick={() => addTrack(playlist?.id)}
                             >
-                                {item.name}
+                                {playlist?.name}
                             </li>
                         );
                     })
