@@ -1,58 +1,61 @@
-import useThrottledToast from '../common/useTrottledToast';
-import { useCurrentPlaylistStore, usePlayerStore } from '../../store/player';
 import usePlayPreview from './usePlayPreview';
 import usePlayThrottle from './usePlayThrottle';
+import useThrottledToast from '../common/useTrottledToast';
+import { useCurrentPlaylistStore, usePlayerStore } from '../../store/player';
+
 const usePlayerControl = () => {
-    const { playPreview } = usePlayPreview();
     const toast = useThrottledToast();
-    const { isPlaying, setIsPlaying, url } = usePlayerStore();
+    const { playPreview } = usePlayPreview();
+    const { isPlaying, setIsPlaying } = usePlayerStore();
     const { playlist, currentIndex, setIndex } = useCurrentPlaylistStore();
-    const playerControl = () => {
+    const onToggle = () => {
         if (isPlaying) {
             setIsPlaying(false);
-        } else if (!isPlaying) {
+        } else {
             setIsPlaying(true);
         }
     };
-    const playNextTrack = async (index: number) => {
+    const playNextTrack = async (index: number, isAuto: boolean) => {
         const nextTrack = playlist[index];
-        console.log(nextTrack);
         if (!nextTrack) {
-            console.log(nextTrack);
-
-            toast('info', '재생할 곡이 없습니다', url);
-            setIsPlaying(false);
+            if (isAuto) {
+                toast('info', '다음 트랙이 없습니다');
+                setIsPlaying(false);
+            } else {
+                toast('info', '다음 트랙이 없습니다');
+            }
             return;
         }
         setIndex(index);
         const { id, title, artist, image } = nextTrack;
         const result = await playPreview({ id, title, artist, image });
-        if (!result.success) {
-            console.log('에러났네? 다음 곡으로...');
-            await playNextTrack(index + 1);
+        if (!result.playState) {
+            await playNextTrack(index + 1, true);
         }
     };
     const onNext = usePlayThrottle(async () => {
-        playNextTrack(currentIndex + 1);
+        playNextTrack(currentIndex + 1, true);
+    });
+    const onClickNext = usePlayThrottle(async () => {
+        playNextTrack(currentIndex + 1, false);
     });
 
-    const onPrev = usePlayThrottle(() => {
-        const prevIndex = currentIndex - 1;
-        const prevTrack = playlist[prevIndex];
+    const onPrev = usePlayThrottle(async () => {
+        const prevTrack = playlist[currentIndex - 1];
         if (!prevTrack) {
-            toast('info', '재생할 곡이 없습니다', url);
+            toast('info', '이전 트랙이 없습니다');
             return;
         }
-        setIndex(prevIndex);
+        setIndex(currentIndex - 1);
         const { id, title, artist, image } = prevTrack;
-        playPreview({
+        await playPreview({
             id,
             title,
             artist,
             image,
         });
     });
-    return { playerControl, onNext, onPrev };
+    return { onToggle, onNext, onClickNext, onPrev };
 };
 
 export default usePlayerControl;
