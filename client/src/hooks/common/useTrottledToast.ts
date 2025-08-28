@@ -1,15 +1,15 @@
 import { useRef } from 'react';
 import { toast } from 'react-toastify';
 
-function useThrottledToast() {
+const useThrottledToast = () => {
     const lastToastTimeRef = useRef(0);
-    return (type: 'info' | 'error' | 'success', message: string, toastId: string) => {
+    return (type: 'info' | 'error' | 'success', message: string) => {
         const now = Date.now();
-        if (now - lastToastTimeRef.current > 2000) {
+        if (now - lastToastTimeRef.current > 1000) {
             lastToastTimeRef.current = now;
-            toast[type](message, { toastId, icon: false });
+            toast[type](message, { icon: false });
         }
     };
-}
+};
 
 export default useThrottledToast;
