@@ -1,6 +1,6 @@
-import { useModalStore } from '../../store/common';
 import AddPlaylistModal from './AddplaylistModal';
 import PlaylistCategory from '../common/PlaylistCategory';
+import { useModalStore } from '../../store/common';
 
 export default function ModalContainer() {
     const { type, close } = useModalStore();

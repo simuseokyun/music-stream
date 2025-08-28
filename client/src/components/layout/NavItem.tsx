@@ -8,7 +8,7 @@ export default function NavItem({ icon, label, onClick, active }: NavItemProps) 
             }`}
             onClick={onClick}
         >
-            <img className="w-[30px] h-[30px] lg:mr-2" src={icon} alt={label} />
+            <img className="img-small lg:mr-2" src={icon} alt={label} />
             <p className="hidden lg:block">{label}</p>
         </li>
     );
