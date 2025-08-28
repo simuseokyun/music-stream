@@ -1,10 +1,11 @@
 import { useForm } from 'react-hook-form';
-import useUserStore from '../../store/user';
 import { InfiniteData, useQueryClient } from '@tanstack/react-query';
-import useCreatePlaylist from '../../hooks/playlist/useCreatePlaylist';
 import Modal from '../common/Modal';
+import useCreatePlaylist from '../../hooks/playlist/useCreatePlaylist';
 import { PlaylistListResponse } from '../../types/api/playlist';
 import { AddPlaylistForm } from '../../types/models/playlist';
+import useUserStore from '../../store/user';
+
 export default function AddPlaylistModal({ onClose }: { onClose: () => void }) {
     const queryClient = useQueryClient();
     const {
@@ -13,23 +14,21 @@ export default function AddPlaylistModal({ onClose }: { onClose: () => void }) {
         formState: { errors },
     } = useForm<AddPlaylistForm>();
     const { mutate: addPlaylist } = useCreatePlaylist();
-    const user = useUserStore((state) => state.user?.id);
-    const checkName = (name: string) => {
+    const session = useUserStore((state) => state.user?.id);
+
+    const onSubmit = (formData: AddPlaylistForm) => {
+        addPlaylist({ ...formData, user: session! });
+        onClose();
+    };
+    const validName = (name: string) => {
         const list = queryClient.getQueryData<InfiniteData<PlaylistListResponse>>(['playlists']);
         const isDuplicate = list?.pages.flatMap((page) => page.items).some((item) => item.name === name);
         return isDuplicate ? '이미 존재하는 이름입니다.' : true;
     };
-
-    const onSubmit = (formData: AddPlaylistForm) => {
-        addPlaylist({ ...formData, user: user! });
-        onClose();
-    };
     return (
         <Modal onClose={onClose} modalTitle="플레이리스트 생성">
             <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
-                <label htmlFor="name" className="text-sm">
-                    이름
-                </label>
+                <label htmlFor="name">이름</label>
                 <input
                     className="w-full text-sm mt-2 p-1 bg-[rgb(40,40,40)] rounded-xl"
                     id="name"
@@ -41,10 +40,10 @@ export default function AddPlaylistModal({ onClose }: { onClose: () => void }) {
                             value: 15,
                             message: '가능한 입력 숫자를 초과하였습니다.',
                         },
-                        validate: checkName,
+                        validate: validName,
                     })}
                 />
-                <label htmlFor="description" className="text-sm mt-4 block">
+                <label htmlFor="description" className="mt-4 block">
                     설명
                 </label>
                 <input

@@ -1,11 +1,11 @@
-import Loading from '../common/Loading';
-import { useSortTabStore } from '../../store/library';
-import useGetMyArtists from '../../hooks/artist/useGetMyArtists';
 import ArtistItem from './MyArtistItem';
+import Loading from '../common/Loading';
+import useGetMyArtists from '../../hooks/artist/useGetMyArtists';
+import { useSortTabStore } from '../../store/library';
 
 export default function ArtistList() {
-    const sortState = useSortTabStore((state) => state.active);
     const { data, isLoading, isError } = useGetMyArtists();
+    const sortState = useSortTabStore((state) => state.active);
     if (isLoading) {
         return <Loading />;
     }
@@ -25,8 +25,8 @@ export default function ArtistList() {
     }
 
     return (
-        <ul className={`w-full ${sortState === 'grid' ? 'grid grid-cols-3 lg:grid-cols-4' : ''}  mt-[10px]`}>
-            {data?.artists.items.map((item) => <ArtistItem key={item?.id} artist={item} />)}
+        <ul className={`w-full mt-2 ${sortState === 'grid' && 'grid grid-cols-3 lg:grid-cols-4'}`}>
+            {data?.artists?.items.map((artist) => <ArtistItem key={artist?.id} artist={artist} />)}
         </ul>
     );
 }
