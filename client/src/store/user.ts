@@ -6,7 +6,7 @@ const useUserStore = create<UseUser>((set) => ({
     setUser: (user) => set({ user }),
     clearUser: () => set({ user: null }),
     hydrated: false,
-    setHydrated: (value) => set({ hydrated: value }),
+    setHydrated: (hydrated) => set({ hydrated }),
     resetHydrated: () => set({ hydrated: false }),
 }));
 

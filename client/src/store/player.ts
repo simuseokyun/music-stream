@@ -7,7 +7,7 @@ const usePlayerStore = create<UsePlayer>((set) => ({
     artist: '',
     url: '',
     image: '',
-    setState: ({ title, artist, url, image }) => {
+    setPlayerState: ({ title, artist, url, image }) => {
         set(() => ({
             isPlaying: true,
             title,
@@ -16,16 +16,14 @@ const usePlayerStore = create<UsePlayer>((set) => ({
             image,
         }));
     },
-    setIsPlaying: (state) => set(() => ({ isPlaying: state })),
+    setIsPlaying: (isPlaying) => set({ isPlaying }),
 }));
 const useCurrentPlaylistStore = create<UseCurrentPlaylist>((set) => ({
     playlist: [],
     currentIndex: 0,
     source: '',
-    setIndex: (num) => set(() => ({ currentIndex: num })),
-    setPlaylist: (state) => {
-        set(() => ({ playlist: state }));
-    },
+    setIndex: (currentIndex) => set(() => ({ currentIndex })),
+    setPlaylist: (playlist) => set({ playlist }),
 }));
 
 export { usePlayerStore, useCurrentPlaylistStore };
