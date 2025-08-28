@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { NewAlbumListResponse } from '../../types/api/album';
-import { getNewAlbum } from '../../services/album/album';
 
+import { getDataWithoutAuth } from '../../services/api/client';
 const useGetNewAlbums = () => {
-    const { isLoading, data, isError } = useQuery<NewAlbumListResponse>({
-        queryKey: ['newAlbum'],
-        queryFn: getNewAlbum,
+    const { data, isLoading, isError } = useQuery<NewAlbumListResponse>({
+        queryKey: ['albums', 'new'],
+        queryFn: () => getDataWithoutAuth<NewAlbumListResponse>(`/v1/new-albums`),
         staleTime: 6 * 60 * 1000,
         gcTime: 6 * 60 * 1000,
     });
