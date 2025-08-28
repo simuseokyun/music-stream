@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { Root } from '../pages/Root';
+import Root from '../pages/Root';
 import Album from '../pages/album';
 import Artist from '../pages/artist';
 import SearchResult from '../pages/searchResult';
@@ -8,7 +8,7 @@ import Playlist from '../pages/playlist';
 import AllAlbum from '../pages/allAlbum';
 import Error from '../components/common/Error';
 import Search from '../components/layout/SearchForm';
-import NewAlbum from '../components/home/AlbumList';
+import Home from '../pages/home';
 import ProtectedRoute from './ProtectedRoute';
 import Login from '../pages/auth/login';
 
@@ -18,8 +18,8 @@ export const router = createBrowserRouter([
         element: <Root />,
         errorElement: <Error />,
         children: [
-            { index: true, element: <NewAlbum /> },
-            { path: 'home', element: <NewAlbum /> },
+            { index: true, element: <Home /> },
+            { path: 'home', element: <Home /> },
             { path: 'login', element: <Login /> },
             { path: 'seek', element: <Search /> },
             { path: 'search', element: <SearchResult /> },
