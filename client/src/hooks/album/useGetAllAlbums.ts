@@ -1,25 +1,26 @@
 import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useInfiniteQuery, InfiniteData } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
+import { getDataWithoutAuth } from '../../services/api/client';
 import { AlbumListResponse } from '../../types/api/album';
-import { getAllAlbum } from '../../services/album/album';
-import { useParams } from 'react-router-dom';
 
 const useGetAllAlbums = () => {
     const { artistId } = useParams();
     const { ref, inView } = useInView({ delay: 100, rootMargin: '100px' });
-    const { data, isLoading, isError, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery<
+    const { data, isLoading, isError, error, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery<
         AlbumListResponse,
         Error,
         InfiniteData<AlbumListResponse>,
         any,
         number
     >({
-        queryKey: ['allAlbum', artistId],
+        queryKey: ['artist', 'albums', 'all', artistId],
         queryFn: ({ pageParam = 0 }) => {
-            if (!artistId) Promise.reject('');
-
-            return getAllAlbum(artistId!, pageParam);
+            if (!artistId) throw new Error('아티스트 아이디가 필요합니다');
+            return getDataWithoutAuth<AlbumListResponse>(
+                `/v1/artists/${artistId}/albums?include_groups=album,single&offset=${pageParam}`
+            );
         },
         initialPageParam: 0,
         getNextPageParam: (lastPage) => {
@@ -42,6 +43,7 @@ const useGetAllAlbums = () => {
         data,
         isLoading,
         isError,
+        error,
         ref,
         isFetchingNextPage,
     };
