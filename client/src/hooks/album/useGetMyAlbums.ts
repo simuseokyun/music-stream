@@ -1,19 +1,18 @@
-import { useInView } from 'react-intersection-observer';
-import { InfiniteData } from '@tanstack/react-query';
-import { getFollowingAlbums } from '../../services/album/album';
 import { useEffect } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, InfiniteData } from '@tanstack/react-query';
+import { useInView } from 'react-intersection-observer';
+import { getFollowingAlbums } from '../../services/album/album';
 import { MyAlbumListResponse } from '../../types/api/album';
 const useGetMyAlbums = () => {
     const { ref, inView } = useInView({ delay: 100, rootMargin: '100px' });
-    const { isLoading, data, isError, error, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<
+    const { data, isLoading, isError, error, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<
         MyAlbumListResponse,
         Error,
         InfiniteData<MyAlbumListResponse>,
         [string, string],
         number
     >({
-        queryKey: ['album', 'following'],
+        queryKey: ['albums', 'following'],
         queryFn: getFollowingAlbums,
         initialPageParam: 0,
         getNextPageParam: (lastPage) => {
@@ -22,7 +21,7 @@ const useGetMyAlbums = () => {
             const nextOffset = url.searchParams.get('offset');
             return Number(nextOffset);
         },
-        staleTime: 5 * 60 * 1000,
+        staleTime: 6 * 60 * 1000,
         gcTime: 6 * 60 * 1000,
     });
 
