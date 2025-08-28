@@ -4,10 +4,10 @@ import ArtistResult from '../../components/searchResult/SearchArtist';
 
 import useGetSearchResult from '../../hooks/searchResult/useGetSearchResult';
 export default function SearchResult() {
+    const { data, isLoading, isError } = useGetSearchResult();
     const [searchParams] = useSearchParams();
     const title = searchParams.get('q');
-    const { data, isLoading, isError } = useGetSearchResult();
-    const artist = data?.pages[0]?.artists.items?.[0];
+    const artist = data?.pages[0]?.artists?.items?.[0];
 
     return (
         <div className="flex-1 rounded-md">
