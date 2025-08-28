@@ -5,7 +5,7 @@ import { getDataWithoutAuth } from '../../services/api/client';
 const useGetNewAlbums = () => {
     const { data, isLoading, isError } = useQuery<NewAlbumListResponse>({
         queryKey: ['albums', 'new'],
-        queryFn: () => getDataWithoutAuth<NewAlbumListResponse>(`/v1/new-albums`),
+        queryFn: () => getDataWithoutAuth<NewAlbumListResponse>(`/v1/browse/new-releases`),
         staleTime: 6 * 60 * 1000,
         gcTime: 6 * 60 * 1000,
     });
