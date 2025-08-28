@@ -1,14 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import { ArtistFiveTracksResponse } from '../../types/api/track';
+import { FiveTracksResponse } from '../../types/api/track';
+import { getDataWithoutAuth } from '../../services/api/client';
 
-import { getArtistTopTrack } from '../../services/artist/artist';
 const useGetArtistTrack = (artistId?: string) => {
-    const { data, isLoading, isError } = useQuery<ArtistFiveTracksResponse>({
-        queryKey: ['ArtistPopularTracks', artistId],
+    const { data, isLoading, isError } = useQuery<FiveTracksResponse>({
+        queryKey: ['artist', 'tracks', artistId],
         queryFn: () => {
-            return getArtistTopTrack(artistId!);
+            if (!artistId) throw new Error('아티스트 정보를 불러올 수 없습니다');
+            return getDataWithoutAuth<FiveTracksResponse>(artistId);
         },
         enabled: !!artistId,
+        staleTime: Infinity,
+        gcTime: Infinity,
     });
     return { data, isLoading, isError };
 };
