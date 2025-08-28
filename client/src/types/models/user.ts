@@ -1,5 +1,5 @@
-type User = {
+export interface User {
     id: string;
     email: string;
     display_name: string;
-};
+}

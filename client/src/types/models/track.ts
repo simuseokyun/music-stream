@@ -1,14 +1,22 @@
-import { Track } from '../api/track';
+import { TrackResponse } from '../api/track';
 import { PlayState } from './player.';
 
-export type AlbumTrack = {
-    track: { id: string; name: string; artists: { name: string; id: string }[] };
+export interface TrackItem {
+    track: TrackResponse;
+    onPlay: ({ id }: { id: PlayState['id'] }) => void;
+}
+export interface AlbumTrackItem {
+    track: { id: string; name: string; artists: { name: string; id: string }[]; track_number?: number };
     image: string;
-    onPlay: ({ id, title, artist, image }: PlayState) => void;
-};
+    onPlay: ({ id }: { id: PlayState['id'] }) => void;
+}
 
-export type MyPlaylistTrack = {
-    track: Track;
+export interface PlaylistTrackItem extends TrackItem {
     playlistId: string;
-    onPlay: ({ id, title, artist, image }: PlayState) => void;
-};
+}
+export interface Track {
+    id: string;
+    name: string;
+    uri: string;
+    artists: { name: string; id: string }[];
+}

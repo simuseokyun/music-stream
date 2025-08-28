@@ -4,3 +4,7 @@ export interface NavItem {
     onClick: () => void;
     active?: boolean;
 }
+export interface Pagenation {
+    onPrev: () => void;
+    onNext: () => void;
+}

@@ -1,30 +1,14 @@
-import { PlayState } from '../models/player.';
-
 export interface PlaylistTracksResponse {
-    items: {
-        track: Track;
-    }[];
+    items: { track: TrackResponse }[];
     next: string;
 }
 
-export interface ArtistFiveTracksResponse {
-    tracks: FiveTrack[];
+export interface FiveTracksResponse {
+    tracks: TrackResponse[];
 }
-export type Track = {
+export interface TrackResponse {
     id: string;
     name: string;
-    album: { images: { url: string }[]; artists: { id: string; name: string }[] };
+    album: { id: string; name: string; images: { url: string }[]; artists: { id: string; name: string }[] };
     is_local: boolean;
-};
-type FiveTrack = {
-    id: string;
-    name: string;
-    duration_ms: number;
-    album: { id: string; images: { url: string }[]; name: string };
-    artists: { id: string; name: string }[];
-    uri: string;
-};
-export type ArtistTrackItem = {
-    track: Pick<FiveTrack, 'id' | 'name' | 'album' | 'artists'>;
-    onPlay: ({ id, title, artist, image }: PlayState) => void;
-};
+}

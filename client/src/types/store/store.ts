@@ -1,7 +1,5 @@
-import { TrackResponse } from '../api/searchResult';
-import { Track } from '../api/track';
 import { PlayState } from '../models/player.';
-
+import { User } from '../models/user';
 export interface UseUser {
     user: User | null;
     setUser: (user: User | null) => void;
@@ -25,12 +23,12 @@ export interface UseCategory extends TrackInfo {
 }
 
 export interface UseLibraryTab {
-    active: 'playlist' | 'album';
-    setActive: (state: 'playlist' | 'album') => void;
+    active: 'playlist' | 'album' | 'artist';
+    setActive: (state: UseLibraryTab['active']) => void;
 }
 export interface UseSortTab {
     active: 'grid' | 'flex';
-    setActive: (state: 'grid' | 'flex') => void;
+    setActive: (state: UseSortTab['active']) => void;
 }
 
 export interface UseModal {
@@ -41,11 +39,11 @@ export interface UseModal {
 
 export interface UsePlayer {
     isPlaying: boolean;
-    url: string;
     title: string;
     artist: string;
     image: string;
-    setState: (state: NowPlayingInfo) => void;
+    url: string;
+    setPlayerState: (state: NowTrackInfo) => void;
     setIsPlaying: (state: boolean) => void;
 }
 export interface UseCurrentPlaylist {
@@ -54,27 +52,32 @@ export interface UseCurrentPlaylist {
     setIndex: (num: number) => void;
     setPlaylist: (state: PlayState[]) => void;
 }
-type NowPlayingInfo = {
+export interface UsePlayerKey {
+    key: number;
+    setKey: (value: number) => void;
+}
+interface NowTrackInfo {
     title: string;
     artist: string;
-    url: string;
     image: string;
-};
-type ModalType = 'addPlaylist' | 'selectPlaylist' | null;
-type TrackInfo = {
+    url: string;
+}
+
+interface TrackInfo {
     trackId: string;
     trackTitle: string;
     trackImage: string;
     artistId: string;
     artistName: string;
-};
-
-type AlbumInfo = {
+}
+interface AlbumInfo {
     id: string;
     name: string;
-    artist_id: string;
-    artist_name: string;
+    artistId: string;
+    artistName: string;
     image: string;
     type: string;
-    track_length: number;
-};
+    trackLength: number;
+}
+
+type ModalType = 'addPlaylist' | 'selectPlaylist' | null;
