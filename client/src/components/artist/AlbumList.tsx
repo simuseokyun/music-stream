@@ -8,17 +8,19 @@ export default function AlbumList({ artistId }: { artistId?: string }) {
     if (isLoading) {
         return null;
     }
-    if (isError || !data) {
+    if (isError || !data?.items?.length) {
         return (
             <div className="flex-1">
-                <h1 className="text-center m-20">앨범을 찾을 수 없습니다</h1>
+                <h1 className="text-center mt-20">목록을 불러올 수 없습니다</h1>
             </div>
         );
     }
+
     const albumList = data?.items.slice(0, isMobile ? 6 : 4);
+
     return (
         <div className="grid grid-cols-3 md:grid-cols-4 ">
-            {albumList?.map((item) => <AlbumItem key={item.id} album={item} />)}
+            {albumList?.map((album) => <AlbumItem key={album.id} album={album} />)}
         </div>
     );
 }
