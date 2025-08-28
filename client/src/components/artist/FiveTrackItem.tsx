@@ -1,51 +1,48 @@
 import OpenPlaylistBtn from '../common/button/OpenCategoryBtn';
-import { MouseEventHandler } from 'react';
-import { ArtistTrackItem } from '../../types/api/track';
+import { TrackItem as FiveTrackItem } from '../../types/models/track';
 import { useCategoryStore, useViewportStore, useModalStore } from '../../store/common';
-export default function TrackItem({ track, onPlay }: ArtistTrackItem) {
+export default function TrackItem({ track, onPlay }: FiveTrackItem) {
     const {
         id,
         name,
-        artists: [artists],
         album: {
             images: [images],
+            artists: [artists],
         },
     } = track;
     const { isMobile } = useViewportStore();
     const { setTrack } = useCategoryStore((state) => state);
     const { open } = useModalStore();
-    const play: MouseEventHandler = (e) => {
-        e.stopPropagation();
-        onPlay({ id, title: name, artist: artists.name, image: images.url });
-    };
 
-    const mobilePlay = () => {
-        if (isMobile) onPlay({ id, title: name, artist: artists.name, image: images.url });
-    };
     const onClickCategory = () => {
         const trackInfo = {
             trackId: id,
             trackTitle: name,
-            artistName: artists.name,
-            artistId: artists.id,
-            trackImage: images.url,
+            artistName: artists?.name,
+            artistId: artists?.id,
+            trackImage: images?.url,
         };
         open('selectPlaylist');
         setTrack(trackInfo);
     };
 
     return (
-        <tr onClick={mobilePlay}>
-            <td className={`${isMobile ? 'hidden ' : 'table-cell'} w-[40px] text-center`}>
-                <img src="/assets/playButton.svg" onClick={play} />
+        <tr onClick={isMobile ? () => onPlay({ id }) : undefined}>
+            <td className={`${isMobile ? 'hidden ' : 'table-cell'} w-10 text-center`}>
+                <img
+                    className="play-button"
+                    src="/assets/playButton.svg"
+                    alt="재생 아이콘"
+                    onClick={() => onPlay({ id })}
+                />
             </td>
             <td className="w-auto py-1">
                 <div className="flex items-center">
-                    <img className="img-medium rounded-md" src={images.url} alt="앨범커버" />
-                    <h1 className="text-ellipsis ml-4 font-semibold text-sm md:text-base">{name}</h1>
+                    <img className="img-medium rounded-md" src={images?.url ?? '/assets/playlist.svg'} alt="앨범커버" />
+                    <h1 className="font-semibold text-sm ml-2 truncate md:text-base">{name}</h1>
                 </div>
             </td>
-            <td className="text-right relative w-[40px]">
+            <td className="text-right relative w-10">
                 <OpenPlaylistBtn onClick={onClickCategory} />
             </td>
         </tr>
