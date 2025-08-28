@@ -1,17 +1,13 @@
-import { useRef, useCallback } from 'react';
-
-function usePlayThrottle(onPlay: (args: { id: string }) => void | Promise<void>, delay = 1000) {
+import { useRef } from 'react';
+function usePlayThrottle<T extends (...args: any[]) => void | Promise<void>>(onPlay: T, delay = 1000) {
     const lastTime = useRef(0);
-    return useCallback(
-        (args: { id: string }) => {
-            const now = Date.now();
-            if (now - lastTime.current > delay) {
-                lastTime.current = now;
-                onPlay(args);
-            }
-        },
-        [onPlay, delay]
-    );
+    return (...args: Parameters<T>) => {
+        const now = Date.now();
+        if (now - lastTime.current > delay) {
+            onPlay(...args);
+            lastTime.current = now;
+        }
+    };
 }
 
 export default usePlayThrottle;
