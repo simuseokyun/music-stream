@@ -1,14 +1,15 @@
 @layer components {
-    .img-large {
-        @apply w-[150px] h-[150px];
+    .img-small {
+        @apply w-[25px] h-[25px];
     }
-
     .img-medium {
         @apply w-[50px] h-[50px];
     }
-
-    .img-small {
-        @apply w-[25px] h-[25px];
+    .img-large {
+        @apply w-[150px] h-[150px];
+    }
+    .play-button {
+        @apply transform transition;
     }
     .text-sub {
         color: var(--color-sub);
@@ -16,20 +17,12 @@
     }
     .action-button {
         @apply inline-block w-[30px] h-[30px] p-[2px] rounded-full transition-transform;
-        @screen md {
-            &:hover {
-                transform: scale(1.1);
-            }
-        }
     }
     .bg-main {
         background-color: var(--color-main);
     }
     .bg-accent {
         background-color: var(--color-accent);
-    }
-    .bg-white {
-        background-color: var(--color-white);
     }
     .bg-active {
         background-color: var(--color-active);
@@ -46,5 +39,14 @@
     }
     .bg-sub {
         background-color: var(--color-sub);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        .play-button {
+            @apply hover:scale-110;
+        }
+        .action-button {
+            @apply hover:scale-110;
+        }
     }
 }
