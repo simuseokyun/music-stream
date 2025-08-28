@@ -1,12 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { axiosWithAuth } from '../../services/api/client';
+import { getDataWithAuth } from '../../services/api/client';
 import useUserStore from '../../store/user';
 
 const useLogout = () => {
-    const { setUser } = useUserStore();
+    const setUser = useUserStore((state) => state.setUser);
     const queryClient = useQueryClient();
     const onLogout = async () => {
-        const response = await axiosWithAuth(`/api/logout`, {
+        const response = await getDataWithAuth(`/api/logout`, {
             method: 'post',
         });
         if (response.status) {
