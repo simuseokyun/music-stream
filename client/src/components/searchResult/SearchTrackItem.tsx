@@ -1,20 +1,18 @@
 import { Link } from 'react-router-dom';
 import Artists from '../common/Artists';
-import { useViewportStore, useCategoryStore } from '../../store/common';
 import OpenPlaylistBtn from '../common/button/OpenCategoryBtn';
-import { MouseEventHandler } from 'react';
-import { useModalStore } from '../../store/common';
-import { SearchResultTrack } from '../../types/models/searchResult';
+import { TrackItem as SearchTrackItem } from '../../types/models/track';
+import { useModalStore, useViewportStore, useCategoryStore } from '../../store/common';
 
-export const TrackItem = ({ track, onPlay }: SearchResultTrack) => {
+export const TrackItem = ({ track, onPlay }: SearchTrackItem) => {
     const {
         id,
         name,
-        album: { artists, images, id: album_id, name: album_title },
+        album: { artists, images, id: albumId, name: albumTitle },
     } = track;
+    const open = useModalStore((state) => state.open);
     const isMobile = useViewportStore((state) => state.isMobile);
-    const { open } = useModalStore();
-    const { setTrack } = useCategoryStore((state) => state);
+    const setTrack = useCategoryStore((state) => state.setTrack);
     const openCategory = () => {
         open('selectPlaylist');
         setTrack({
@@ -22,36 +20,32 @@ export const TrackItem = ({ track, onPlay }: SearchResultTrack) => {
             trackTitle: name,
             artistId: artists[0].id,
             artistName: artists[0].name,
-            trackImage: images[0].url,
+            trackImage: images[0].url || '/assets/playlist.svg',
         });
     };
 
-    const play: MouseEventHandler = (e) => {
-        e.stopPropagation();
-        onPlay({ id, title: name, artist: artists[0].name, image: images[0].url });
-    };
-
-    const mobilePlay = () => {
-        if (isMobile) onPlay({ id, title: name, artist: artists[0].name, image: images[0].url });
-    };
-
     return (
-        <tr onClick={mobilePlay}>
-            <td className={`${isMobile ? 'hidden ' : 'table-cell'} w-[40px] text-center`}>
-                <img src="/assets/playButton.svg" onClick={play} />
+        <tr onClick={isMobile ? () => onPlay({ id }) : undefined}>
+            <td className={`${isMobile ? 'hidden ' : 'table-cell'} w-10 text-center`}>
+                <img
+                    className="play-button"
+                    src="/assets/playButton.svg"
+                    alt="재생 아이콘"
+                    onClick={() => onPlay({ id })}
+                />
             </td>
             <td className="w-full py-1.5 pr-5 md:w-3/5">
-                <div className="flex items-center">
-                    <img className="img-medium rounded-md " src={images[0].url} alt="앨범커버" />
-                    <div className="ml-4 flex-1 text-ellipsis">
-                        <h1 className="text-ellipsis font-semibold">{name}</h1>
+                <div className="flex items-center overflow-hidden">
+                    <img className="img-medium rounded-md " src={images[0].url} alt="앨범 커버" />
+                    <div className="ml-4 flex-1 ">
+                        <h1 className="truncate">{name}</h1>
                         <Artists artists={artists} />
                     </div>
                 </div>
             </td>
-            <td className="hidden pr-10 text-ellipsis md:table-cell md:w-[25%]">
-                <Link className="text-sm text-ellipsis" to={`/album/${album_id}`}>
-                    {album_title}
+            <td className="hidden pr-10 md:table-cell md:w-[25%]">
+                <Link className="block  text-sm truncate" to={`/album/${albumId}`}>
+                    {albumTitle}
                 </Link>
             </td>
             <td
