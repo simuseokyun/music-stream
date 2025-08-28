@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
+import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { getPlaylists } from '../../services/playlist/playlist';
 import { PlaylistListResponse } from '../../types/api/playlist';
-import { InfiniteData } from '@tanstack/react-query';
 
 export const useGetPlaylists = () => {
     const { ref, inView } = useInView({ delay: 100, rootMargin: '100px' });
-    const { data, isLoading, isError, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<
+    const { data, isLoading, isError, error, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<
         PlaylistListResponse,
         Error,
         InfiniteData<PlaylistListResponse>,
@@ -24,7 +23,7 @@ export const useGetPlaylists = () => {
             return Number(nextOffset);
         },
         staleTime: 5 * 60 * 1000,
-        gcTime: 6 * 60 * 1000,
+        gcTime: 5 * 60 * 1000,
     });
     useEffect(() => {
         if (inView && hasNextPage && !isFetchingNextPage) {
@@ -32,5 +31,5 @@ export const useGetPlaylists = () => {
         }
     }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-    return { ref, data, isLoading, isError, isFetchingNextPage };
+    return { data, isLoading, isError, error, isFetchingNextPage, ref };
 };
