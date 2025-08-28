@@ -1,22 +1,24 @@
 import { useEffect } from 'react';
-import { useInfiniteQuery, InfiniteData } from '@tanstack/react-query';
-import { PlaylistTracksResponse } from '../../types/api/track';
-import { getPlaylist } from '../../services/playlist/playlist';
 import { useInView } from 'react-intersection-observer';
+import { useInfiniteQuery, InfiniteData } from '@tanstack/react-query';
+import { getPlaylist } from '../../services/playlist/playlist';
+
+import { PlaylistTracksResponse } from '../../types/api/track';
+
 const useGetPlaylist = (playlistId?: string) => {
     const { ref, inView } = useInView({ delay: 500, rootMargin: '100px' });
-    const { data, isLoading, isError, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery<
+    const { data, isLoading, isError, error, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery<
         PlaylistTracksResponse,
         Error,
         InfiniteData<PlaylistTracksResponse>,
-        [string, string, string],
+        [string, string],
         number
     >({
-        queryKey: ['me', 'playlist', playlistId as string],
+        queryKey: ['playlist', playlistId as string],
         queryFn: ({ pageParam = 0 }) => {
-            return getPlaylist({ id: playlistId!, pageParam });
+            if (!playlistId) throw new Error('목록을 불러 올 수 없습니다');
+            return getPlaylist({ id: playlistId, pageParam });
         },
-        enabled: !!playlistId,
         initialPageParam: 0,
         getNextPageParam: (lastPage) => {
             if (!lastPage.next) return undefined;
@@ -24,8 +26,9 @@ const useGetPlaylist = (playlistId?: string) => {
             const nextOffset = url.searchParams.get('offset');
             return Number(nextOffset);
         },
+        enabled: !!playlistId,
         staleTime: 5 * 60 * 1000,
-        gcTime: 6 * 60 * 1000,
+        gcTime: 5 * 60 * 1000,
     });
 
     useEffect(() => {
@@ -33,6 +36,6 @@ const useGetPlaylist = (playlistId?: string) => {
             fetchNextPage();
         }
     }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
-    return { data, isLoading, isError, isFetchingNextPage, ref };
+    return { data, isLoading, isError, error, isFetchingNextPage, ref };
 };
 export default useGetPlaylist;
