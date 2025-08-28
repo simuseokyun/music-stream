@@ -1,5 +1,16 @@
-import { axiosWithoutAuth } from '../api/client';
-const getSearchTracks = async (searchValue: string, pageParam: number) => {
-    return axiosWithoutAuth(`/v1/search?q=${searchValue}&type=track,artist&offset=${pageParam}`);
+import { getDataWithAuth } from '../api/client';
+
+const deleteTrack = (playlistId: string, id: string) => {
+    return getDataWithAuth(`/api/me/playlist/track/delete/${playlistId}`, {
+        method: 'delete',
+        data: { id },
+    });
 };
-export default getSearchTracks;
+const addTrack = (playlistId: string, id: string) => {
+    return getDataWithAuth(`/api/me/playlist/track/add/${playlistId}`, {
+        method: 'post',
+        data: { trackId: id },
+    });
+};
+
+export { addTrack, deleteTrack };
