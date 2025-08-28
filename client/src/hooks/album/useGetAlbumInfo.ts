@@ -1,31 +1,34 @@
-import { getLocalStorage } from '../../utils/common/setLocalStorage';
-import { useQuery } from '@tanstack/react-query';
-import { AlbumDataResponse } from '../../types/api/album';
 import { useEffect } from 'react';
-import { getAlbum } from '../../services/album/album';
-import useAlbumStore from '../../store/album';
 import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { getDataWithoutAuth } from '../../services/api/client';
+import { AlbumInfoResponse } from '../../types/api/album';
+import useAlbumStore from '../../store/album';
 const useGetAlbumInfo = () => {
     const { albumId } = useParams();
-    const setAlbumInfo = useAlbumStore((state) => state.setAlbumInfo);
-    const { isLoading, data, isError } = useQuery<AlbumDataResponse>({
-        queryKey: ['albumInfo', albumId],
-        queryFn: async () => getAlbum(albumId!),
+    const { data, isLoading, isError, error } = useQuery<AlbumInfoResponse>({
+        queryKey: ['album', 'info', albumId],
+        queryFn: () => {
+            if (!albumId) throw new Error('앨범 아이디가 필요합니다');
+            return getDataWithoutAuth(`/v1/albums/${albumId}`);
+        },
         enabled: !!albumId,
         staleTime: Infinity,
         gcTime: Infinity,
     });
+    console.log(data);
+    const setAlbumInfo = useAlbumStore((state) => state.setAlbumInfo);
 
     useEffect(() => {
         if (!data) {
             setAlbumInfo({
                 id: '',
                 name: '알 수 없는 앨범',
-                artist_id: '',
-                artist_name: '알 수 없는 아티스트',
+                artistId: '',
+                artistName: '알 수 없는 아티스트',
                 image: '/assets/playlist.svg',
                 type: '알 수 없음',
-                track_length: 0,
+                trackLength: 0,
             });
             return;
         }
@@ -40,13 +43,13 @@ const useGetAlbumInfo = () => {
         setAlbumInfo({
             id,
             name,
-            artist_id: artists.id,
-            artist_name: artists.name,
+            artistId: artists.id,
+            artistName: artists.name,
             image: images.url,
             type,
-            track_length,
+            trackLength: track_length,
         });
     }, [data]);
-    return { data, isLoading, isError };
+    return { data, isLoading, isError, error };
 };
 export default useGetAlbumInfo;
