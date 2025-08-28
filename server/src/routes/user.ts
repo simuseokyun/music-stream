@@ -13,10 +13,10 @@ const userRoute: CustomRoute[] = [
                 const accessToken = cookies.access_token;
                 const refreshToken = cookies.refresh_token;
                 if (!refreshToken) {
-                    return res.status(401).json({ message: '로그인이 필요합니다' });
+                    return res.status(200).json({ loginState: false, message: '현재 로그아웃 상태입니다' });
                 }
                 const data = await callSpotifyApi(`${BASE_URL_API}/v1/me`, { token: accessToken });
-                return res.json(data);
+                return res.json({ loginState: true, ...data });
             } catch (error) {
                 if (error instanceof StatusError) {
                     return res.status(error.status).json({ message: errorMessages[error.status] });
