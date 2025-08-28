@@ -12,6 +12,7 @@ import { playlistRoute } from './routes/playlist';
 import userRoute from './routes/user';
 import { CustomRoute } from './types';
 import { ErrorMessages } from './types';
+import artistRoute from './routes/artist';
 
 const app = express();
 app.use(
@@ -31,7 +32,14 @@ export const errorMessages: ErrorMessages = {
     500: '네트워크 에러입니다',
 };
 
-const routes: CustomRoute[] = [...userRoute, ...authRoute, ...playerRoute, ...playlistRoute, ...albumRoute];
+const routes: CustomRoute[] = [
+    ...userRoute,
+    ...authRoute,
+    ...playerRoute,
+    ...playlistRoute,
+    ...albumRoute,
+    ...artistRoute,
+];
 
 routes.forEach(({ method, route, handler }) => {
     app[method](route, handler);
