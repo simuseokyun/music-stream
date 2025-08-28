@@ -1,12 +1,24 @@
-import { axiosWithAuth } from '../api/client';
-const getPlaylists = async ({ pageParam = 0 }: { pageParam: number }) => {
-    return await axiosWithAuth(`/api/me/playlists?cursor=${pageParam}`);
+import { AddPlaylistForm } from '../../types/models/playlist';
+import { getDataWithAuth } from '../api/client';
+const getPlaylists = ({ pageParam = 0 }: { pageParam: number }) => {
+    return getDataWithAuth(`/api/me/playlists?cursor=${pageParam}`);
 };
-const getPlaylist = async ({ id, pageParam = 0 }: { id: string; pageParam: number }) => {
-    return await axiosWithAuth(`/api/me/playlist/${id}?cursor=${pageParam}`);
+const getPlaylist = ({ id, pageParam = 0 }: { id: string; pageParam: number }) => {
+    return getDataWithAuth(`/api/me/playlist/${id}?cursor=${pageParam}`);
 };
-const getPlaylistInfo = async (playlistId: string) => {
-    return await axiosWithAuth(`/api/me/playlist/info/${playlistId}`);
+const getPlaylistInfo = (playlistId: string) => {
+    return getDataWithAuth(`/api/me/playlist/info/${playlistId}`);
+};
+const createPlaylist = (data: AddPlaylistForm) => {
+    return getDataWithAuth(`/api/me/playlist/add`, {
+        method: 'post',
+        data,
+    });
+};
+const deletePlaylist = (playlistId: string) => {
+    return getDataWithAuth(`/api/me/playlist/delete/${playlistId}`, {
+        method: 'delete',
+    });
 };
 
-export { getPlaylists, getPlaylist, getPlaylistInfo };
+export { getPlaylists, getPlaylist, getPlaylistInfo, createPlaylist, deletePlaylist };
