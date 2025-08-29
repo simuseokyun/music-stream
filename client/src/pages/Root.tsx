@@ -8,7 +8,7 @@ import MobileFooter from '../components/layout/MobileFooter';
 import MobileHeader from '../components/layout/MobileHeader';
 import Player from '../components/player/Player';
 import useCheckUser from '../hooks/auth/useCheckUser';
-import ModalContainer from '../components/modal/ModalContainer';
+import ModalContainer from '../components/Modal/ModalContainer';
 import useAgentCheck from '../hooks/common/useAgentCheck';
 import useGetWebToken from '../hooks/auth/useGetWebToken';
 import useGetSdkToken from '../hooks/auth/useGetSdkToken';
