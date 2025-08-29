@@ -51,6 +51,6 @@ routes.forEach(({ method, route, handler }) => {
     app[method](route, handler);
 });
 
-app.listen(8000, () => {
-    console.log(`서버 실행: http://0.0.0.0:8000`);
+app.listen(8000, '0.0.0.0', () => {
+    console.log('서버 실행: http://0.0.0.0:8000');
 });
