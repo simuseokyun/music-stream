@@ -3,6 +3,7 @@ dotenv.config({
     path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development',
 });
 import express from 'express';
+import path from 'path';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import albumRoute from './routes/album';
@@ -24,7 +25,12 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, '../../client/dist')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+});
 
+console.log(__dirname);
 export const errorMessages: ErrorMessages = {
     401: '잘못된 토큰 또는 만료된 토큰입니다. 사용자를 다시 인증해주세요',
     403: '잘못된 요청입니다. 사용자를 재인증해도 이 요청은 실행되지 않습니다',
@@ -45,6 +51,6 @@ routes.forEach(({ method, route, handler }) => {
     app[method](route, handler);
 });
 
-app.listen({ port: 8000 }, () => {
-    console.log(`서버 실행: http://localhost8000`);
+app.listen(8000, () => {
+    console.log(`서버 실행: http://0.0.0.0:8000`);
 });
