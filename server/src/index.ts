@@ -48,6 +48,7 @@ const routes: CustomRoute[] = [
 
 routes.forEach(({ method, route, handler }) => {
     app[method](route, handler);
+    console.log(`[Express] Route registered: [${method.toUpperCase()}] ${route}`);
 });
 
 app.listen(8000, '0.0.0.0', () => {

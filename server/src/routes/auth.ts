@@ -11,6 +11,7 @@ const authRoute: CustomRoute[] = [
         route: '/api/webToken',
         handler: async (_req, res) => {
             try {
+                console.log(1);
                 const params = new URLSearchParams({
                     grant_type: 'client_credentials',
                     client_id: CLIENT_ID,
