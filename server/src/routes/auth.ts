@@ -11,8 +11,7 @@ const authRoute: CustomRoute[] = [
         route: '/api/webToken',
         handler: async (_req, res) => {
             try {
-                console.log(1);
-                console.log(res);
+                console.log(CLIENT_ID);
                 const params = new URLSearchParams({
                     grant_type: 'client_credentials',
                     client_id: CLIENT_ID,
@@ -23,11 +22,7 @@ const authRoute: CustomRoute[] = [
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
                 });
-                console.log(response);
-                console.log(BASE_URL_AUTH);
                 const data = response.data;
-                console.log(BASE_URL_AUTH);
-
                 return res.json(data);
             } catch (error) {
                 if (isAxiosError(error)) {
