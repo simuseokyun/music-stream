@@ -1,6 +1,7 @@
 const redirectToSpotify = () => {
     const client_id = import.meta.env.VITE_CLIENT_ID || '';
     const redirect_uri = import.meta.env.VITE_REDIRECT_URI || '';
+    console.log(client_id);
     if (!client_id || !redirect_uri) {
         throw new Error('인증 정보가 설정되지 않았습니다');
     }
