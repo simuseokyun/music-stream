@@ -1,9 +1,14 @@
 import dotenv from 'dotenv';
-dotenv.config({
-    path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development',
-});
-import express from 'express';
 import path from 'path';
+
+const envPath =
+    process.env.NODE_ENV === 'production'
+        ? path.resolve(__dirname, '../.env.production') // dist에서 한 단계 위로
+        : path.resolve(__dirname, '../.env.development');
+
+dotenv.config({ path: envPath });
+
+import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import albumRoute from './routes/album';
@@ -34,7 +39,7 @@ routes.forEach(({ method, route, handler }) => {
     app[method](route, handler);
     console.log(`[Express] Route registered: [${method.toUpperCase()}] ${route}`);
 });
-
+console.log(__dirname);
 if (process.env.NODE_ENV === 'production') {
     const clientDistPath = path.join(__dirname, '../../client/dist');
     app.use(express.static(clientDistPath));
