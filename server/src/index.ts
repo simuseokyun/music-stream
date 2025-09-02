@@ -1,8 +1,10 @@
 import dotenv from 'dotenv';
 import path from 'path';
 dotenv.config({
-    path: path.resolve(__dirname, '../.env.production'),
+    path: path.resolve(__dirname, '../.env'),
 });
+const envPath = path.resolve(__dirname, '../.env');
+console.log('Env file path:', envPath);
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -20,7 +22,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-console.log(process.env.A);
+
 const routes: CustomRoute[] = [
     ...userRoute,
     ...authRoute,
