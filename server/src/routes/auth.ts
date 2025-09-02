@@ -12,6 +12,7 @@ const authRoute: CustomRoute[] = [
         handler: async (_req, res) => {
             try {
                 console.log(CLIENT_ID);
+                console.log(process.env.NODE_ENV);
                 const params = new URLSearchParams({
                     grant_type: 'client_credentials',
                     client_id: CLIENT_ID,
