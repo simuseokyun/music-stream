@@ -12,7 +12,7 @@ const getWebToken = async () => {
         return { access_token, expires_in };
     }
     try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/webToken`);
+        const response = await axios.get(`/ss/api/webToken`);
         const { access_token, expires_in } = response.data;
         const issuedAt = Date.now();
         localStorage.setItem('webAccessToken', access_token);
