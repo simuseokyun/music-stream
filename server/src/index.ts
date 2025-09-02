@@ -20,6 +20,21 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+const routes: CustomRoute[] = [
+    ...userRoute,
+    ...authRoute,
+    ...playerRoute,
+    ...playlistRoute,
+    ...albumRoute,
+    ...artistRoute,
+];
+
+routes.forEach(({ method, route, handler }) => {
+    app[method](route, handler);
+    console.log(`[Express] Route registered: [${method.toUpperCase()}] ${route}`);
+});
+
 if (process.env.NODE_ENV === 'production') {
     const clientDistPath = path.join(__dirname, '../../client/dist');
     app.use(express.static(clientDistPath));
@@ -36,20 +51,6 @@ export const errorMessages: ErrorMessages = {
     429: '앱이 속도 제한을 초과하였습니다. 잠시 후 다시 시도해주세요',
     500: '네트워크 에러입니다',
 };
-
-const routes: CustomRoute[] = [
-    ...userRoute,
-    ...authRoute,
-    ...playerRoute,
-    ...playlistRoute,
-    ...albumRoute,
-    ...artistRoute,
-];
-
-routes.forEach(({ method, route, handler }) => {
-    app[method](route, handler);
-    console.log(`[Express] Route registered: [${method.toUpperCase()}] ${route}`);
-});
 
 app.listen(8000, '0.0.0.0', () => {
     console.log('서버 실행: http://0.0.0.0:8000');
