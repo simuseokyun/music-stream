@@ -22,7 +22,11 @@ const authRoute: CustomRoute[] = [
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
                 });
+                console.log(response);
+                console.log(BASE_URL_AUTH);
                 const data = response.data;
+                console.log(BASE_URL_AUTH);
+
                 return res.json(data);
             } catch (error) {
                 if (isAxiosError(error)) {
