@@ -20,7 +20,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
+console.log(process.env.A);
 const routes: CustomRoute[] = [
     ...userRoute,
     ...authRoute,
