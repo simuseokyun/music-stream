@@ -1,13 +1,8 @@
 import dotenv from 'dotenv';
 import path from 'path';
-
-const envPath =
-    process.env.NODE_ENV === 'production'
-        ? path.resolve(__dirname, '../.env.production') // dist에서 한 단계 위로
-        : path.resolve(__dirname, '../.env.development');
-
-dotenv.config({ path: envPath });
-
+dotenv.config({
+    path: path.resolve(__dirname, '../.env.production'),
+});
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
