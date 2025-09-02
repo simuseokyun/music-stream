@@ -20,12 +20,16 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '../../client/dist')));
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
-});
+if (process.env.NODE_ENV === 'production') {
+    const clientDistPath = path.join(__dirname, '../../client/dist');
+    app.use(express.static(clientDistPath));
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(clientDistPath, 'index.html'));
+    });
+} else {
+    console.log('개발 모드: React dev server를 통해 API 호출');
+}
 
-console.log(__dirname);
 export const errorMessages: ErrorMessages = {
     401: '잘못된 토큰 또는 만료된 토큰입니다. 사용자를 다시 인증해주세요',
     403: '잘못된 요청입니다. 사용자를 재인증해도 이 요청은 실행되지 않습니다',
