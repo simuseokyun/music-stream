@@ -6,7 +6,7 @@ const useLogout = () => {
     const setUser = useUserStore((state) => state.setUser);
     const queryClient = useQueryClient();
     const onLogout = async () => {
-        const response = await getDataWithAuth(`${import.meta.env.VITE_API_URL}/api/logout`, {
+        const response = await getDataWithAuth(`/api/logout`, {
             method: 'post',
         });
         if (response.status) {

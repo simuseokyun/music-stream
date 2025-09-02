@@ -7,7 +7,7 @@ const useCheckUser = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await getDataWithAuth(`${import.meta.env.VITE_API_URL}/api/me/check`);
+                const response = await getDataWithAuth(`/api/me/check`);
                 if (response?.loginState) {
                     const { id, email, display_name } = response;
                     setUser({ id, email, display_name });
