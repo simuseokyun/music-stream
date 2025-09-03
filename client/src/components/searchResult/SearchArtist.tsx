@@ -21,7 +21,7 @@ export default function ArtistResult({ artist, isLoading, isError }: SearchArtis
                 <img className="img-large object-cover rounded-full" src="/assets/user.svg" alt="아티스트 이미지" />
                 <div className="ml-4">
                     <h1 className="text-2xl font-bold">아티스트를 찾을 수 없음</h1>
-                    <p className="text-base text-sub">팔로워 : 0명</p>
+                    <p className="text-base text-sub leading-normal">팔로워 : 0명</p>
                 </div>
             </div>
         );

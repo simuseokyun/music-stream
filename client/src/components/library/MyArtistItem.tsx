@@ -21,7 +21,9 @@ export default function ArtistItem({ artist }: { artist: Artist }) {
                 alt="아티스트 이미지"
             />
             <div className={`${sortState === 'flex' ? 'ml-4 flex-1 min-w-0' : 'mt-2'}`}>
-                <h1 className={`text-sm truncate ${sortState === 'grid' ? 'text-center' : 'text-left'} md:text-base`}>
+                <h1
+                    className={`text-sm truncate leading-normal ${sortState === 'grid' ? 'text-center' : 'text-left'} md:text-base`}
+                >
                     {name}
                 </h1>
             </div>

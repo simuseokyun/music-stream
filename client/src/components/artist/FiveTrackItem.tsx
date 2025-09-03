@@ -39,7 +39,7 @@ export default function TrackItem({ track, onPlay }: FiveTrackItem) {
             <td className="w-auto py-1">
                 <div className="flex items-center">
                     <img className="img-medium rounded-md" src={images?.url ?? '/assets/playlist.svg'} alt="앨범커버" />
-                    <h1 className="font-semibold text-sm ml-2 truncate md:text-base">{name}</h1>
+                    <h1 className="font-semibold text-sm ml-2 leading-normal truncate md:text-base">{name}</h1>
                 </div>
             </td>
             <td className="text-right relative w-10">

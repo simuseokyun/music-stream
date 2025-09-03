@@ -35,7 +35,7 @@ export default function TrackItem({ track, image, onPlay }: AlbumTrackItem) {
                 )}
             </td>
             <td className="p-2">
-                <h1 className="text-sm font-semibold truncate md:text-base">{name}</h1>
+                <h1 className="text-sm font-semibold leading-normal truncate md:text-base">{name}</h1>
                 <Artists artists={artists} />
             </td>
             <td className="relative w-10">

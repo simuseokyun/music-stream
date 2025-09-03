@@ -18,7 +18,7 @@ export default function Player() {
                         alt="앨범 커버"
                     />
                     <div className=" flex-1 min-w-0 ml-2">
-                        <h1 className="text-sm font-semibold truncate md:text-base ">{title}</h1>
+                        <h1 className="text-sm font-semibold leading-normal truncate md:text-base ">{title}</h1>
                         <p className="text-sm text-sub truncate ">{artist}</p>
                     </div>
                 </div>
