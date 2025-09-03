@@ -3,8 +3,6 @@ import path from 'path';
 dotenv.config({
     path: path.resolve(__dirname, '../.env'),
 });
-const envPath = path.resolve(__dirname, '../.env');
-console.log('Env file path:', envPath);
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -36,18 +34,15 @@ routes.forEach(({ method, route, handler }) => {
     app[method](route, handler);
     console.log(`[Express] Route registered: [${method.toUpperCase()}] ${route}`);
 });
-console.log(__dirname);
-console.log(process.env.NODE_ENV);
-console.log(path.join(__dirname, '../../client/dist'));
+
 if (process.env.NODE_ENV === 'production') {
-    const clientDistPath = path.join(__dirname, '../../client/dist');
-    console.log(clientDistPath);
-    app.use(express.static(clientDistPath));
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(clientDistPath, 'index.html'));
+    const clientPath = path.join(__dirname, '../../client/dist');
+    app.use(express.static(clientPath));
+    app.get('*', (_req, res) => {
+        res.sendFile(path.join(clientPath, 'index.html'));
     });
 } else {
-    console.log('개발 모드: React dev server를 통해 API 호출');
+    console.log('개발 모드');
 }
 
 export const errorMessages: ErrorMessages = {
@@ -58,5 +53,5 @@ export const errorMessages: ErrorMessages = {
 };
 
 app.listen(8000, '0.0.0.0', () => {
-    console.log('서버 실행: http://0.0.0.0:8000');
+    console.log('서버 실행');
 });
