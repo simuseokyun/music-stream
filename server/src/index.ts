@@ -37,6 +37,8 @@ routes.forEach(({ method, route, handler }) => {
     console.log(`[Express] Route registered: [${method.toUpperCase()}] ${route}`);
 });
 console.log(__dirname);
+console.log(process.env.NODE_ENV);
+console.log(path.join(__dirname, '../../client/dist'));
 if (process.env.NODE_ENV === 'production') {
     const clientDistPath = path.join(__dirname, '../../client/dist');
     console.log(clientDistPath);
