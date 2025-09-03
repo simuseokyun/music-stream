@@ -15,10 +15,14 @@ const getWebToken = async () => {
         const response = await axios.get(`/api/webToken`);
         const { access_token, expires_in } = response.data;
         const issuedAt = Date.now();
-        localStorage.setItem('webAccessToken', access_token);
-        localStorage.setItem('webExpiration', expires_in.toString());
-        localStorage.setItem('issuedAt', issuedAt.toString());
-        return { access_token, expires_in };
+        if (access_token) {
+            localStorage.setItem('webAccessToken', access_token);
+            localStorage.setItem('webExpiration', expires_in.toString());
+            localStorage.setItem('issuedAt', issuedAt.toString());
+            return { access_token, expires_in };
+        } else {
+            throw new Error('엑세스 토큰 없음');
+        }
     } catch (error) {
         throw new Error('토큰을 발급하는 데 실패했습니다');
     }
