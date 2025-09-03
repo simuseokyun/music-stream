@@ -16,7 +16,16 @@ import { ErrorMessages } from './types';
 import artistRoute from './routes/artist';
 
 const app = express();
-app.use(cors({ origin: true, credentials: true }));
+const allowedOrigin =
+    process.env.NODE_ENV === 'production'
+        ? 'http://ec2-3-34-190-12.ap-northeast-2.compute.amazonaws.com:8000'
+        : 'http://localhost:3000';
+app.use(
+    cors({
+        origin: allowedOrigin,
+        credentials: true, // 쿠키 전송 허용
+    })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
