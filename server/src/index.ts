@@ -39,6 +39,7 @@ routes.forEach(({ method, route, handler }) => {
 console.log(__dirname);
 if (process.env.NODE_ENV === 'production') {
     const clientDistPath = path.join(__dirname, '../../client/dist');
+    console.log(clientDistPath);
     app.use(express.static(clientDistPath));
     app.get('*', (req, res) => {
         res.sendFile(path.join(clientDistPath, 'index.html'));
