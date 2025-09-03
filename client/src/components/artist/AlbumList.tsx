@@ -3,7 +3,7 @@ import useGetArtistAlbums from '../../hooks/album/useArtistAlbums';
 import { useViewportStore } from '../../store/common';
 
 export default function AlbumList({ artistId }: { artistId?: string }) {
-    const { data, isLoading, isError } = useGetArtistAlbums(artistId);
+    const { data, isLoading, isError } = useGetArtistAlbums(`/${artistId}`);
     const isMobile = useViewportStore((state) => state.isMobile);
     if (isLoading) {
         return null;
