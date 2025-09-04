@@ -4,7 +4,7 @@ import useGetArtistTrack from '../../hooks/track/useGetArtistTrack';
 import useThrottledToast from '../../hooks/common/useTrottledToast';
 import usePlayTrack from '../../hooks/player/usePlayTrack';
 export default function TrackList({ artistId }: { artistId?: string }) {
-    const { data, isLoading, isError } = useGetArtistTrack(`/${artistId}`);
+    const { data, isLoading, isError } = useGetArtistTrack(artistId);
     const { playTrack } = usePlayTrack();
     const toast = useThrottledToast();
     const onPlay = usePlayThrottle(async ({ id }: { id: string }) => {
@@ -29,7 +29,7 @@ export default function TrackList({ artistId }: { artistId?: string }) {
     if (isError || !data?.tracks.length) {
         return (
             <div className="flex-1">
-                <h1 className="text-center mt-20">곡 목록을 불러올 수 없습니다</h1>
+                <h1 className="text-center mt-10">곡 목록을 불러올 수 없습니다</h1>
             </div>
         );
     }

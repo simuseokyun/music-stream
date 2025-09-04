@@ -6,19 +6,19 @@ export default function LibraryTab() {
         <div className="flex justify-between items-center">
             <div className="flex justify-between items-center">
                 <button
-                    className={`text-sm p-2 rounded-md ${active === 'playlist' && 'bg-active'}`}
+                    className={`text-sm p-1 px-2 rounded-md ${active === 'playlist' && 'bg-active'}`}
                     onClick={() => onClickLeftTab('playlist')}
                 >
                     플레이리스트
                 </button>
                 <button
-                    className={`text-sm p-2 rounded-md ${active === 'album' && 'bg-active'}`}
+                    className={`text-sm p-1 px-2 rounded-md ${active === 'album' && 'bg-active'}`}
                     onClick={() => onClickLeftTab('album')}
                 >
                     내가 찜한 앨범
                 </button>
                 <button
-                    className={`text-sm p-2 rounded-md ${active === 'artist' ? 'bg-active' : ''}`}
+                    className={`text-sm p-1 px-2 rounded-md ${active === 'artist' ? 'bg-active' : ''}`}
                     onClick={() => onClickLeftTab('artist')}
                 >
                     아티스트

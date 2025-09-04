@@ -27,8 +27,8 @@ export default function TrackItem({ track, onPlay }: FiveTrackItem) {
     };
 
     return (
-        <tr onClick={isMobile ? () => onPlay({ id }) : undefined}>
-            <td className={`${isMobile ? 'hidden ' : 'table-cell'} w-10 text-center`}>
+        <tr>
+            <td className="table-cell w-8 text-left">
                 <img
                     className="play-button"
                     src="/assets/playButton.svg"
@@ -39,7 +39,7 @@ export default function TrackItem({ track, onPlay }: FiveTrackItem) {
             <td className="w-auto py-1">
                 <div className="flex items-center">
                     <img className="img-medium rounded-md" src={images?.url ?? '/assets/playlist.svg'} alt="앨범커버" />
-                    <h1 className="font-semibold text-sm ml-2 leading-normal truncate md:text-base">{name}</h1>
+                    <h1 className="font-semibold text-sm ml-2 leading-none truncate md:text-base">{name}</h1>
                 </div>
             </td>
             <td className="text-right relative w-10">

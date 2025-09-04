@@ -20,7 +20,7 @@ export default function AlbumItem({ album }: { album: Album }) {
                 alt="앨범 커버"
             />
             <div className={`mt-2 ${sortState === 'flex' && 'ml-4 flex-1 min-w-0'}`}>
-                <h1 className="text-sm truncate leading-normal md:text-base">{name}</h1>
+                <h1 className="text-sm truncate leading-none md:text-base">{name}</h1>
                 <p className="text-sm text-sub truncate">
                     {artists[0]?.name}
                     <span className="ml-2">{AlbumType[album_type as keyof typeof AlbumType]}</span>

@@ -3,7 +3,7 @@ import useGetArtistAlbums from '../../hooks/album/useArtistAlbums';
 import { useViewportStore } from '../../store/common';
 
 export default function AlbumList({ artistId }: { artistId?: string }) {
-    const { data, isLoading, isError } = useGetArtistAlbums(`/${artistId}`);
+    const { data, isLoading, isError } = useGetArtistAlbums(artistId);
     const isMobile = useViewportStore((state) => state.isMobile);
     if (isLoading) {
         return null;
@@ -11,7 +11,7 @@ export default function AlbumList({ artistId }: { artistId?: string }) {
     if (isError || !data?.items?.length) {
         return (
             <div className="flex-1">
-                <h1 className="text-center mt-20">목록을 불러올 수 없습니다</h1>
+                <h1 className="text-center mt-10">목록을 불러올 수 없습니다</h1>
             </div>
         );
     }
@@ -19,7 +19,7 @@ export default function AlbumList({ artistId }: { artistId?: string }) {
     const albumList = data?.items.slice(0, isMobile ? 6 : 4);
 
     return (
-        <div className="grid grid-cols-3 md:grid-cols-4 ">
+        <div className="grid grid-cols-3 md:grid-cols-4 gap-2 ">
             {albumList?.map((album) => <AlbumItem key={album.id} album={album} />)}
         </div>
     );

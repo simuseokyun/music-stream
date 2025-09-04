@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Artists from '../common/Artists';
 import OpenPlaylistBtn from '../common/button/OpenCategoryBtn';
 import { TrackItem as SearchTrackItem } from '../../types/models/track';
-import { useModalStore, useViewportStore, useCategoryStore } from '../../store/common';
+import { useModalStore, useCategoryStore } from '../../store/common';
 
 export const TrackItem = ({ track, onPlay }: SearchTrackItem) => {
     const {
@@ -11,7 +11,6 @@ export const TrackItem = ({ track, onPlay }: SearchTrackItem) => {
         album: { artists, images, id: albumId, name: albumTitle },
     } = track;
     const open = useModalStore((state) => state.open);
-    const isMobile = useViewportStore((state) => state.isMobile);
     const setTrack = useCategoryStore((state) => state.setTrack);
     const openCategory = () => {
         open('selectPlaylist');
@@ -25,8 +24,8 @@ export const TrackItem = ({ track, onPlay }: SearchTrackItem) => {
     };
 
     return (
-        <tr onClick={isMobile ? () => onPlay({ id }) : undefined}>
-            <td className={`${isMobile ? 'hidden ' : 'table-cell'} w-10 text-center`}>
+        <tr>
+            <td className="table-cell w-8 text-left">
                 <img
                     className="play-button"
                     src="/assets/playButton.svg"

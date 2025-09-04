@@ -7,7 +7,6 @@ export default function TrackItem({ track, image, onPlay }: AlbumTrackItem) {
     const { id, name, artists } = track;
     const setTrack = useCategoryStore((state) => state.setTrack);
     const open = useModalStore((state) => state.open);
-    const isMobile = useViewportStore((state) => state.isMobile);
 
     const onClickCategory = () => {
         open('selectPlaylist');
@@ -21,21 +20,17 @@ export default function TrackItem({ track, image, onPlay }: AlbumTrackItem) {
     };
 
     return (
-        <tr onClick={isMobile ? () => onPlay({ id }) : undefined}>
+        <tr>
             <td className="w-10 text-center table-cell">
-                {isMobile ? (
-                    <p>{track?.track_number}</p>
-                ) : (
-                    <img
-                        className="play-button"
-                        src="/assets/playButton.svg"
-                        alt="재생 아이콘"
-                        onClick={() => onPlay({ id })}
-                    />
-                )}
+                <img
+                    className="play-button"
+                    src="/assets/playButton.svg"
+                    alt="재생 아이콘"
+                    onClick={() => onPlay({ id })}
+                />
             </td>
             <td className="p-2">
-                <h1 className="text-sm font-semibold leading-normal truncate md:text-base">{name}</h1>
+                <h1 className="text-sm font-semibold leading-none truncate md:text-base">{name}</h1>
                 <Artists artists={artists} />
             </td>
             <td className="relative w-10">

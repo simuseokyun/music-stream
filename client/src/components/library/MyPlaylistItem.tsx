@@ -26,7 +26,7 @@ export default function PlaylistItem({ playlist, sortState }: PlaylistItemProps)
                 />
             )}
             <div className="overflow-hidden">
-                <h1 className={`text-sm md: leading-normal mt-2 truncate ${sortState === 'flex' && 'ml-4'}`}>{name}</h1>
+                <h1 className={`text-sm md: leading-none mt-2 truncate ${sortState === 'flex' && 'ml-4'}`}>{name}</h1>
                 <p className={`text-sm text-sub truncate ${sortState === 'flex' && 'ml-4'}`}>{description}</p>
             </div>
         </li>
