@@ -24,7 +24,7 @@ export default function Home() {
                 <h1 className="text-2xl font-bold">최신 음악</h1>
                 <Pagenation onPrev={onPrev} onNext={onNext} />
             </div>
-            <div className="grid grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-0">
                 {data?.albums?.items
                     ?.slice(index * offset, (index + 1) * offset)
                     .map((item) => <NewAlbumItem key={item?.id} album={item} />)}

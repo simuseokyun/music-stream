@@ -12,7 +12,9 @@ export default function Artist() {
             <TrackList artistId={artistId} />
             <h1 className="text-2xl font-bold mt-5 pt-5 border-t border-white/20 ">디스코그래피</h1>
             <div className="text-right mb-3">
-                <Link to={`/allAlbum/${artistId}`}>모두 표시</Link>
+                <Link className="text-sm" to={`/allAlbum/${artistId}`}>
+                    모두 표시
+                </Link>
             </div>
             <AlbumList artistId={artistId} />
         </div>

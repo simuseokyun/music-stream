@@ -19,7 +19,7 @@ export default function AllAlbum() {
     return (
         <div className="flex-1">
             <h1 className="text-2xl font-bold mb-[10px]">{artists[0]?.name || ''} 의 모든앨범</h1>
-            <ul className="grid grid-cols-3 md:grid-cols-4">
+            <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 lg:gap-0">
                 {data?.pages.map((page) => page?.items.map((album) => <AlbumItem key={album.id} album={album} />))}
             </ul>
             {isFetchingNextPage && <Loading />}
