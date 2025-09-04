@@ -7,7 +7,7 @@ const useGetArtistTrack = (artistId?: string) => {
         queryKey: ['artist', 'tracks', artistId],
         queryFn: () => {
             if (!artistId) throw new Error('아티스트 정보를 불러올 수 없습니다');
-            return getDataWithoutAuth<FiveTracksResponse>(artistId);
+            return getDataWithoutAuth<FiveTracksResponse>(`/v1/artists/${artistId}/top-tracks`);
         },
         enabled: !!artistId,
         staleTime: Infinity,

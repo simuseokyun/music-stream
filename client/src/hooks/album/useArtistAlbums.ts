@@ -7,7 +7,7 @@ const useGetArtistAlbums = (artistId?: string) => {
         queryKey: ['artist', 'albums', artistId],
         queryFn: async () => {
             if (!artistId) throw new Error('아티스트 아이디가 필요합니다');
-            return getDataWithoutAuth<AlbumListResponse>(artistId);
+            return getDataWithoutAuth<AlbumListResponse>(`/v1/artists/${artistId}/albums`);
         },
         enabled: !!artistId,
         staleTime: Infinity,

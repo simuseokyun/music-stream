@@ -31,6 +31,7 @@ const getWebToken = async () => {
 const getSdkToken = async (authCode: string) => {
     const params = new URLSearchParams({ code: authCode }).toString();
     try {
+        console.log(params);
         const response = await axios.post('/api/auth/sdkToken', params);
         return response.data;
     } catch (error) {
