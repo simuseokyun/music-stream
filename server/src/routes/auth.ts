@@ -11,8 +11,6 @@ const authRoute: CustomRoute[] = [
         route: '/api/webToken',
         handler: async (_req, res) => {
             try {
-                console.log(CLIENT_ID);
-                console.log(process.env.NODE_ENV);
                 const params = new URLSearchParams({
                     grant_type: 'client_credentials',
                     client_id: CLIENT_ID,
@@ -46,11 +44,17 @@ const authRoute: CustomRoute[] = [
                     client_id: CLIENT_ID,
                     client_secret: CLIENT_SECRET,
                 }).toString();
+
                 const data = await callSpotifyApi(`${BASE_URL_AUTH}/api/token`, {
                     method: 'POST',
+                    token: BASIC_AUTH,
                     data: params,
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    auth: true,
                 });
+
                 const { access_token, refresh_token } = data;
                 res.cookie('access_token', access_token, {
                     httpOnly: true,
@@ -95,8 +99,9 @@ const authRoute: CustomRoute[] = [
                     method: 'POST',
                     token: BASIC_AUTH,
                     data: params,
-                    refresh: true,
+                    auth: true,
                 });
+
                 const { access_token } = data;
                 res.cookie('access_token', access_token, {
                     httpOnly: true,

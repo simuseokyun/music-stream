@@ -26,6 +26,8 @@ app.use(
         credentials: true, // 쿠키 전송 허용
     })
 );
+console.log(allowedOrigin);
+console.log(process.env.NODE_ENV);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -41,7 +43,6 @@ const routes: CustomRoute[] = [
 
 routes.forEach(({ method, route, handler }) => {
     app[method](route, handler);
-    console.log(`[Express] Route registered: [${method.toUpperCase()}] ${route}`);
 });
 
 if (process.env.NODE_ENV === 'production') {

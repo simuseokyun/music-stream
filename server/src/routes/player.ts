@@ -10,6 +10,7 @@ const playerRoute: CustomRoute[] = [
             try {
                 const { title } = query;
                 const { id } = body;
+                console.log(title, id);
                 if (!title || !id) return res.status(400).json({ message: '곡 정보를 찾을 수 없습니다' });
                 const data = await spotifyPreviewFinder(title as string, 20);
                 const trackInfo = data?.results.find((track: { spotifyUrl: string }) => {

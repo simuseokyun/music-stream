@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import StatusError from '../errors/statusError';
+
 const callSpotifyApi = async (
     url: string,
     options: {
@@ -7,7 +8,7 @@ const callSpotifyApi = async (
         token?: string;
         data?: string | Record<string, any>;
         headers?: Record<string, string>;
-        refresh?: boolean;
+        auth?: boolean;
     } = {}
 ) => {
     try {
@@ -16,15 +17,24 @@ const callSpotifyApi = async (
             method: options.method || 'GET',
             data: options.data,
             headers: {
+                // Authorization: options.token
+                //     ? options.refresh
+                //         ? `Basic ${options.token}`
+                //         : `Bearer ${options.token}`
+                //     : undefined,
+                // ...options.headers,
                 Authorization: options.token
-                    ? options.refresh
+                    ? options.auth
                         ? `Basic ${options.token}`
                         : `Bearer ${options.token}`
                     : undefined,
                 ...options.headers,
             },
         };
+        console.log(config);
+
         const response = await axios(config);
+        console.log(response);
         return response.data;
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
