@@ -20,9 +20,10 @@ export default function TrackList({ data }: { data: AlbumInfoResponse }) {
             artist: data?.artists[0]?.name,
             image: data?.images[0]?.url,
         }));
-        console.log(list, index, newList);
+
         playTrack(index, newList);
     });
+    console.log(data);
 
     return (
         <table className="w-full table-fixed mt-2">

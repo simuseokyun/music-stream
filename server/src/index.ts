@@ -1,8 +1,9 @@
 import dotenv from 'dotenv';
 import path from 'path';
 dotenv.config({
-    path: path.resolve(__dirname, '../.env'),
+    path: path.resolve(__dirname, '../.env.development'),
 });
+console.log(process.env.SPOTIFY_CLIENT_ID);
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';

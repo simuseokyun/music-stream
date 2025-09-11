@@ -1,16 +1,19 @@
 import OpenPlaylistBtn from '../common/button/OpenCategoryBtn';
+import Artists from '../common/Artists';
+import { useCategoryStore, useModalStore } from '../../store/common';
+import convertDuration from '../../utils/common/convertDuration';
 import { TrackItem as FiveTrackItem } from '../../types/models/track';
-import { useCategoryStore, useViewportStore, useModalStore } from '../../store/common';
 export default function TrackItem({ track, onPlay }: FiveTrackItem) {
     const {
         id,
         name,
         album: {
             images: [images],
-            artists: [artists],
+            artists,
         },
+        duration_ms,
     } = track;
-    const { isMobile } = useViewportStore();
+
     const { setTrack } = useCategoryStore((state) => state);
     const { open } = useModalStore();
 
@@ -18,8 +21,8 @@ export default function TrackItem({ track, onPlay }: FiveTrackItem) {
         const trackInfo = {
             trackId: id,
             trackTitle: name,
-            artistName: artists?.name,
-            artistId: artists?.id,
+            artistName: artists[0]?.name,
+            artistId: artists[0]?.id,
             trackImage: images?.url,
         };
         open('selectPlaylist');
@@ -28,7 +31,7 @@ export default function TrackItem({ track, onPlay }: FiveTrackItem) {
 
     return (
         <tr>
-            <td className="table-cell w-8 text-left">
+            <td className="table-cell w-8 text-left active:scale-110">
                 <img
                     className="play-button"
                     src="/assets/playButton.svg"
@@ -39,7 +42,13 @@ export default function TrackItem({ track, onPlay }: FiveTrackItem) {
             <td className="w-auto py-1">
                 <div className="flex items-center">
                     <img className="img-medium rounded-md" src={images?.url ?? '/assets/playlist.svg'} alt="앨범커버" />
-                    <h1 className="font-semibold text-sm ml-2 leading-none truncate md:text-base">{name}</h1>
+                    <div className="ml-3">
+                        <h1 className="font-semibold text-sm leading-none truncate md:text-base">{name}</h1>
+                        <div className="flex items-center">
+                            <Artists artists={artists} />
+                            <span className="text-sm text-sub">&nbsp;∙&nbsp;{convertDuration(duration_ms)}</span>
+                        </div>
+                    </div>
                 </div>
             </td>
             <td className="text-right relative w-10">

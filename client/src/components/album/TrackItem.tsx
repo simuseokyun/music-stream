@@ -1,10 +1,10 @@
 import Artists from '../common/Artists';
 import OpenPlaylistBtn from '../common/button/OpenCategoryBtn';
+import convertDuration from '../../utils/common/convertDuration';
+import { useCategoryStore, useModalStore } from '../../store/common';
 import { AlbumTrackItem } from '../../types/models/track';
-import { useCategoryStore, useViewportStore, useModalStore } from '../../store/common';
-
 export default function TrackItem({ track, image, onPlay }: AlbumTrackItem) {
-    const { id, name, artists } = track;
+    const { id, name, artists, duration_ms } = track;
     const setTrack = useCategoryStore((state) => state.setTrack);
     const open = useModalStore((state) => state.open);
 
@@ -21,7 +21,7 @@ export default function TrackItem({ track, image, onPlay }: AlbumTrackItem) {
 
     return (
         <tr>
-            <td className="w-10 text-center table-cell">
+            <td className="w-8 text-left table-cell active:scale-110">
                 <img
                     className="play-button"
                     src="/assets/playButton.svg"
@@ -31,7 +31,10 @@ export default function TrackItem({ track, image, onPlay }: AlbumTrackItem) {
             </td>
             <td className="p-2">
                 <h1 className="text-sm font-semibold leading-none truncate md:text-base">{name}</h1>
-                <Artists artists={artists} />
+                <div className="flex items-center">
+                    <Artists artists={artists} />
+                    <span className="text-sm text-sub">&nbsp;∙&nbsp;{convertDuration(duration_ms)}</span>
+                </div>
             </td>
             <td className="relative w-10">
                 <OpenPlaylistBtn onClick={onClickCategory} />

@@ -13,6 +13,7 @@ const playerRoute: CustomRoute[] = [
                 console.log(title, id);
                 if (!title || !id) return res.status(400).json({ message: '곡 정보를 찾을 수 없습니다' });
                 const data = await spotifyPreviewFinder(title as string, 20);
+                console.log(data);
                 const trackInfo = data?.results.find((track: { spotifyUrl: string }) => {
                     const urlParts = track.spotifyUrl.split('/');
                     const trackId = urlParts[urlParts.length - 1];

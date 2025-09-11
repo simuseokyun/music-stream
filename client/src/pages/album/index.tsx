@@ -15,7 +15,7 @@ export default function Album() {
         );
     }
     return (
-        <div className="flex-1 bg-black rounded-md mt-[60px] md:m-0 md:bg-main">
+        <div className="flex-1 bg-black rounded-md mt-[40px] md:m-0 md:bg-main">
             <div className="relative md:p-[20px] rounded-md">
                 <AlbumInfo />
                 <TrackList data={data} />

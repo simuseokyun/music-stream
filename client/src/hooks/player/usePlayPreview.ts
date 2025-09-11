@@ -10,7 +10,7 @@ const usePlayPreview = () => {
     const { key, setKey } = usePlayerKey();
     const playPreview = async ({ id, title, artist, image }: PlayState) => {
         try {
-            const response = await axios.post(`/api/preview?title=${encodeURIComponent(title)}`, { id });
+            const response = await axios.post(`/api/preview?title=${title}`, { id });
             console.log(response);
             const data = response.data;
             if (url === data[0]?.previewUrls[0]) {

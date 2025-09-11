@@ -41,14 +41,14 @@ export default function Root() {
             </div>
         );
     return (
-        <div className="w-full bg-[inherit]">
+        <div className="w-full bg-transparent">
             <ToastContainer />
             <ModalContainer />
-            <div className="px-5 pt-10 pb-[120px] max-w-[1200px] mx-auto md:p-10 md:pb-[80px] ">
+            <div className="px-3 pt-10 pb-[120px] max-w-[1200px] mx-auto sm:px-5 md:p-10 md:pb-[80px] ">
                 <div className="hidden md:block">
                     <SearchInput />
                 </div>
-                <div className="block mt-[60px] md:flex md:gap-5 md:items-start md:m-0">
+                <div className="block mt-[40px] md:flex md:gap-5 md:items-start md:m-0">
                     <SideBar />
                     <MobileHeader />
                     <Outlet />

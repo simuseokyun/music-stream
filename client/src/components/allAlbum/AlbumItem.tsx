@@ -8,7 +8,7 @@ export default function AlbumItem({ album }: { album: Album }) {
     };
 
     return (
-        <li className="w-full rounded-md lg:p-3 lg:hover:bg-[#1a191a] " onClick={goAlbum}>
+        <li className="w-full rounded-md lg:p-3 lg:hover:bg-[#1a191a]" onClick={goAlbum}>
             <img className="rounded-md" src={images[0]?.url ?? '/assets/playlist.svg'} alt="앨범 커버" />
             <h1 className="text-sm font-semibold mt-2 truncate md:text-base">{name}</h1>
             <div>

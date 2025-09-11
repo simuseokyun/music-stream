@@ -11,7 +11,7 @@ export default function AlbumItem({ album }: { album: Album }) {
     };
     return (
         <li
-            className={`w-full p-2 rounded-md ${sortState === 'flex' && 'w-full flex items-center'} md:p-3 md:hover:bg-[#1a191a]`}
+            className={`w-full rounded-md ${sortState === 'flex' && 'w-full flex items-center mt-2'} lg:p-3 lg:hover:bg-[#1a191a]`}
             onClick={goAlbum}
         >
             <img
@@ -19,11 +19,13 @@ export default function AlbumItem({ album }: { album: Album }) {
                 src={images[0]?.url ?? '/assets/playlist.svg'}
                 alt="앨범 커버"
             />
-            <div className={`mt-2 ${sortState === 'flex' && 'ml-4 flex-1 min-w-0'}`}>
-                <h1 className="text-sm truncate leading-none md:text-base">{name}</h1>
+            <div className={`mt-2 ${sortState === 'flex' && 'ml-3 flex-1 min-w-0'}`}>
+                <h1 className={`text-base truncate font-semibold leading-none  ${sortState === 'grid' && 'mt-3'}`}>
+                    {name}
+                </h1>
                 <p className="text-sm text-sub truncate">
                     {artists[0]?.name}
-                    <span className="ml-2">{AlbumType[album_type as keyof typeof AlbumType]}</span>
+                    <span>&nbsp;∙&nbsp;{AlbumType[album_type as keyof typeof AlbumType]}</span>
                 </p>
             </div>
         </li>

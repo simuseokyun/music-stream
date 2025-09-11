@@ -9,7 +9,7 @@ export default function PlaylistItem({ playlist, sortState }: PlaylistItemProps)
 
     return (
         <li
-            className={`w-full p-2 rounded-md ${sortState === 'flex' && 'flex items-center'} md:p-3 md:hover:bg-[#1a191a]`}
+            className={`w-full rounded-md ${sortState === 'flex' && 'w-full flex items-center mt-2'} lg:p-3 lg:hover:bg-[#1a191a]`}
             onClick={goPlaylist}
         >
             {images && images[0] ? (
@@ -25,9 +25,9 @@ export default function PlaylistItem({ playlist, sortState }: PlaylistItemProps)
                     alt="앨범 커버"
                 />
             )}
-            <div className="overflow-hidden">
-                <h1 className={`text-sm md: leading-none mt-2 truncate ${sortState === 'flex' && 'ml-4'}`}>{name}</h1>
-                <p className={`text-sm text-sub truncate ${sortState === 'flex' && 'ml-4'}`}>{description}</p>
+            <div className={`overflow-hidden ${sortState === 'flex' && 'ml-3'}`}>
+                <h1 className={`font-semibold leading-none truncate  ${sortState === 'grid' && 'mt-3'}`}>{name}</h1>
+                <p className={`text-sm mt-0.5 text-sub truncate`}>{description}</p>
             </div>
         </li>
     );

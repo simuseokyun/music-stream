@@ -25,7 +25,9 @@ export default function PlaylistList() {
         );
     return (
         <>
-            <ul className={`w-full mt-2 ${sortState === 'grid' ? 'grid grid-cols-3 lg:grid-cols-4' : ''} `}>
+            <ul
+                className={`w-full mt-2 ${sortState === 'grid' ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 lg:gap-0' : ''} `}
+            >
                 {data?.pages.map((page) =>
                     page?.items.map((playlist) => {
                         return <PlaylistItem key={playlist.id} playlist={playlist} sortState={sortState} />;

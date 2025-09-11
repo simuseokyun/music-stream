@@ -35,7 +35,7 @@ export default function TrackList({ playlistId }: { playlistId?: string }) {
 
     return (
         <div className="mt-2">
-            <table className="w-full table-fixed ">
+            <table className="w-full table-fixed">
                 <tbody>
                     {data?.pages.map((page) =>
                         page?.items.map(({ track }, index) => (

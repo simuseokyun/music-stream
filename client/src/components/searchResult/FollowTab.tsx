@@ -18,7 +18,7 @@ export default function FollowTab({ artist }: { artist: Artist }) {
     return (
         <div className="mt-1">
             <button
-                className={`text-[12px] px-2 py-2 text-black font-bold rounded-2xl  transition  ${followState ? 'bg-white' : 'bg-accent'} md:text-sm`}
+                className={`text-[12px] px-2 py-1 text-black font-bold rounded-2xl  transition  ${followState ? 'bg-white' : 'bg-accent'} md:text-sm`}
                 onClick={onFollowToggle}
             >
                 {followState ? '팔로우 중' : '팔로우'}

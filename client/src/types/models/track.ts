@@ -6,7 +6,13 @@ export interface TrackItem {
     onPlay: ({ id }: { id: PlayState['id'] }) => void;
 }
 export interface AlbumTrackItem {
-    track: { id: string; name: string; artists: { name: string; id: string }[]; track_number?: number };
+    track: {
+        id: string;
+        name: string;
+        artists: { name: string; id: string }[];
+        track_number?: number;
+        duration_ms: number;
+    };
     image: string;
     onPlay: ({ id }: { id: PlayState['id'] }) => void;
 }
@@ -19,4 +25,5 @@ export interface Track {
     name: string;
     uri: string;
     artists: { name: string; id: string }[];
+    duration_ms: number;
 }

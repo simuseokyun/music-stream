@@ -9,7 +9,9 @@ const usePlayTrack = () => {
     const toast = useThrottledToast();
     const playTrack = async (index: number, list: PlayState[]) => {
         try {
+            console.log(index, list);
             const result = await playPreview(list[index]);
+
             if (result.playState) {
                 setIndex(index);
                 setPlaylist([...list]);

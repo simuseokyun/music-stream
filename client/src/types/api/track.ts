@@ -11,4 +11,5 @@ export interface TrackResponse {
     name: string;
     album: { id: string; name: string; images: { url: string }[]; artists: { id: string; name: string }[] };
     is_local: boolean;
+    duration_ms: number;
 }

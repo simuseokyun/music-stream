@@ -8,7 +8,7 @@ export default function Player() {
     const { onToggle, onNext, onClickNext, onPrev } = usePlayerControl();
     return (
         <div
-            className={`fixed w-full bg-[#1a191a] transition-all duration-300 ${!!url ? ' bottom-[50px] md:bottom-0' : 'bottom-[-100px]'} md:border-t-1 md:bg-main`}
+            className={`fixed w-full bg-[#1a191a] transition-all duration-300 ${!!url ? ' bottom-[40px] md:bottom-0' : 'bottom-[-80px]'} md:border-t-1 md:bg-main`}
         >
             <div className="w-full flex items-center p-2">
                 <div className="flex items-center flex-1 min-w-0">
@@ -18,8 +18,8 @@ export default function Player() {
                         alt="앨범 커버"
                     />
                     <div className=" flex-1 min-w-0 ml-2">
-                        <h1 className="text-sm font-semibold leading-none truncate md:text-base ">{title}</h1>
-                        <p className="text-sm text-sub truncate ">{artist}</p>
+                        <h1 className="text-sm font-semibold leading-none mb-1 truncate md:text-base ">{title}</h1>
+                        <p className="text-[12px] text-sub truncate leading-none">{artist}</p>
                     </div>
                 </div>
                 <div className="flex-1">

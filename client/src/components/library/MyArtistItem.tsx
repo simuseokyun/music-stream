@@ -12,7 +12,7 @@ export default function ArtistItem({ artist }: { artist: Artist }) {
     };
     return (
         <li
-            className={`w-full p-2 rounded-md ${sortState === 'flex' && 'w-full flex items-center'} md:p-3 md:hover:bg-[#1a191a]`}
+            className={`w-full rounded-md ${sortState === 'flex' && 'w-full flex items-center mt-2 '} lg:p-3 lg:hover:bg-[#1a191a]`}
             onClick={goArtist}
         >
             <img
@@ -20,9 +20,9 @@ export default function ArtistItem({ artist }: { artist: Artist }) {
                 src={images[0]?.url ?? '/assets/user.svg'}
                 alt="아티스트 이미지"
             />
-            <div className={`${sortState === 'flex' ? 'ml-4 flex-1 min-w-0' : 'mt-2'}`}>
+            <div className={`${sortState === 'flex' ? 'ml-3 flex-1' : 'mt-3'}`}>
                 <h1
-                    className={`text-sm truncate leading-none ${sortState === 'grid' ? 'text-center' : 'text-left'} md:text-base`}
+                    className={`text-base font-semibold truncate leading-none ${sortState === 'grid' ? 'text-center' : 'text-left'}`}
                 >
                     {name}
                 </h1>
