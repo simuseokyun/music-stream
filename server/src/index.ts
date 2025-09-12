@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 dotenv.config({
-    path: path.resolve(__dirname, '../.env.development'),
+    path: path.resolve(__dirname, `../.env.${process.env.NODE_ENV || 'development'}`),
 });
 console.log(process.env.SPOTIFY_CLIENT_ID);
 import express from 'express';
@@ -27,7 +27,7 @@ app.use(
         credentials: true, // 쿠키 전송 허용
     })
 );
-console.log(allowedOrigin);
+
 console.log(process.env.NODE_ENV);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
