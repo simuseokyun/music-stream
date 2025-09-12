@@ -3,7 +3,8 @@ import path from 'path';
 dotenv.config({
     path: path.resolve(__dirname, `../.env.${process.env.NODE_ENV || 'development'}`),
 });
-console.log(process.env.SPOTIFY_CLIENT_ID);
+console.log(`서버에서 클라이언트 아이디 : ${process.env.SPOTIFY_CLIENT_ID}`);
+console.log(`서버에서 노드엔브 : ${process.env.NODE_ENV}`);
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
