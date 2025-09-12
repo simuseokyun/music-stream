@@ -29,10 +29,9 @@ const getWebToken = async () => {
 };
 
 const getSdkToken = async (authCode: string) => {
-    const params = new URLSearchParams({ code: authCode }).toString();
     try {
-        console.log(params);
-        const response = await axios.post('/api/auth/sdkToken', params);
+        console.log(`오쓰${authCode}`);
+        const response = await axios.post('/api/auth/sdkToken', { code: authCode });
         return response.data;
     } catch (error) {
         throw new Error('토큰을 발급하는 데 실패했습니다');
