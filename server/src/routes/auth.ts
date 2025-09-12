@@ -37,7 +37,7 @@ const authRoute: CustomRoute[] = [
         route: '/api/auth/sdkToken',
         handler: async ({ body: { code } }, res) => {
             try {
-                console.log(code);
+                console.log(`서버에서 코드받은 값${code}`);
                 const params = new URLSearchParams({
                     code,
                     redirect_uri: REDIRECT_URI,
