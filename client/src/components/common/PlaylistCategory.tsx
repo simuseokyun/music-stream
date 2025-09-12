@@ -18,9 +18,9 @@ export default function PlaylistCategory({ onClose }: { onClose: () => void }) {
     }
     if (!data.pages[0].items?.length) {
         return (
-            <div className="flex-1">
-                <h1 className="text-center mt-20">플레이리스트를 생성해주세요</h1>
-            </div>
+            <Modal onClose={onClose} modalTitle="알림">
+                <h1 className="text-center mt-8">플레이리스트를 생성해주세요</h1>
+            </Modal>
         );
     }
 
