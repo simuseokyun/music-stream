@@ -8,7 +8,7 @@ export default function MobileFooter() {
         { url: '/library?active=playlist', image: '/assets/libraryButton.svg' },
     ];
     return (
-        <div className="w-full fixed bottom-0 left-0 h-[40px] bg-main z-10 md:hidden ">
+        <div className="fixed w-full bottom-0 left-0 h-[40px] bg-black/30 backdrop-blur-sm z-10 md:hidden">
             <div className="max-w-[400px] w-[80%] h-full mx-auto">
                 <div className="w-full h-full flex items-center justify-center">
                     {navList?.map((list) => {

@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import Artists from '../common/Artists';
 import OpenPlaylistBtn from '../common/button/OpenCategoryBtn';
-import { TrackItem as SearchTrackItem } from '../../types/models/track';
 import { useModalStore, useCategoryStore } from '../../store/common';
+import { TrackItem as SearchTrackItem } from '../../types/models/track';
 
 export const TrackItem = ({ track, onPlay }: SearchTrackItem) => {
     const {
@@ -25,7 +25,7 @@ export const TrackItem = ({ track, onPlay }: SearchTrackItem) => {
 
     return (
         <tr>
-            <td className="w-8 text-left table-cell active:scale-110">
+            <td className="w-8 text-left table-cell transition-transform duration-200  active:scale-110">
                 <img
                     className="play-button"
                     src="/assets/playButton.svg"
@@ -36,8 +36,8 @@ export const TrackItem = ({ track, onPlay }: SearchTrackItem) => {
             <td className="w-full py-1.5 pr-5 md:w-3/5">
                 <div className="flex items-center overflow-hidden">
                     <img className="img-medium rounded-md " src={images[0].url} alt="앨범 커버" />
-                    <div className="ml-2 flex-1 ">
-                        <h1 className="text-[14px] font-semibold leading-none truncate md:text-base">{name}</h1>
+                    <div className="ml-2 flex-1 truncate">
+                        <h1 className="text-[14px] font-semibold truncate md:text-base">{name}</h1>
                         <Artists artists={artists} />
                     </div>
                 </div>

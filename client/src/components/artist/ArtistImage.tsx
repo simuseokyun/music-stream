@@ -34,7 +34,7 @@ export default function ArtistImage({ artistId }: { artistId?: string }) {
             />
             <div className="absolute w-full h-full  flex flex-col justify-end p-5 top-0 left-0 z-1">
                 <h1 className="text-4xl font-bold">{name}</h1>
-                <span className="my-1">팔로워 : {commaSeparate(followers.total)}명</span>
+                <span className="text-sm my-0.5">팔로워 : {commaSeparate(followers.total)}명</span>
 
                 {session && <FollowTab artist={artist} />}
             </div>

@@ -31,7 +31,7 @@ export default function TrackItem({ track, onPlay }: FiveTrackItem) {
 
     return (
         <tr>
-            <td className="table-cell w-8 text-left active:scale-110">
+            <td className="w-8 text-left table-cell transition-transform duration-200  active:scale-110">
                 <img
                     className="play-button"
                     src="/assets/playButton.svg"

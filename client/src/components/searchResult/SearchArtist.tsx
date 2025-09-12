@@ -35,7 +35,7 @@ export default function ArtistResult({ artist, isLoading, isError }: SearchArtis
             />
             <div className="ml-4">
                 <h1 className="text-2xl font-bold">{artist?.name}</h1>
-                <p className="text-base text-sub">팔로워 : {commaSeparate(artist?.followers?.total)} 명</p>
+                <p className="text-sm text-sub">팔로워 : {commaSeparate(artist?.followers?.total)} 명</p>
                 {session && <FollowTab artist={artist} />}
             </div>
         </div>

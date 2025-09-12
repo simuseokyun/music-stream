@@ -28,7 +28,7 @@ export default function TrackItem({ track, playlistId, onPlay }: PlaylistTrackIt
 
     return (
         <tr className="md:hover:bg-[#1a191a] group">
-            <td className="w-8 text-center table-cell active:scale-110">
+            <td className="w-8 text-left table-cell transition-transform duration-200  active:scale-110">
                 <img className="play-button" src="/assets/playButton.svg" alt="재생 아이콘" onClick={playSong} />
             </td>
             <td className="w-full md:w-3/5 py-2">

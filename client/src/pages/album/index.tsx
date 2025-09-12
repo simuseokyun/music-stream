@@ -19,7 +19,7 @@ export default function Album() {
             <div className="relative md:p-[20px] rounded-md">
                 <AlbumInfo />
                 <TrackList data={data} />
-                <p className="text-xs mt-10">{data?.copyrights[0]?.text}</p>
+                <p className="text-xs mt-4">{data?.copyrights[0]?.text}</p>
             </div>
         </div>
     );
