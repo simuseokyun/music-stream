@@ -1,4 +1,4 @@
-const convertDuration = (ms = 0): string => {
+const convertDuration = (ms: number = 0): string => {
     const totalSecond = Math.floor(ms / 1000);
     const minute = Math.floor(totalSecond / 60);
     const second = totalSecond % 60;
