@@ -31,7 +31,7 @@ export default function TrackItem({ track, onPlay }: FiveTrackItem) {
 
     return (
         <tr>
-            <td className="w-8 text-left table-cell transition-transform duration-200  active:scale-110">
+            <td className="w-6 text-left table-cell transition-transform duration-200  active:scale-110">
                 <img
                     className="play-button"
                     src="/assets/playButton.svg"
@@ -39,11 +39,13 @@ export default function TrackItem({ track, onPlay }: FiveTrackItem) {
                     onClick={() => onPlay({ id })}
                 />
             </td>
-            <td className="w-auto py-1">
+            <td className="p-2 overflow-hidden items-left">
                 <div className="flex items-center">
                     <img className="img-medium rounded-md" src={images?.url ?? '/assets/playlist.svg'} alt="앨범커버" />
-                    <div className="ml-3">
-                        <h1 className="font-semibold text-sm leading-none truncate md:text-base">{name}</h1>
+                    <div className="ml-2 min-w-0">
+                        <h1 className="w-auto font-semibold text-sm leading-none overflow-hidden truncate md:text-base">
+                            {name}
+                        </h1>
                         <div className="flex items-center">
                             <Artists artists={artists} />
                             <span className="text-sm text-sub">&nbsp;∙&nbsp;{convertDuration(duration_ms)}</span>
@@ -51,7 +53,7 @@ export default function TrackItem({ track, onPlay }: FiveTrackItem) {
                     </div>
                 </div>
             </td>
-            <td className="text-right relative w-10">
+            <td className="relative w-6 text-right ">
                 <OpenPlaylistBtn onClick={onClickCategory} />
             </td>
         </tr>

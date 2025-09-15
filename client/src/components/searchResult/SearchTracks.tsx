@@ -38,7 +38,7 @@ function TracksResult() {
     if (!data?.pages[0]?.tracks?.items.length) {
         return (
             <div className="flex-1">
-                <h1 className="text-center mt-20">검색결과가 존재하지 않습니다</h1>
+                <h1 className="font-semibold text-center mt-20 ">검색결과가 존재하지 않습니다</h1>
             </div>
         );
     }

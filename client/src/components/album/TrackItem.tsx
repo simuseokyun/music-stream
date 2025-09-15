@@ -21,7 +21,7 @@ export default function TrackItem({ track, image, onPlay }: AlbumTrackItem) {
 
     return (
         <tr>
-            <td className="w-8 text-left table-cell transition-transform duration-200  active:scale-110">
+            <td className="w-6 text-left transition-transform duration-200  active:scale-110">
                 <img
                     className="play-button"
                     src="/assets/playButton.svg"
@@ -36,7 +36,7 @@ export default function TrackItem({ track, image, onPlay }: AlbumTrackItem) {
                     <span className="text-sm text-sub">&nbsp;∙&nbsp;{convertDuration(duration_ms)}</span>
                 </div>
             </td>
-            <td className="relative w-10">
+            <td className="relative w-6">
                 <OpenPlaylistBtn onClick={onClickCategory} />
             </td>
         </tr>

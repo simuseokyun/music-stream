@@ -7,7 +7,7 @@ const getWebToken = async () => {
     const issuedAt = getLocalStorage('issuedAt');
     const nowTime = Date.now();
     const isValid =
-        access_token && expires_in && issuedAt && nowTime - 30000 < Number(issuedAt) + Number(expires_in) * 1000;
+        access_token && expires_in && issuedAt && nowTime - 300000 < Number(issuedAt) + Number(expires_in) * 1000;
     if (isValid) {
         return { access_token, expires_in };
     }

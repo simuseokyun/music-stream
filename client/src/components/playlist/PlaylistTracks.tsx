@@ -50,7 +50,7 @@ export default function TrackList({ playlistId }: { playlistId?: string }) {
                 </tbody>
             </table>
             {isFetchingNextPage && <Loading />}
-            {!data?.pages[0].items.length && <h1 className="text-center font-bold mt-10">곡을 추가해주세요</h1>}
+            {!data?.pages[0].items.length && <h1 className="text-center font-semibold mt-10">곡을 추가해주세요</h1>}
             <div ref={ref} />
         </div>
     );

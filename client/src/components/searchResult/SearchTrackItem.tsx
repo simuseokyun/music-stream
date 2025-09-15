@@ -25,7 +25,7 @@ export const TrackItem = ({ track, onPlay }: SearchTrackItem) => {
 
     return (
         <tr>
-            <td className="w-8 text-left table-cell transition-transform duration-200  active:scale-110">
+            <td className="w-6 text-left transition-transform duration-200  active:scale-110">
                 <img
                     className="play-button"
                     src="/assets/playButton.svg"
@@ -33,22 +33,22 @@ export const TrackItem = ({ track, onPlay }: SearchTrackItem) => {
                     onClick={() => onPlay({ id })}
                 />
             </td>
-            <td className="w-full py-1.5 pr-5 md:w-3/5">
+            <td className="w-auto p-2">
                 <div className="flex items-center overflow-hidden">
-                    <img className="img-medium rounded-md " src={images[0].url} alt="앨범 커버" />
-                    <div className="ml-2 flex-1 truncate">
+                    <img className="img-medium rounded-md" src={images[0].url} alt="앨범 커버" />
+                    <div className="ml-2 w-auto truncate">
                         <h1 className="text-[14px] font-semibold truncate md:text-base">{name}</h1>
                         <Artists artists={artists} />
                     </div>
                 </div>
             </td>
-            <td className="hidden pr-10 md:table-cell md:w-[25%]">
+            <td className="hidden pr-2 md:table-cell md:w-[30%]">
                 <Link className="block  text-sm truncate" to={`/album/${albumId}`}>
                     {albumTitle}
                 </Link>
             </td>
             <td
-                className="relative w-[40px] text-center"
+                className="relative w-6 text-center"
                 onClick={(e) => {
                     e.stopPropagation();
                 }}
