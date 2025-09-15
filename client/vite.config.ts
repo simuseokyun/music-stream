@@ -9,19 +9,21 @@ export default defineConfig({
     },
     build: {
         outDir: 'dist',
+        emptyOutDir: true,
         rollupOptions: {
             input: 'index.html',
         },
     },
     server: {
+        port: 3000,
+        open: true,
         proxy: {
             '/api': {
                 target: 'http://localhost:8000',
+                rewrite: (path) => path.replace(/^\/api/, ''),
                 changeOrigin: true,
             },
         },
-        port: 3000,
     },
-
     base: '/',
 });
