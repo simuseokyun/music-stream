@@ -7,7 +7,7 @@ import { errorMessages } from '..';
 const userRoute: CustomRoute[] = [
     {
         method: METHOD.GET,
-        route: '/api/me/check',
+        route: '/me/check',
         handler: async ({ cookies }, res) => {
             try {
                 console.log('쿠키는' + cookies);

@@ -8,7 +8,7 @@ import { errorMessages } from '..';
 const authRoute: CustomRoute[] = [
     {
         method: METHOD.GET,
-        route: '/api/webToken',
+        route: '/webToken',
         handler: async (_req, res) => {
             try {
                 const params = new URLSearchParams({
@@ -34,7 +34,7 @@ const authRoute: CustomRoute[] = [
     },
     {
         method: METHOD.POST,
-        route: '/api/auth/sdkToken',
+        route: '/auth/sdkToken',
         handler: async ({ body: { code } }, res) => {
             try {
                 console.log(`서버에서 코드받은 값${code}`);
@@ -84,7 +84,7 @@ const authRoute: CustomRoute[] = [
     },
     {
         method: METHOD.POST,
-        route: '/api/auth/refresh',
+        route: '/auth/refresh',
         handler: async ({ cookies }, res) => {
             const token = cookies.refresh_token;
             if (!token) {
@@ -122,7 +122,7 @@ const authRoute: CustomRoute[] = [
     },
     {
         method: METHOD.POST,
-        route: '/api/logout',
+        route: '/logout',
         handler: ({ cookies }, res) => {
             const token = cookies.refresh_token;
             if (!token) {

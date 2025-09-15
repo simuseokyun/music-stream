@@ -6,7 +6,7 @@ import { errorMessages } from '..';
 export const playlistRoute: CustomRoute[] = [
     {
         method: METHOD.GET,
-        route: '/api/me/playlists',
+        route: '/me/playlists',
         handler: async ({ query, cookies }, res) => {
             try {
                 const token = cookies.access_token;
@@ -29,7 +29,7 @@ export const playlistRoute: CustomRoute[] = [
     },
     {
         method: METHOD.GET,
-        route: '/api/me/playlist/:id',
+        route: '/me/playlist/:id',
         handler: async ({ params, query, cookies }, res) => {
             try {
                 const token = cookies.access_token;
@@ -54,7 +54,7 @@ export const playlistRoute: CustomRoute[] = [
     },
     {
         method: METHOD.GET,
-        route: '/api/me/playlist/info/:playlistId',
+        route: '/me/playlist/info/:playlistId',
         handler: async ({ params, cookies }, res) => {
             try {
                 const token = cookies.access_token;
@@ -75,7 +75,7 @@ export const playlistRoute: CustomRoute[] = [
     },
     {
         method: METHOD.POST,
-        route: '/api/me/playlist/add',
+        route: '/me/playlist/add',
         handler: async ({ body, cookies }, res) => {
             try {
                 const token = cookies.access_token;
@@ -100,7 +100,7 @@ export const playlistRoute: CustomRoute[] = [
     },
     {
         method: METHOD.DELETE,
-        route: '/api/me/playlist/delete/:playlistId',
+        route: '/me/playlist/delete/:playlistId',
         handler: async ({ params, cookies }, res) => {
             try {
                 const token = cookies.access_token;
@@ -125,7 +125,7 @@ export const playlistRoute: CustomRoute[] = [
 
     {
         method: METHOD.POST,
-        route: '/api/me/playlist/track/add/:playlistId',
+        route: '/me/playlist/track/add/:playlistId',
         handler: async ({ body, params, cookies }, res) => {
             try {
                 const token = cookies.access_token;
@@ -151,7 +151,7 @@ export const playlistRoute: CustomRoute[] = [
     },
     {
         method: METHOD.DELETE,
-        route: '/api/me/playlist/track/delete/:playlistId',
+        route: '/me/playlist/track/delete/:playlistId',
         handler: async ({ body, params, cookies }, res) => {
             try {
                 const token = cookies.access_token;

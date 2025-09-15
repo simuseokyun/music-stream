@@ -5,7 +5,7 @@ import { isAxiosError } from 'axios';
 const playerRoute: CustomRoute[] = [
     {
         method: METHOD.POST,
-        route: '/api/preview',
+        route: '/preview',
         handler: async ({ query, body }, res) => {
             try {
                 const { title } = query;

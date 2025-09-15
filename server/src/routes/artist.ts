@@ -6,7 +6,7 @@ import { errorMessages } from '..';
 const artistRoute: CustomRoute[] = [
     {
         method: METHOD.GET,
-        route: '/api/me/artists',
+        route: '/me/artists',
         handler: async ({ cookies }, res) => {
             try {
                 const token = cookies.access_token;
@@ -28,7 +28,7 @@ const artistRoute: CustomRoute[] = [
     },
     {
         method: METHOD.GET,
-        route: '/api/me/artists/check',
+        route: '/me/artists/check',
         handler: async ({ query, cookies }, res) => {
             try {
                 const token = cookies.access_token;
@@ -56,7 +56,7 @@ const artistRoute: CustomRoute[] = [
     },
     {
         method: METHOD.PUT,
-        route: '/api/me/artists/follow',
+        route: '/me/artists/follow',
         handler: async ({ body, cookies }, res) => {
             try {
                 const token = cookies.access_token;
@@ -81,7 +81,7 @@ const artistRoute: CustomRoute[] = [
     },
     {
         method: METHOD.DELETE,
-        route: '/api/me/artists/unfollow',
+        route: '/me/artists/unfollow',
         handler: async ({ body, cookies }, res) => {
             try {
                 const token = cookies.access_token;
