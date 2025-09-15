@@ -7,6 +7,12 @@ export default defineConfig({
         environment: 'jsdom',
         setupFiles: './src/setupTests.ts',
     },
+    build: {
+        outDir: 'dist',
+        rollupOptions: {
+            input: 'index.html',
+        },
+    },
     server: {
         proxy: {
             '/api': {
@@ -16,5 +22,6 @@ export default defineConfig({
         },
         port: 3000,
     },
-    base: './',
+
+    base: '/',
 });
