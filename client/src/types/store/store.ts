@@ -56,6 +56,11 @@ export interface UsePlayerKey {
     key: number;
     setKey: (value: number) => void;
 }
+export interface UseRequestForm {
+    isOpen: boolean;
+    open: () => void;
+    close: () => void;
+}
 interface NowTrackInfo {
     title: string;
     artist: string;
@@ -80,4 +85,4 @@ interface AlbumInfo {
     trackLength: number;
 }
 
-type ModalType = 'addPlaylist' | 'selectPlaylist' | null;
+type ModalType = 'addPlaylist' | 'selectPlaylist' | 'reqeustForm' | null;

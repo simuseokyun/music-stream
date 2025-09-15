@@ -25,4 +25,5 @@ const usePlayerKey = create<UsePlayerKey>((set) => ({
     key: 0,
     setKey: (value) => set({ key: value }),
 }));
+
 export { useCategoryStore, useViewportStore, useModalStore, usePlayerKey };
