@@ -52,6 +52,7 @@ if (process.env.NODE_ENV === 'production') {
     console.log(clientPath);
     app.use(express.static(clientPath));
     app.get('*', (_req, res) => {
+        console.log('*에 입장');
         res.sendFile(path.join(clientPath, 'index.html'));
     });
 } else {
