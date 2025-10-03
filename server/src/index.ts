@@ -3,8 +3,7 @@ import path from 'path';
 dotenv.config({
     path: path.resolve(__dirname, `../.env.${process.env.NODE_ENV || 'development'}`),
 });
-console.log(`서버에서 클라이언트 아이디 : ${process.env.SPOTIFY_CLIENT_ID}`);
-console.log(`서버에서 노드엔브 : ${process.env.NODE_ENV}`);
+
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -29,7 +28,6 @@ app.use(
     })
 );
 
-console.log(process.env.NODE_ENV);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -49,10 +47,8 @@ routes.forEach(({ method, route, handler }) => {
 
 if (process.env.NODE_ENV === 'production') {
     const clientPath = path.join(__dirname, '../../client/dist');
-    console.log(clientPath);
     app.use(express.static(clientPath));
     app.get('*', (_req, res) => {
-        console.log('*에 입장');
         res.sendFile(path.join(clientPath, 'index.html'));
     });
 } else {

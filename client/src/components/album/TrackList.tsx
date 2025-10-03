@@ -23,7 +23,6 @@ export default function TrackList({ data }: { data: AlbumInfoResponse }) {
 
         playTrack(index, newList);
     });
-    console.log(data);
 
     return (
         <table className="w-full table-fixed mt-2">

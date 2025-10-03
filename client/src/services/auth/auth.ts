@@ -30,7 +30,6 @@ const getWebToken = async () => {
 
 const getSdkToken = async (authCode: string) => {
     try {
-        console.log(`오쓰${authCode}`);
         const response = await axios.post('/api/auth/sdkToken', { code: authCode });
         return response.data;
     } catch (error) {
