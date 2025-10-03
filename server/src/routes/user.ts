@@ -10,10 +10,8 @@ const userRoute: CustomRoute[] = [
         route: '/me/check',
         handler: async ({ cookies }, res) => {
             try {
-                console.log('쿠키는' + cookies);
                 const accessToken = cookies.access_token;
                 const refreshToken = cookies.refresh_token;
-                console.log(accessToken, refreshToken);
                 if (!refreshToken) {
                     return res.status(200).json({ loginState: false, message: '현재 로그아웃 상태입니다' });
                 }

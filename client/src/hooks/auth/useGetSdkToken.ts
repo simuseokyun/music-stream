@@ -11,7 +11,7 @@ const useGetSdkToken = (code: string) => {
         enabled: !!code,
         retry: 2,
     });
-    console.log(data);
+
     useEffect(() => {
         if (data && isSuccess) {
             window.history.replaceState({}, document.title, window.location.pathname);

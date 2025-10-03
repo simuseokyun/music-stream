@@ -8,7 +8,7 @@ const useCheckUser = () => {
         const fetchUser = async () => {
             try {
                 const response = await getDataWithAuth(`/api/me/check`);
-                console.log(response);
+
                 if (response?.loginState) {
                     const { id, email, display_name } = response;
                     setUser({ id, email, display_name });

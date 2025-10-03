@@ -16,7 +16,7 @@ const useGetAlbumInfo = () => {
         staleTime: Infinity,
         gcTime: Infinity,
     });
-    console.log(data);
+
     const setAlbumInfo = useAlbumStore((state) => state.setAlbumInfo);
 
     useEffect(() => {

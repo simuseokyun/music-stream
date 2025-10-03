@@ -31,10 +31,7 @@ const callSpotifyApi = async (
                 ...options.headers,
             },
         };
-        console.log(config);
-
         const response = await axios(config);
-        console.log(response);
         return response.data;
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
