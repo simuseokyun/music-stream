@@ -62,6 +62,6 @@ export const errorMessages: ErrorMessages = {
     500: '네트워크 에러입니다',
 };
 
-app.listen(8000, '0.0.0.0', () => {
+app.listen(5001, '0.0.0.0', () => {
     console.log('서버 실행');
 });
