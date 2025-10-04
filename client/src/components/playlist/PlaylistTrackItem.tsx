@@ -34,7 +34,7 @@ export default function TrackItem({ track, playlistId, onPlay }: PlaylistTrackIt
             <td className="w-auto p-2">
                 <div className="flex items-center">
                     <img
-                        className="img-medium rounded-md"
+                        className="img-medium rounded-md aspect-square"
                         src={images[0]?.url || '/assets/playlist.svg'}
                         alt="앨범 커버"
                     />

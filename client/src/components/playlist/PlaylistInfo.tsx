@@ -14,7 +14,10 @@ export default function PlaylistInfo({ playlistId }: { playlistId?: string }) {
 
     return (
         <div className="text-center border-b border-white/20 pb-5 md:flex md:items-end md:text-start ">
-            <img className="w-[150px] rounded-md md:w-[200px]" src={data?.images?.[0]?.url ?? '/assets/playlist.svg'} />
+            <img
+                className="w-[150px] rounded-md aspect-square md:w-[200px]"
+                src={data?.images?.[0]?.url ?? '/assets/playlist.svg'}
+            />
             <div className="md:ml-4">
                 <h1 className="hidden text-sm leading-none md:block md:text-base">플레이리스트</h1>
                 <h1 className="text-2xl font-bold md:text-[30px]">{data?.name}</h1>

@@ -14,7 +14,6 @@ const playerRoute: CustomRoute[] = [
                 console.time('spotify');
                 const data = await spotifyPreviewFinder(title as string, 20);
                 console.timeEnd('spotify');
-
                 const trackInfo = data?.results.find((track: { spotifyUrl: string }) => {
                     const urlParts = track.spotifyUrl.split('/');
                     const trackId = urlParts[urlParts.length - 1];

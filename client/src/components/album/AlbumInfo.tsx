@@ -9,7 +9,7 @@ export default function AlbumInfo() {
     const tabProps = { id, name, artistId, artistName, image };
     return (
         <div className="text-center border-b border-white/20 pb-2 md:flex md:items-end md:text-start ">
-            <img className="w-[150px] rounded-md md:w-[200px]" src={image} alt="앨범 커버" />
+            <img className="w-[150px] rounded-md md:w-[200px] aspect-[1/1]" src={image} alt="앨범 커버" />
             <div className="md:ml-4">
                 <span className="mb-2 hidden md:block">{AlbumType[type as keyof typeof AlbumType]}</span>
                 <h1

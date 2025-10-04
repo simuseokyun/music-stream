@@ -13,7 +13,7 @@ export default function Player() {
             <div className="w-full flex items-center p-2">
                 <div className="flex items-center flex-1 min-w-0">
                     <img
-                        className="w-[40px] h-[40px] md:img-medium  rounded-md shrink-0"
+                        className="w-[40px] h-[40px] aspect-square md:img-medium  rounded-md shrink-0"
                         src={image ?? '/assets/playlist.svg'}
                         alt="앨범 커버"
                     />

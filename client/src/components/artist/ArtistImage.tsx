@@ -27,7 +27,7 @@ export default function ArtistImage({ artistId }: { artistId?: string }) {
     };
 
     return (
-        <div className="relative w-full h-[300px] rounded-md z-0 overflow-hidden">
+        <div className="relative w-full  h-[300px] rounded-md z-0 aspect-square overflow-hidden">
             <img
                 src={images[0]?.url || '/assets/user.svg'}
                 className={`absolute w-full h-full top-0 left-0 ${images[0]?.url && 'object-cover'}`}
