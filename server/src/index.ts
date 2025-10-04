@@ -16,7 +16,6 @@ import { CustomRoute } from './types';
 import { ErrorMessages } from './types';
 import artistRoute from './routes/artist';
 
-console.log(process.env.NODE_ENV);
 const app = express();
 const allowedOrigin =
     process.env.NODE_ENV === 'production'
@@ -25,12 +24,11 @@ const allowedOrigin =
 app.use(
     cors({
         origin: allowedOrigin,
-        credentials: true, // 쿠키 전송 허용
+        credentials: true,
     })
 );
 
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -44,6 +42,7 @@ const routes: CustomRoute[] = [
 ];
 
 routes.forEach(({ method, route, handler }) => {
+    console.log('라우터');
     app[method](route, handler);
 });
 
