@@ -21,6 +21,8 @@ const allowedOrigin =
     process.env.NODE_ENV === 'production'
         ? 'http://ec2-3-34-190-12.ap-northeast-2.compute.amazonaws.com'
         : 'http://localhost:3000';
+
+console.log(allowedOrigin);
 app.use(
     cors({
         origin: allowedOrigin,
