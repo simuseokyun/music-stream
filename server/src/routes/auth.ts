@@ -85,7 +85,8 @@ const authRoute: CustomRoute[] = [
     {
         method: METHOD.POST,
         route: '/auth/refresh',
-        handler: async ({ cookies }, res) => {
+        handler: async (req, res) => {
+            const { cookies } = req;
             const token = cookies.refresh_token;
             if (!token) {
                 return res.status(401).json({ message: '로그인 후 이용해주세요' });
@@ -123,7 +124,8 @@ const authRoute: CustomRoute[] = [
     {
         method: METHOD.POST,
         route: '/logout',
-        handler: ({ cookies }, res) => {
+        handler: (req, res) => {
+            const { cookies } = req;
             const token = cookies.refresh_token;
             if (!token) {
                 return res.status(200).json({ message: '이미 로그아웃된 상태입니다' });
