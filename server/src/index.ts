@@ -4,14 +4,7 @@ import path from 'path';
 //     path: path.resolve(__dirname, `../.env.${process.env.NODE_ENV || 'development'}`),
 // });
 // 1️⃣ 먼저 기본 .env 로드 (NODE_ENV 값이 있든 없든 실행)
-const env = process.env.NODE_ENV || 'development';
 
-// 2️⃣ 해당 환경 파일 로드
-dotenv.config({
-    path: path.resolve(__dirname, `../.env.${env}`),
-});
-
-console.log(process.env.NODE_ENV);
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -24,6 +17,14 @@ import { CustomRoute } from './types';
 import { ErrorMessages } from './types';
 import artistRoute from './routes/artist';
 
+const env = process.env.NODE_ENV || 'development';
+
+// 2️⃣ 해당 환경 파일 로드
+dotenv.config({
+    path: path.resolve(__dirname, `../.env.${env}`),
+});
+
+console.log(process.env.NODE_ENV);
 const app = express();
 const allowedOrigin =
     process.env.NODE_ENV === 'production'
