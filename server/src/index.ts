@@ -22,7 +22,7 @@ const allowedOrigin =
         ? 'http://ec2-3-34-190-12.ap-northeast-2.compute.amazonaws.com'
         : 'http://localhost:3000';
 
-console.log(allowedOrigin);
+console.log('허용 : ' + allowedOrigin);
 app.use(
     cors({
         origin: allowedOrigin,
