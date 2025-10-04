@@ -19,7 +19,7 @@ import artistRoute from './routes/artist';
 const app = express();
 const allowedOrigin =
     process.env.NODE_ENV === 'production'
-        ? 'http://ec2-3-34-190-12.ap-northeast-2.compute.amazonaws.com:8000'
+        ? 'http://ec2-3-34-190-12.ap-northeast-2.compute.amazonaws.com'
         : 'http://localhost:3000';
 app.use(
     cors({
@@ -42,7 +42,7 @@ const routes: CustomRoute[] = [
 ];
 
 routes.forEach(({ method, route, handler }) => {
-    console.log('라우터');
+    console.log('등록된 라우터:', method, route);
     app[method](route, handler);
 });
 
