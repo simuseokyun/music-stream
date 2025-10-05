@@ -2,7 +2,7 @@ module.exports = {
     apps: [
         {
             name: 'index',
-            script: 'dist/index.js',
+            script: './dist/index.js',
             env: {
                 NODE_ENV: 'development',
             },
