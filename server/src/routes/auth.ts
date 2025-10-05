@@ -8,15 +8,15 @@ import { errorMessages } from '..';
 const authRoute: CustomRoute[] = [
     {
         method: METHOD.GET,
-        route: '/webToken',
+        route: '/api/webToken',
         handler: async (_req, res) => {
             try {
-                console.log(CLIENT_ID, CLIENT_SECRET);
                 const params = new URLSearchParams({
                     grant_type: 'client_credentials',
                     client_id: CLIENT_ID,
                     client_secret: CLIENT_SECRET,
                 });
+                console.log(BASE_URL_AUTH);
                 const response = await axios.post(`${BASE_URL_AUTH}/api/token`, params.toString(), {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',

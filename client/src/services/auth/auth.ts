@@ -13,6 +13,7 @@ const getWebToken = async () => {
     }
     try {
         const response = await axios.get(`/api/webToken`);
+        console.log(response);
         const { access_token, expires_in } = response.data;
         const issuedAt = Date.now();
         if (access_token) {
