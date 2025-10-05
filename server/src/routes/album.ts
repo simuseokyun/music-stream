@@ -7,7 +7,7 @@ import { errorMessages } from '..';
 const albumRoute: CustomRoute[] = [
     {
         method: METHOD.GET,
-        route: '/me/albums',
+        route: '/api/me/albums',
         handler: async ({ query, cookies }, res) => {
             try {
                 const token = cookies.access_token;
@@ -31,7 +31,7 @@ const albumRoute: CustomRoute[] = [
     },
     {
         method: METHOD.PUT,
-        route: '/me/albums/add',
+        route: '/api/me/albums/add',
         handler: async ({ body, cookies }, res) => {
             try {
                 const token = cookies.access_token;
@@ -56,7 +56,7 @@ const albumRoute: CustomRoute[] = [
     },
     {
         method: METHOD.DELETE,
-        route: '/me/albums/delete',
+        route: '/api/me/albums/delete',
         handler: async ({ body, cookies }, res) => {
             try {
                 const token = cookies.access_token;
@@ -81,7 +81,7 @@ const albumRoute: CustomRoute[] = [
     },
     {
         method: METHOD.GET,
-        route: '/me/albums/check',
+        route: '/api/me/albums/check',
         handler: async ({ query, cookies }, res) => {
             try {
                 const token = cookies.access_token;
