@@ -35,7 +35,7 @@ const authRoute: CustomRoute[] = [
     },
     {
         method: METHOD.POST,
-        route: '/auth/sdkToken',
+        route: '/api/auth/sdkToken',
         handler: async ({ body: { code } }, res) => {
             try {
                 const params = new URLSearchParams({
@@ -84,7 +84,7 @@ const authRoute: CustomRoute[] = [
     },
     {
         method: METHOD.POST,
-        route: '/auth/refresh',
+        route: '/api/auth/refresh',
         handler: async (req, res) => {
             const { cookies } = req;
             const token = cookies.refresh_token;
@@ -123,7 +123,7 @@ const authRoute: CustomRoute[] = [
     },
     {
         method: METHOD.POST,
-        route: '/logout',
+        route: '/api/logout',
         handler: (req, res) => {
             const { cookies } = req;
             const token = cookies.refresh_token;
