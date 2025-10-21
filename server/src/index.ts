@@ -17,10 +17,7 @@ import { ErrorMessages } from './types';
 import artistRoute from './routes/artist';
 
 const app = express();
-const allowedOrigin =
-    process.env.NODE_ENV === 'production'
-        ? 'http://ec2-3-34-190-12.ap-northeast-2.compute.amazonaws.com'
-        : 'http://localhost:3000';
+const allowedOrigin = process.env.NODE_ENV === 'production' ? 'https://simseokyun.info' : 'http://localhost:3000';
 
 console.log('허용 : ' + allowedOrigin);
 app.use(
